@@ -1016,6 +1016,54 @@
     .language-table tbody tr:nth-child(even) td,
     .tool-table tbody tr:nth-child(even) td { background: #EEEEEE; }
 
+    .language-action-col { width: 22px; }
+
+    .language-table thead th,
+    .tool-table thead th {
+      position: relative;
+      padding-right: 22px;
+    }
+
+    .table-head-add {
+      position: absolute;
+      right: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      padding: 0;
+      color: #fff;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.8rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .table-head-add:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .language-action-cell {
+      width: 22px;
+      padding: 0 !important;
+      text-align: center;
+    }
+
+    .language-row-delete {
+      width: 16px;
+      height: 20px;
+      padding: 0;
+      color: #888;
+      background: transparent;
+      border: 0;
+      font-size: 0.9rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .language-row-delete:hover { color: #c00; }
+
     .language-tool-input {
       width: 100%;
       height: 28px;
@@ -2152,6 +2200,13 @@
       white-space: nowrap;
     }
 
+    .skill-name-cell[data-tooltip-key] { cursor: help; }
+
+    .skill-name-cell[data-tooltip-key]:focus-visible {
+      outline: 2px solid #800000;
+      outline-offset: -2px;
+    }
+
     .skill-name-cell.is-proficient { color: #00B0F0; }
     .skill-name-cell.is-expertise { color: #7030A0; }
 
@@ -2638,8 +2693,26 @@
       box-shadow: inset 0 0 0 1px #800000;
     }
 
-    .backpack-tool-table input.backpack-tool-operation,
-    .backpack-tool-table input.backpack-tool-craft { text-align: left; }
+    .backpack-tool-table textarea.backpack-tool-operation,
+    .backpack-tool-table input.backpack-tool-craft {
+      text-align: left;
+    }
+
+    .backpack-tool-table textarea.backpack-tool-operation {
+      height: 28px;
+      min-height: 28px;
+      padding: 3px 5px;
+      overflow: hidden;
+      line-height: 1.35;
+      resize: none;
+      white-space: pre-wrap;
+    }
+
+    .backpack-tool-table textarea.backpack-tool-operation.is-expanded {
+      overflow: auto;
+      background: #fff;
+      box-shadow: inset 0 0 0 1px #800000;
+    }
 
     .backpack-table input.is-default,
     .backpack-table select.is-default,
@@ -3442,6 +3515,115 @@
       .expected-value { font-size: 1.8rem; }
     }
   
+    .ledger-panel {
+      background: #f8f8f6;
+    }
+
+    .ledger-scroll {
+      overflow-x: auto;
+    }
+
+    .ledger-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      border: 1px solid #1F4E79;
+      table-layout: fixed;
+      font-size: 0.86rem;
+    }
+
+    .ledger-name-col { width: 27%; }
+    .ledger-detail-col { width: 23%; }
+
+    .ledger-table th,
+    .ledger-table td {
+      padding: 4px 6px;
+      border: 1px solid #9DB7D5;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .ledger-title-row th {
+      padding: 6px;
+      color: #fff;
+      background: #1F4E79;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    .ledger-summary-row th {
+      color: #1F4E79;
+      background: #D9E2F3;
+      font-weight: bold;
+    }
+
+    .ledger-summary-row td {
+      color: #111;
+      background: #fff;
+      font-weight: bold;
+    }
+
+    .ledger-summary-row output { font-size: 0.95rem; }
+
+    .ledger-column-row th {
+      color: #fff;
+      background: #1F4E79;
+      font-weight: bold;
+    }
+
+    .ledger-table tbody td { padding: 0; }
+
+    .ledger-table tbody tr:nth-child(odd) .ledger-income-cell {
+      background: #DDEBF7;
+    }
+
+    .ledger-table tbody tr:nth-child(even) .ledger-income-cell {
+      background: #EEF5FB;
+    }
+
+    .ledger-table tbody tr:nth-child(odd) .ledger-expense-cell {
+      background: #FCE4D6;
+    }
+
+    .ledger-table tbody tr:nth-child(even) .ledger-expense-cell {
+      background: #FDF1EA;
+    }
+
+    .ledger-input {
+      width: 100%;
+      min-width: 0;
+      padding: 5px 6px;
+      color: #1F4E79;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.84rem;
+      text-align: center;
+    }
+
+    .ledger-expense-cell .ledger-input { color: #7F3F00; }
+    .ledger-expense-cell .ledger-expense-amount { color: #C55A11; }
+    .ledger-input::placeholder { color: #8EA9C1; opacity: 1; }
+
+    .ledger-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+
+    .ledger-add { color: #111; }
+
+    .notes-panel .custom-editor {
+      min-height: 300px;
+      max-height: none;
+      overflow: auto;
+      resize: vertical;
+      white-space: pre-wrap;
+    }
+
+    .character-notes-editor { margin-top: 0; }
+
 @media print {
   @page { size: A4; margin: 10mm; }
 
@@ -3465,6 +3647,9 @@
   .custom-reset,
   .builder-save-status,
   .reference-tooltip,
+  .ledger-actions,
+  .table-head-add,
+  .language-row-delete,
   .tab { display: none !important; }
 
   .page-width {
@@ -3485,6 +3670,10 @@
   }
 
   .panel-title { break-after: avoid; }
+
+  .ledger-panel { background: #fff !important; }
+  .ledger-scroll { overflow: visible !important; }
+  .ledger-table { min-width: 0 !important; }
 
   .builder-section-title {
     break-after: avoid;
@@ -3826,24 +4015,22 @@
 
         <div class="language-tools-grid">
           <table class="language-table" aria-label="语言">
-            <thead><tr><th colspan="2" class="reference-tooltip-trigger" data-reference-tooltip="language" tabindex="0">语言</th></tr></thead>
-            <tbody>
-              <tr><td><input class="language-tool-input is-default" type="text" value="通用语" autocomplete="off" aria-label="语言1"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言2"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言3"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言4"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言5"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言6"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言7"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言8"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言9"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言10"></td></tr>
+            <colgroup><col><col><col class="language-action-col"></colgroup>
+            <thead><tr><th colspan="3" class="reference-tooltip-trigger" data-reference-tooltip="language" tabindex="0">语言<button id="language-add" class="table-head-add" type="button" title="添加一行语言" aria-label="添加一行语言">＋</button></th></tr></thead>
+            <tbody id="language-body">
+              <tr><td><input class="language-tool-input is-default" type="text" value="通用语" autocomplete="off" aria-label="语言1"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言2"></td><td class="language-action-cell"></td></tr>
+              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言3"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言4"></td><td class="language-action-cell"></td></tr>
+              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言5"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言6"></td><td class="language-action-cell"></td></tr>
             </tbody>
           </table>
 
           <table class="tool-table" aria-label="熟练工具">
-            <thead><tr><th colspan="2" class="reference-tooltip-trigger" data-reference-tooltip="tool" tabindex="0">熟练工具</th></tr></thead>
-            <tbody>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具1"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具2"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具3"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具4"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具5"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具6"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具7"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具8"></td></tr>
-              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具9"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具10"></td></tr>
+            <colgroup><col><col><col class="language-action-col"></colgroup>
+            <thead><tr><th colspan="3" class="reference-tooltip-trigger" data-reference-tooltip="tool" tabindex="0">熟练工具<button id="tool-add" class="table-head-add" type="button" title="添加一行工具" aria-label="添加一行工具">＋</button></th></tr></thead>
+            <tbody id="tool-body">
+              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具1"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具2"></td><td class="language-action-cell"></td></tr>
+              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具3"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具4"></td><td class="language-action-cell"></td></tr>
+              <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具5"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具6"></td><td class="language-action-cell"></td></tr>
             </tbody>
           </table>
         </div>
@@ -4591,6 +4778,49 @@
               <tbody id="backpack-magic-body"></tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <div class="panel ledger-panel">
+        <h2 class="panel-title">开支记录 Expense Record</h2>
+        <div class="ledger-scroll">
+          <table class="ledger-table" aria-label="开支记录">
+            <colgroup>
+              <col class="ledger-name-col">
+              <col class="ledger-detail-col">
+              <col class="ledger-name-col">
+              <col class="ledger-detail-col">
+            </colgroup>
+            <thead>
+              <tr class="ledger-title-row"><th colspan="4">账本笔记</th></tr>
+              <tr class="ledger-summary-row">
+                <th colspan="2">合计结余</th>
+                <td colspan="2"><output id="ledger-balance">0gp</output></td>
+              </tr>
+              <tr class="ledger-column-row">
+                <th>收入项目</th><th>明细</th><th>支出项目</th><th>明细</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-body"></tbody>
+          </table>
+        </div>
+        <div class="ledger-actions">
+          <button id="ledger-add" class="backpack-add ledger-add" type="button">＋ 添加行</button>
+        </div>
+      </div>
+
+      <div class="panel notes-panel">
+        <h2 class="panel-title">角色备注 Notes</h2>
+        <div class="custom-race-editor character-notes-editor">
+          <div class="custom-editor-toolbar" role="toolbar" aria-label="角色备注格式">
+            <button type="button" class="custom-format" data-format="plain">正文</button>
+            <button type="button" class="custom-format" data-format="bold">粗体</button>
+            <button type="button" class="custom-format" data-format="title">标题</button>
+            <button type="button" class="custom-format" data-format="term">术语</button>
+            <button type="button" class="custom-format" data-format="spell">法术</button>
+            <button type="button" class="custom-format" data-format="list">• 列表</button>
+          </div>
+          <div id="character-notes" class="custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此记录角色备注、队伍信息、待办事项等。"></div>
         </div>
       </div>
     </section>
@@ -6919,6 +7149,15 @@
     const equipmentArmorAc = document.getElementById("equipment-armor-ac");
     const equipmentArmorStealth = document.getElementById("equipment-armor-stealth");
     const equipmentShieldAc = document.getElementById("equipment-shield-ac");
+    const equipmentShieldEquipped = document.getElementById("equipment-shield-equipped");
+    const ledgerBody = document.getElementById("ledger-body");
+    const ledgerAdd = document.getElementById("ledger-add");
+    const ledgerBalance = document.getElementById("ledger-balance");
+    const characterNotes = document.getElementById("character-notes");
+    const languageBody = document.getElementById("language-body");
+    const languageAdd = document.getElementById("language-add");
+    const toolBody = document.getElementById("tool-body");
+    const toolAdd = document.getElementById("tool-add");
     const featStyleAdd = document.getElementById("feat-style-add");
     const combatFeatBlock = document.getElementById("combat-feat-block");
     const combatFeatBody = document.getElementById("combat-feat-body");
@@ -6982,7 +7221,9 @@
         !mainClassFeatureBlock || !mainClassFeatureTitle || !mainClassFeatureText ||
         !multiClassFeatureBlock || !multiClassFeatureTitle || !multiClassFeatureText ||
         !equipmentArmorType || !equipmentArmorName || !equipmentArmorAc ||
-        !equipmentArmorStealth || !equipmentShieldAc) {
+        !equipmentArmorStealth || !equipmentShieldAc || !equipmentShieldEquipped ||
+        !ledgerBody || !ledgerAdd || !ledgerBalance || !characterNotes ||
+        !languageBody || !languageAdd || !toolBody || !toolAdd) {
       return;
     }
 
@@ -7739,6 +7980,17 @@
       highlightTerms(raceTraitsBox);
     }
 
+    function setCustomBackgroundDefault() {
+      if (customBackgroundTraits.innerHTML.trim()) return;
+      customBackgroundTraits.innerHTML = `<span class="custom-title">自定义背景</span><br>
+<b>属性值：</b>任选一项+2，一项+1<br>
+<b>专长：</b>任意起源专长<br>
+<b>技能熟练：</b>任选两项技能<br>
+<b>工具熟练：</b>任选一项工具<br>
+<b>装备：</b>50GP<br><br>
+在此处填写所用背景的特征。`;
+    }
+
     function renderBackgroundTraits() {
       const value = backgroundSelect.value;
 
@@ -7751,6 +8003,7 @@
       if (value === "自定义背景") {
         backgroundTraitsBox.hidden = true;
         customBackgroundEditor.hidden = false;
+        setCustomBackgroundDefault();
         return;
       }
 
@@ -8755,6 +9008,9 @@ ${data.description}`;
           nameCell.className = "skill-name-cell";
           nameCell.dataset.skill = skill;
           nameCell.textContent = skill;
+          nameCell.dataset.tooltipKey = `skill-${skill}`;
+          nameCell.tabIndex = 0;
+          nameCell.setAttribute("aria-describedby", "ability-tooltip");
 
           const applySkillProficiency = () => {
             updateSkillNameColor(nameCell, Number(proficiencySelect.value));
@@ -9550,7 +9806,7 @@ ${data.description}`;
       const abilityModifier = getModifierValue(abilityKey) ?? 0;
       const bonusRaw = bonusInput.value.trim();
       const bonus = bonusRaw === "" || !Number.isFinite(Number(bonusRaw)) ? 0 : Math.trunc(Number(bonusRaw));
-      const attack = 8 + abilityModifier + getCurrentPB() + bonus;
+      const attack = abilityModifier + getCurrentPB() + bonus;
       const damage = formatDamageExpression(data.damage, abilityModifier, bonus);
 
       if (force || attackInput.classList.contains("is-default") || attackInput.value.trim() === "") {
@@ -10378,7 +10634,10 @@ ${data.description}`;
       "#special-ability-body",
       "#backpack-gear-body",
       "#backpack-tool-body",
-      "#backpack-magic-body"
+      "#backpack-magic-body",
+      "#ledger-body",
+      "[data-custom-language-row]",
+      "[data-custom-tool-row]"
     ].join(",");
 
     function isInDynamicBuilderRow(element) {
@@ -10485,6 +10744,16 @@ ${data.description}`;
       }));
     }
 
+    function captureCustomLanguageToolRows(container, selector) {
+      return [...container.querySelectorAll(selector)].map((row) => ({
+        controls: [...row.querySelectorAll("input")].map((element) => ({
+          value: element.value,
+          checked: null,
+          className: element.className
+        }))
+      }));
+    }
+
     function captureBuilderData() {
       return {
         schema: "dnd5e2024.character",
@@ -10498,7 +10767,16 @@ ${data.description}`;
           gear: captureDynamicBuilderRows(backpackGearBody),
           tool: captureDynamicBuilderRows(backpackToolBody),
           magic: captureDynamicBuilderRows(backpackMagicBody)
-        }
+        },
+        ledgerRows: captureDynamicBuilderRows(ledgerBody),
+        languageCustomRows: captureCustomLanguageToolRows(
+          languageBody,
+          "[data-custom-language-row]"
+        ),
+        toolCustomRows: captureCustomLanguageToolRows(
+          toolBody,
+          "[data-custom-tool-row]"
+        )
       };
     }
 
@@ -10537,6 +10815,54 @@ ${data.description}`;
       entries.forEach((entry, index) => {
         applyCapturedControl(controls[index], entry);
       });
+    }
+
+    function createLanguageToolRow(kind, deletable = false) {
+      const row = document.createElement("tr");
+      if (deletable) {
+        row.dataset[kind === "language" ? "customLanguageRow" : "customToolRow"] = "";
+      }
+
+      for (let index = 0; index < 2; index += 1) {
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "language-tool-input";
+        input.autocomplete = "off";
+        input.setAttribute("aria-label", `${
+          kind === "language" ? "语言" : "工具"
+        }${deletable ? "（自定义）" : ""}`);
+        input.addEventListener("input", () => input.classList.remove("is-default"));
+        cell.append(input);
+        row.append(cell);
+      }
+
+      const actionCell = document.createElement("td");
+      actionCell.className = "language-action-cell";
+      if (deletable) {
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "language-row-delete";
+        deleteButton.textContent = "×";
+        deleteButton.title = "删除此行";
+        deleteButton.setAttribute("aria-label", "删除此行");
+        deleteButton.addEventListener("click", () => row.remove());
+        actionCell.append(deleteButton);
+      }
+      row.append(actionCell);
+      return row;
+    }
+
+    function restoreCustomLanguageToolRows(container, selector, rows) {
+      for (const row of container.querySelectorAll(selector)) row.remove();
+      for (const rowData of rows || []) {
+        const row = createLanguageToolRow(
+          selector.includes("language") ? "language" : "tool",
+          true
+        );
+        container.append(row);
+        applyCapturedRow(row, rowData);
+      }
     }
 
     function restoreDynamicBuilderRows(data) {
@@ -10592,6 +10918,28 @@ ${data.description}`;
         applyCapturedRow(element, row);
       }
       updateBackpackSection("magic");
+
+      ledgerBody.replaceChildren();
+      const ledgerRows = Array.isArray(data.ledgerRows)
+        ? data.ledgerRows
+        : [{}, {}, {}];
+      ledgerRows.forEach((row, index) => {
+        const element = createLedgerRow(index === 0);
+        ledgerBody.append(element);
+        applyCapturedRow(element, row);
+      });
+      updateLedgerTotals();
+
+      restoreCustomLanguageToolRows(
+        languageBody,
+        "[data-custom-language-row]",
+        data.languageCustomRows
+      );
+      restoreCustomLanguageToolRows(
+        toolBody,
+        "[data-custom-tool-row]",
+        data.toolCustomRows
+      );
     }
 
     function restoreBuilderData(data) {
@@ -10937,7 +11285,15 @@ ${data.description}`;
       setCombatTotal(combatInitiative, "initiative", 10 + dexMod);
       const armorAcRaw = equipmentArmorAc.value.trim();
       const armorAc = armorAcRaw === "" ? null : Number(armorAcRaw);
-      setCombatTotal(combatAc, "ac", Number.isFinite(armorAc) ? armorAc : null);
+      const shieldAc = equipmentShieldEquipped.value === "是"
+        ? Number(equipmentShieldAc.value.trim())
+        : 0;
+      const hasShieldAc = Number.isFinite(shieldAc);
+      setCombatTotal(
+        combatAc,
+        "ac",
+        Number.isFinite(armorAc) ? armorAc + (hasShieldAc ? shieldAc : 0) : null
+      );
       setCombatTotal(combatPassive, "passive", 10 + wisMod);
 
       const spellKey = combatSpellAbility.value;
@@ -11057,7 +11413,37 @@ ${data.description}`;
       correction: "部分魔法物品、超自然赠礼等效果会让你的属性值再次获得加值，在此列填入那些加值。",
       adjustment: "调整 = 向下取整((数值 - 10) / 2)。",
       save: "豁免 = 调整 + 职业豁免熟练的 PB + 豁免修正。",
-      saveCorrection: `部分魔法物品、超自然赠礼等效果会让你的豁免获得加值，在此列填入那些加值。通常而言会来自<b class="item">防御护腕</b>或者<b class="item">幸运石</b>。`
+      saveCorrection: `部分魔法物品、超自然赠礼等效果会让你的豁免获得加值，在此列填入那些加值。通常而言会来自<b class="item">防御护腕</b>或者<b class="item">幸运石</b>。`,
+      "mod-str": "当你要举起、推动、拉拽或破坏某样东西，使用力量属性进行检定。",
+      "mod-dex": "当你要灵巧、迅捷或安静地移动，使用敏捷属性进行检定。",
+      "mod-con": "当你要努力超越身体的极限，使用体质属性进行检定。",
+      "mod-int": "当你要推理或回忆，使用智力属性进行检定。",
+      "mod-wis": "当你要从环境或生物的行为表现中感知事物，使用感知属性进行检定。",
+      "mod-cha": "当你要影响、取悦或误导，使用魅力属性进行检定。",
+      "save-str": "力量：当你要承担对身体的直观冲击，使用力量属性进行豁免。",
+      "save-dex": "敏捷：当你要躲开有害效应，使用敏捷属性进行豁免。",
+      "save-con": "体质：当你要承受毒性的危害，使用体质属性进行豁免。",
+      "save-int": "智力：当你要识别虚假的幻象，使用智力属性进行豁免。",
+      "save-wis": "感知：当你要抵抗精神攻击，使用感知属性进行豁免。",
+      "save-cha": "魅力：当你要维持你的存在，使用魅力属性进行豁免。",
+      "skill-特技": "<b>特技 Acrobatics（敏捷）</b><br>在复杂的环境里屹立不倒或是表演杂技特技。",
+      "skill-驯兽": "<b>驯兽 Animal Handling（感知）</b><br>让动物平静下来、训练它们，又或者让它们做某种特定的事。",
+      "skill-奥秘": "<b>奥秘 Arcana（智力）</b><br>回忆有关于法术、魔法物品和存在位面的知识。",
+      "skill-运动": "<b>运动 Athletics（力量）</b><br>比平时跳的更远，在汹涌的水面上漂浮或是打碎什么东西。",
+      "skill-欺瞒": "<b>欺瞒 Deception（魅力）</b><br>撒一个让人信服的谎话或者做出让人深信不疑的伪装。",
+      "skill-历史": "<b>历史 History（智力）</b><br>回忆有关历史事件、人民、国家和文化传统的知识。",
+      "skill-洞悉": "<b>洞悉 Insight（感知）</b><br>辨别某人的情绪或意图。",
+      "skill-威吓": "<b>威吓 Intimidation（魅力）</b><br>恫吓他人或胁迫某人去做你想要他做的事。",
+      "skill-调查": "<b>调查 Investigation（智力）</b><br>在书本中寻辨晦涩难懂的信息或推断某些事物是如何运作的。",
+      "skill-医药": "<b>医药 Medicine（感知）</b><br>诊断某种疾病或是确定近期死亡的死者的死因。",
+      "skill-自然": "<b>自然 Nature（智力）</b><br>回忆有关地形、植物、动物和天气的知识。",
+      "skill-察觉": "<b>察觉 Perception（感知）</b><br>结合各种感官，注意一些容易忽略的细节。",
+      "skill-表演": "<b>表演 Performance（魅力）</b><br>演戏、讲述故事、演奏乐曲或翩翩起舞。",
+      "skill-游说": "<b>游说 Persuasion（魅力）</b><br>真诚且优雅地在某件事上说服他人。",
+      "skill-宗教": "<b>宗教 Religion（智力）</b><br>回忆有关神的传说、宗教仪式的学问以及圣徽的知识。",
+      "skill-巧手": "<b>巧手 Sleight of Hand（敏捷）</b><br>扒窃口袋，藏起只手可握的小物件或是耍一些手上把戏。",
+      "skill-隐匿": "<b>隐匿 Stealth（敏捷）</b><br>通过悄悄地移动和藏在事物后面来躲避别人的注意。",
+      "skill-求生": "<b>求生 Survival（感知）</b><br>跟踪追查、寻找食物、寻觅踪迹或是避免遭遇自然灾害。"
     };
 
     const ABILITY_TOOLTIP_DELAY = 500;
@@ -11287,7 +11673,19 @@ ${data.description}`;
       });
     }
 
-    for (const target of document.querySelectorAll(".ability-table [data-tooltip-key]")) {
+    for (const row of abilityRows) {
+      for (const [prefix, key] of [["mod", "mod"], ["save", "save"]]) {
+        const output = document.getElementById(`${prefix}-${row.key}`);
+        if (!output) continue;
+        output.dataset.tooltipKey = `${key}-${row.key}`;
+        output.tabIndex = 0;
+        output.setAttribute("aria-describedby", "ability-tooltip");
+      }
+    }
+
+    for (const target of document.querySelectorAll(
+      ".ability-table [data-tooltip-key], .skill-table [data-tooltip-key]"
+    )) {
       target.addEventListener("mouseenter", () => scheduleAbilityTooltip(target));
       target.addEventListener("mouseleave", cancelAbilityTooltip);
       target.addEventListener("focusin", () => scheduleAbilityTooltip(target));
@@ -11533,8 +11931,11 @@ ${data.description}`;
       } else {
         equipmentShieldAc.classList.remove("is-default");
       }
+      updateCombatStats();
       alignPlusIndicators();
     });
+
+    equipmentShieldEquipped.addEventListener("change", updateCombatStats);
 
     window.addEventListener("resize", alignPlusIndicators);
 
@@ -11696,6 +12097,82 @@ ${data.description}`;
       if (sp) parts.push(`${sp}SP`);
       if (cp) parts.push(`${cp}CP`);
       return parts.join(" ");
+    }
+
+    function formatLedgerCurrency(copper) {
+      return formatBackpackPrice(Math.abs(copper));
+    }
+
+    function parseLedgerAmount(value) {
+      const raw = String(value ?? "").trim();
+      if (/^-?\d+$/.test(raw)) return Number(raw) * 100;
+      return parseBackpackPrice(raw);
+    }
+
+    function updateLedgerTotals() {
+      let income = 0;
+      let expense = 0;
+
+      for (const row of ledgerBody.querySelectorAll("tr")) {
+        income += parseLedgerAmount(row.querySelector(".ledger-income-amount")?.value);
+        expense += parseLedgerAmount(row.querySelector(".ledger-expense-amount")?.value);
+      }
+
+      const balance = income - expense;
+      ledgerBalance.textContent = balance < 0
+        ? `-${formatLedgerCurrency(balance)}`
+        : formatLedgerCurrency(balance);
+    }
+
+    function normalizeLedgerAmount(input) {
+      const raw = input.value.trim();
+      if (/^-?\d+$/.test(raw)) input.value = `${raw}GP`;
+      updateLedgerTotals();
+    }
+
+    function createLedgerRow(isFirst = false) {
+      const row = document.createElement("tr");
+      const fields = [
+        ["ledger-income-name", "收入项目"],
+        ["ledger-income-amount", "收入明细"],
+        ["ledger-expense-name", "支出项目"],
+        ["ledger-expense-amount", "支出明细"]
+      ];
+
+      for (const [className, label] of fields) {
+        const cell = document.createElement("td");
+        cell.className = className.includes("income") ? "ledger-income-cell" : "ledger-expense-cell";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = `ledger-input ${className}`;
+        input.autocomplete = "off";
+        input.setAttribute("aria-label", label);
+        if (isFirst && className === "ledger-income-name") {
+          input.placeholder = "起始资金";
+        } else if (isFirst && className === "ledger-expense-name") {
+          input.placeholder = "起始装备";
+        }
+        input.addEventListener("input", () => {
+          updateLedgerTotals();
+        });
+        if (className.endsWith("-amount")) {
+          input.addEventListener("change", () => normalizeLedgerAmount(input));
+          input.addEventListener("blur", () => normalizeLedgerAmount(input));
+        }
+        cell.append(input);
+        row.append(cell);
+      }
+
+      return row;
+    }
+
+    function addLedgerRow(focus = true) {
+      const row = createLedgerRow(ledgerBody.children.length === 0);
+      ledgerBody.append(row);
+      updateLedgerTotals();
+      if (!focus) return;
+      const firstInput = row.querySelector(".ledger-income-name");
+      if (firstInput) firstInput.focus();
     }
 
     function updateBackpackGearTotals() {
@@ -11925,7 +12402,7 @@ ${data.description}`;
         ability.appendChild(option);
       }
 
-      const operation = createBackpackInput("backpack-tool-operation", "工具操作");
+      const operation = createBackpackTextarea("backpack-tool-operation", "工具操作");
       const craft = createBackpackInput("backpack-tool-craft", "工具制造");
       const weight = createBackpackInput("backpack-tool-weight", "工具重量");
       const price = createBackpackInput("backpack-tool-price", "工具价格");
@@ -12045,6 +12522,21 @@ ${data.description}`;
     addBackpackRow("gear");
     addBackpackRow("tool");
     addBackpackRow("magic");
+    languageAdd.addEventListener("click", () => {
+      const row = createLanguageToolRow("language", true);
+      languageBody.append(row);
+      row.querySelector("input")?.focus();
+    });
+    toolAdd.addEventListener("click", () => {
+      const row = createLanguageToolRow("tool", true);
+      toolBody.append(row);
+      row.querySelector("input")?.focus();
+    });
+
+    ledgerAdd.addEventListener("click", addLedgerRow);
+    addLedgerRow(false);
+    addLedgerRow(false);
+    addLedgerRow(false);
 
     initializeBuilderPersistence();
 
