@@ -1255,6 +1255,24 @@
 
     .custom-editor li { margin: 0 0 3px; }
 
+    .custom-editor table,
+    .race-traits table,
+    .class-feature-text table {
+      max-width: 100%;
+      margin: 4px 0;
+      border-collapse: collapse;
+    }
+
+    .custom-editor th,
+    .custom-editor td,
+    .race-traits th,
+    .race-traits td,
+    .class-feature-text th,
+    .class-feature-text td {
+      padding: 2px 4px;
+      vertical-align: top;
+    }
+
     .race-traits {
       margin-top: 10px;
       padding: 9px 11px;
@@ -1925,6 +1943,39 @@
 
     .feat-level-input.is-default { color: #888; }
 
+    .feat-name-control {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .feat-name-select,
+    .feat-custom-name-input {
+      width: 100%;
+      min-width: 0;
+      padding: 6px 2px;
+      color: #111;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    .feat-name-select { cursor: pointer; }
+
+    .feat-name-select option:disabled { color: #999; }
+
+    .feat-custom-name-input::placeholder { color: #bbb; }
+
+    .feat-custom-reset {
+      width: 16px;
+      font-size: 0.95rem;
+    }
+
     .feat-level-input::-webkit-inner-spin-button,
     .feat-level-input::-webkit-outer-spin-button {
       margin: 0;
@@ -1949,6 +2000,15 @@
       overflow: hidden;
     }
 
+    .feat-description.is-default { color: #888; }
+
+    .feat-description-rich {
+      min-height: 30px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      cursor: text;
+    }
+
     .feat-description.expanded {
       height: 140px;
       overflow: auto;
@@ -1956,6 +2016,8 @@
 
     .feat-level-input:focus,
     .feat-name-input:focus,
+    .feat-name-select:focus,
+    .feat-custom-name-input:focus,
     .feat-description:focus {
       outline: 1px solid #800000;
       outline-offset: -1px;
@@ -2474,6 +2536,25 @@
     .backpack-add:hover { border-color: #800000; }
 
     .backpack-section { margin-top: 14px; }
+
+    .backpack-name-control {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .backpack-name-control select,
+    .backpack-name-control input {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .backpack-name-control .custom-reset {
+      width: 14px;
+      font-size: 0.95rem;
+    }
 
     .backpack-table {
       width: 100%;
@@ -3441,11 +3522,14 @@
     field-sizing: content;
   }
 
-  .backpack-description {
+  .backpack-description,
+  .feat-description-rich {
     height: auto !important;
     min-height: 2em !important;
     overflow: visible !important;
   }
+
+  .feat-description-rich { white-space: pre-wrap !important; }
 
   .backpack-delete-col,
   .backpack-delete-head,
@@ -7748,6 +7832,424 @@ ${data.description}`;
       }
     }
 
+    const featCatalog = [
+      {
+        label: "——起源专长——",
+        items: [
+          "警戒", "巧匠", "医疗师", "幸运", "魔法学徒", "音乐家",
+          "凶蛮打手", "熟习", "酒馆斗殴者", "健壮"
+        ]
+      },
+      {
+        label: "——通用专长——",
+        items: [
+          "属性值提升", "演员", "运动精英", "冲锋手", "大厨", "强弩专家",
+          "粉碎者", "防御式决斗", "双持客", "耐性", "元素掌控", "妖精触碰",
+          "擒抱者", "巨武器大师", "重甲运用", "重甲大师", "领袖之证",
+          "敏锐心灵", "轻甲运用", "巫师杀手", "军用武器训练", "中甲大师",
+          "中甲运用", "骑乘战斗", "观察力", "穿刺者", "毒师", "长柄武器大师",
+          "强健身心", "仪式施法者", "哨兵", "影界触碰", "神射手", "盾牌大师",
+          "技艺专家", "隐伏者", "劈砍者", "飙速跑者", "法术射手", "念动力",
+          "心灵感应", "战地施法者", "武器大师"
+        ]
+      },
+      {
+        label: "——传奇恩惠专长——",
+        items: [
+          "英勇战斗之恩惠", "次元旅行之恩惠", "能量抗性之恩惠",
+          "扭曲命运之恩惠", "超凡强韧之恩惠", "无敌攻势之恩惠",
+          "强力恢复之恩惠", "博学多才之恩惠", "神行无拘之恩惠",
+          "法术溯回之恩惠", "暗夜精魂之恩惠", "真实视觉之恩惠"
+        ]
+      }
+    ];
+
+    const featDescriptionData = {
+      "警戒": `警戒 Alert
+起源专长
+你获得以下增益。
+先攻熟练 Initiative Proficiency。当你投掷先攻时，你可以将你的熟练加值加入结果。
+先攻互换 Initiative Swap。当你掷完先攻，你可以立即与处于同一场战斗中的一名自愿的盟友交换先攻。如果你或那个盟友正处于失能状态，则不能进行交换。`,
+      "巧匠": `巧匠 Crafter
+起源专长
+你获得以下增益。
+工具熟练 Tool Proficiency。你从快速制作表中自选三项不同的工匠工具并获得其熟练。
+折扣 Discount。你在购买非魔法物品时具有20%的折扣。
+快速制作 Fast Crafting。当你完成一次长休时，你可以制作一件快速制作栏中的装备。你必须拥有与该物品对应的工匠工具以及与这些工具对应的工具熟练才能尝试制作。造出的物品会持续存在到你下次完成长休，随后该物品解体坏损。
+快速制作 Fast Crafting
+工匠工具    可制造的装备
+木匠工具 Carpenter's Tools    梯子、火把
+皮匠工具 Leatherworker's Tools    小箱子、卷轴匣、小包
+石匠工具 Mason's Tools    滑轮组
+陶匠工具 Potter's Tools    壶、油灯
+铁匠工具 Smith's Tools    滚珠、桶、铁蒺藜、爪钩、铁锅
+修补工具 Tinker's Tools    铃铛、铲子、火绒盒
+织布工具 Weaver's Tools    篮子、绳索、捕网、帐篷
+木雕工具 Woodcarver's Tools    短棒、巨棒、长棍`,
+      "医疗师": `医疗师 Healer
+起源专长
+你获得以下增益。
+战地医师 Battle Medic。如果你有医疗包，以一个操作动作，你可以消耗医疗包的一次使用次数来救治一个位于你5尺内的生物。该生物可以消耗一枚生命骰，然后由你来投掷它，令该生物恢复等于所掷出的点数+你的熟练加值点生命值。
+治疗重掷 Healing Rerolls。当你掷骰以决定用法术或此专长的战地医师增益所恢复的生命值时，你可以重掷其中掷出1的骰子，但你必须使用重掷的结果。`,
+      "幸运": `幸运 Lucky
+起源专长
+你获得以下增益。
+幸运点 Lucky Point。你拥有一些幸运点，其数量等同于你的熟练加值。你可以将点数花在下列的增益上。你在完成一次长休时重新获得所有已消耗的幸运点。
+优势 Advantage。当你为了一次D20检定而投掷d20时，你可以花费一个幸运点来给予这次检定优势。
+劣势 Disadvantage。当一个生物为了一次对你发动的攻击检定而投掷d20时，你可以花费一个幸运点来为这次检定施加劣势。`,
+      "魔法学徒": `魔法学徒 Magic Initiate
+起源专长
+你获得以下增益。
+两道戏法 Two Cantrips。从牧师法术列表、德鲁伊法术列表、法师法术列表中选择一个列表，你从该法术列表中选择两道戏法并习得之。再从智力、感知、魅力中选择一项属性，你从这个专长中习得的法术使用该属性作为施法属性。
+一环法术 Level 1 Spell。你从前面所选的法术列表中再选择一道一环法术，并始终准备着这道法术。你可以无需法术位地施展该法术一次，并在完成长休时重获以此法施展该法术的能力。你也可以使用你拥有的任意法术位来施展该法术。
+改变法术 Spell Change。每当你获得一级新等级，你都能将通过本专长习得的一道法术替换为同法术列表中同环阶的另一道法术。
+复选 Repeatable。你可多次选择本专长，但是你每次都必须选择一个不同的法术列表。`,
+      "音乐家": `音乐家 Musician
+起源专长
+你获得以下增益。
+乐器训练 Instrument Training。你获得三种自选的乐器的熟练。
+鼓舞之歌 Encouraging Song。作为你完成短休或长休的一部分，你可以用你熟练的乐器演奏一首歌曲，并令听到这首乐歌的盟友获得英雄激励。以这种方式所能影响的盟友数量最多等于你的熟练加值。`,
+      "凶蛮打手": `凶蛮打手 Savage Attacker
+起源专长
+你专门训练过如何做出更具破坏性的进攻。每回合一次，当你使用武器命中目标时，你可以掷两次武器的伤害骰，并自选其中一次应用在目标上。`,
+      "熟习": `熟习 Skilled
+起源专长
+你获得共计三项自选的技能和工具熟练。
+复选 Repeatable。你可多次选择本专长。`,
+      "酒馆斗殴者": `酒馆斗殴者 Tavern Brawler
+起源专长
+你获得以下增益。
+强化徒手打击 Enhanced Unarmed Strike。当你使用徒手打击命中并造成伤害时，你可以造成1d4+你力量调整值的钝击伤害，而非徒手打击的原本伤害。
+伤害重掷 Damage Rerolls。当你为徒手打击掷伤害骰时，你可以重掷其中掷出1的骰子，但你必须使用重掷的结果。
+临时武器专家 Improvised Weaponry。你拥有临时武器的熟练。
+推离 Push。在你的回合内，如果你用攻击动作中的一次徒手打击命中了一个生物，你可以在对目标造成伤害的同时将它推离5尺。你每回合只能使用这个增益一次。`,
+      "健壮": `健壮 Tough
+起源专长
+获得该专长时，你的生命值上限提升你当前角色等级两倍的数值。并且在你随后每次升级时，你的生命值上限都会额外提升2。`,
+      "属性值提升": `属性值提升 Ability Score Improvement
+通用专长（先决：等级4+）
+你选择的一项属性提升2，或者你选择的两项属性各提升1。你无法依靠本专长令某个属性值超出20。
+复选 Repeatable。你可多次选择本专长。`,
+      "演员": `演员 Actor
+通用专长（先决：等级4+，魅力13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的魅力提升1，至多提升至20。
+伪装 Impersonation。伪装成某个虚构或真实的个体的情况下，你为使别人相信你就是那个个体所做的魅力（欺瞒或表演）检定具有优势。
+拟声 Mimicry。你可以模仿出另一个生物的语音，甚至包括它的说话方式。听见你的拟声的生物必须通过一次感知（洞悉）检定才能发觉这种拟声是由他人伪造的（DC等于8+你的魅力调整值+你的熟练加值）。`,
+      "运动精英": `运动精英 Athlete
+通用专长（先决：等级4+，力量或敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+攀爬速度 Climb Speed。你获得等同于你速度的攀爬速度。
+鲤鱼打挺 Hop Up。处于倒地状态的情况下，你可以仅消耗5尺移动力来站起来。
+跳跃 Jumping。你只需移动5尺距离便能进行一次助跑跳远或一次助跑跳高。`,
+      "冲锋手": `冲锋手 Charger
+通用专长（先决：等级4+，力量或敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+进阶疾走 Improved Dash。当你执行疾走动作时，对该动作而言，你的速度提升了10尺。
+冲锋攻击 Charge Attack。使用攻击动作中的近战攻击检定命中目标时，若你在此次攻击前立即向着目标直线移动了10+尺，你可以为这次攻击增添以下其中一个效应：此次攻击的伤害掷骰获得1d8的加值；将目标推离10尺，前提是目标体型不比你大超过一级。你只能在每个你自己的回合使用一次此增益。`,
+      "大厨": `大厨 Chef
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的体质或感知提升1，至多提升至20。
+厨师工具 Cook's Utensils。如果你没有厨师工具的熟练，你获得之。
+大补食膳 Replenishing Meal。作为短休的一部分，只要你手上有食材和厨师工具，你就可以烹饪一顿特别的美食。你可以为数个生物准备足够的此类食物，其数量等于4+你的熟练加值。在这一次短休结束时，任何吃了这些食物且花费了生命骰来恢复生命值的生物都能额外恢复1d8的生命值。
+应急零嘴 Bolstering Treats。如果你手上有食材和厨师工具，你可以花费一小时的时间，或在完成一次长休时，烹饪出一定份数的零嘴，其数量等于你熟练加值。这些特别的小零嘴在做好后能保存八小时。一个生物可以使用一个附赠动作来吃掉其中一份零嘴，并获得等同于你熟练加值的临时生命值。`,
+      "强弩专家": `强弩专家 Crossbow Expert
+通用专长（先决：等级4+，敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷提升1，至多提升至20。
+无视装填 Ignore Loading。你无视手弩、重弩和轻弩的装填词条（在这个专长里统称弩）。如果你正手持着一把弩，你即使没有空手也能够为它装填一发弹药。
+抵近射击 Firing in Melee。你用弩进行的攻击检定不会因你在敌人的5尺内而具有劣势。
+双持射击 Dual Wielding。当你发动由轻型词条所提供的额外的攻击时，如果这次追加攻击是由一把具有轻型词条的弩所发动的，且你原本无法在伤害中加入属性调整值，你就可以改为可以将你的属性调整值加入本次伤害中。`,
+      "粉碎者": `粉碎者 Crusher
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或体质提升1，至多提升至20。
+推动 Push。每回合一次，当你以造成钝击伤害的一次攻击命中了一个生物时，只要这个生物的体型不比你大超过一级，你就能将它移动5尺至一处未占据空间中。
+强化重击 Enhanced Critical。当你掷出一次重击命中一名生物并对其造成钝击伤害后，直到你的下个回合开始前，任何以该生物为目标的攻击检定都会具有优势。`,
+      "防御式决斗": `防御式决斗 Defensive Duelist
+通用专长（先决：等级4+，敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷提升1，至多提升至20。
+招架 Parry。如果其他生物的近战攻击命中你时你正握着一把灵巧武器，则你可以执行反应来将你的熟练加值加入到你的护甲等级中，此举可能导致本次攻击变为未命中。那之后，直到你的下一回合开始前，你的AC在面对近战攻击时都将具有相同的加值。`,
+      "双持客": `双持客 Dual Wielder
+通用专长（先决：等级4+，力量或敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+强化双持 Enhanced Dual Wielding。当你在自己的回合中执行了攻击动作，并使用具有轻型词条的武器发动了一次攻击后，你可以在同一回合中以附赠动作发动一次额外的攻击。这次额外的攻击必须由另一把不具有双手词条的近战武器发动。额外的攻击的伤害无法加入你的属性调整值（除非该调整值为负数）。
+快速拔刀 Quick Draw。拔出或入鞘武器时，你可以同时拔出或入鞘两把不具有双手词条的武器，而非通常情况下的一把。`,
+      "耐性": `耐性 Durable
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的体质提升1，至多提升至20。
+悍不畏死 Defy Death。你进行的死亡豁免具有优势。
+高速恢复 Speedy Recovery。以一个附赠动作，你可以消耗并投掷一枚生命骰，来恢复与投掷结果相等的生命值。`,
+      "元素掌控": `元素掌控 Elemental Adept
+通用专长（先决：等级4+，施法或契约魔法特性）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1点，至多提升至20。
+能量掌控 Energy Mastery。选择以下伤害类型之一：强酸、寒冷、火焰、闪电、雷鸣。你施展的法术无视所选伤害类型的抗性。此外，当你为你施展的造成该类型伤害的法术投掷伤害时，你可以将伤害骰中骰出的1都视为2。
+复选 Repeatable。你可多次选取本专长，但每次选取时都必须为能量掌控增益选择一个不同的伤害类型。`,
+      "妖精触碰": `妖精触碰 Fey-Touched
+通用专长（先决：等级4+）
+暴露在妖精荒野 Feywild 的魔法之下给予你以下增益：
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+妖精魔法 Fey Magic。选择一道预言或惑控学派的一环法术。你始终准备着你选择的这道法术与迷踪步 Misty Step。你可以无需法术位地施展每道法术各一次，当你完成长休时，你重获以此法施展这些法术的能力。你也能够以你拥有的任意合适环阶的法术位施展这些法术。
+这些法术的施法属性是你以此专长提升的属性。`,
+      "擒抱者": `擒抱者 Grappler
+通用专长（先决：等级4+，力量或敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+连擒带打 Punch and Grab。你的回合中，当你用攻击动作中的一次徒手打击命中了一个生物，你可以同时使用擒抱和造成伤害两个选项。你每回合只能使用这个增益一次。
+优势攻击 Attack Advantage。你攻击受擒于你的生物时进行的攻击检定具有优势。
+高速拖行 Fast Wrestler。你无需为移动受擒于你的生物而花费额外的移动力，前提是这名生物的体型与你相同或更小。`,
+      "巨武器大师": `巨武器大师 Great Weapon Master
+通用专长（先决：等级4+，力量13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量提升1，至多提升至20。
+重武器掌握 Heavy Weapon Master。在你的回合内，你的攻击动作中，当你用具有重型词条的武器命中了一名生物时，你可以让这把武器对目标额外造成一定的伤害，额外伤害等同于你的熟练加值。
+顺势斩 Hew。当你使用近战武器掷出一次重击时，或当你用其将一个生物的生命值降低至0时，你可以立即使用你的附赠动作用同一把武器发动一次攻击。`,
+      "重甲运用": `重甲运用 Heavily Armored
+通用专长（先决：等级4+，中甲受训）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的体质或力量提升1，至多提升至20。
+护甲受训 Armor Training。你获得重甲受训。`,
+      "重甲大师": `重甲大师 Heavy Armor Master
+通用专长（先决：等级4+，重甲受训）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的体质或力量提升1，至多提升至20。
+伤害减免 Damage Reduction。穿着重甲期间，当你被一次攻击命中时，该次攻击对你造成的任何钝击伤害、穿刺伤害与挥砍伤害均减去你的熟练加值。`,
+      "领袖之证": `领袖之证 Inspiring Leader
+通用专长（先决：等级4+，感知或魅力13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的感知或魅力提升1，至多提升至20。
+激励演出 Bolstering Performance。每当你的短休/长休结束时，你可以做一场激励人心的表演：一次演讲、一首歌曲或一支舞蹈。当你这么做时，选择至多6名在周围30尺内观看你表演的盟友（亦可包括你自己）。每个被选中的生物都可以获得一定临时生命值，其数值等于你的角色等级+你用本专长提升的属性的调整值。`,
+      "敏锐心灵": `敏锐心灵 Keen Mind
+通用专长（先决：等级4+，智力13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力提升1，至多提升至20。
+轶闻知识 Lore Knowledge。选择下列技能之一：奥秘、历史、调查、自然、宗教。如果你不具有所选技能的熟练，则你获得其熟练；如果你已有熟练，则你获得其专精。
+快速研究 Quick Study。你可以用附赠动作执行研究动作。`,
+      "轻甲运用": `轻甲运用 Lightly Armored
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1点，至多提升至20。
+护甲受训 Armor Training。你获得轻甲和盾牌受训。`,
+      "巫师杀手": `巫师杀手 Mage Slayer
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+专注中断手 Concentration Breaker。当你对一名正处于专注的生物造成伤害时，该生物本次为维持专注所进行的豁免检定具有劣势。
+审慎护心 Guarded Mind。当你的智力、感知或魅力豁免失败时，你可以将其改为成功。此增益一经使用，直到完成短休或长休前你都无法再次使用。`,
+      "军用武器训练": `军用武器训练 Martial Weapon Training
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+武器熟练 Weapon Proficiency。你获得军用武器熟练。`,
+      "中甲大师": `中甲大师 Medium Armor Master
+通用专长（先决：等级4+，中甲受训）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+灵敏着装 Dexterous Wearer。穿着中甲期间，若你的敏捷在16或更高，你可以在AC中加入3点敏捷调整值，而非原本的2点。`,
+      "中甲运用": `中甲运用 Moderately Armored
+通用专长（先决：等级4+，轻甲受训）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+护甲受训 Armor Training。你获得中甲受训。`,
+      "骑乘战斗": `骑乘战斗 Mounted Combatant
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量、敏捷或感知提升1，至多提升至20。
+骑乘突击 Mounted Strike。骑乘期间，你对位于你坐骑5尺内的、体型比你坐骑至少小一级的、且未被骑乘的生物所进行的攻击检定具有优势。
+侧跃躲闪 Leap Aside。当你的坐骑受某效应影响而需要进行敏捷豁免时，如果此次豁免成功只受到一半伤害，那么它豁免成功时不受伤害，豁免失败只承受一半伤害。为享受此增益，你必须骑乘着你的坐骑，且你与坐骑均不能处于失能状态。
+我身作盾 Veer。当你骑乘时，只要你不处于失能状态，你就可以强制让命中了你的坐骑的攻击改为命中你自己。`,
+      "观察力": `观察力 Observant
+通用专长（先决：等级4+，智力或感知13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力或感知提升1，至多提升至20。
+敏锐观察 Keen Observer。选择以下技能之一：洞悉、调查或察觉。如果你不具有所选技能的熟练，则你获得其熟练；如果你已有熟练，则你获得其专精。
+快速搜索 Quick Search。你可以用附赠动作进行搜索动作。`,
+      "穿刺者": `穿刺者 Piercer
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+穿透伤 Puncture。每回合一次，当你用造成穿刺伤害的攻击命中一个生物时，你可以重骰这次攻击伤害的其中一枚伤害骰。但你必须采用新的掷骰结果。
+强化重击 Enhanced Critical。当你用造成穿刺伤害的攻击命中一个生物并且掷出重击时，你可以在计算额外的穿刺伤害时多投一个伤害骰。`,
+      "毒师": `毒师 Poisoner
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷或智力提升1，至多提升至20。
+强效毒素 Potent Poison。你造成毒素伤害的伤害掷骰无视对方的毒素伤害抗性。
+酿毒 Brew Poison。你获得毒药工具的熟练。你可以花费一小时的时间与价值50GP的材料，来使用毒药工具制造一定数量的毒药，其剂数等同于你的熟练加值。你能够以一个附赠动作为一把武器或一枚弹药涂上一剂毒药。涂用后，此种毒药的毒性能维持一分钟，毒性也会在你用此涂毒物品造成伤害后会被消耗。当一名生物受到来自此种涂毒物品的伤害时，该生物必须成功通过一次体质豁免（DC等于8+你以本专长提升的属性的调整值+你的熟练加值），否则将受到2d8毒素伤害并陷入中毒状态，持续至你的下回合结束。`,
+      "长柄武器大师": `长柄武器大师 Polearm Master
+通用专长（先决：等级4+，力量或敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷或力量提升1，至多提升至20。
+长柄打击 Pole Strike。在你执行攻击动作并使用长棍、矛或同时具有重型词条与触及词条的武器攻击后，你可以立刻用附赠动作，使用该武器的另一端发动一次近战攻击。在这次攻击中，该武器的伤害骰改为d4，其伤害类型改为钝击伤害。
+反应打击 Reactive Strike。在你持握长棍、矛或同时具有重型词条与触及词条的武器期间，生物进入你触及范围时，你能够以反应，使用该武器对该生物发动一次近战攻击。`,
+      "强健身心": `强健身心 Resilient
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。选择你不具有其豁免熟练的一项属性，该属性提升1，至多提升至20。
+豁免熟练 Saving Throw Proficiency。你获得所选属性的豁免熟练。`,
+      "仪式施法者": `仪式施法者 Ritual Caster
+通用专长（先决：等级4+，智力、感知或魅力13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+仪式魔法 Ritual Spells。你选择数道具有仪式标签的一环法术，其具体数量等于你的熟练加值。你始终准备着这几道法术，并可以用你拥有的任何法术位去施展它们。施展它们的施法属性为你用此专长提升的属性。此后，每当你的熟练加值提升时，你可以通过这个特性多获得一道始终准备的、带有仪式标签的一环法术。
+快速仪式 Quick Ritual。你可以用通常的施法时间来施展一道仪式法术，而不需要仪式的延长施法时间。这么做不会花费你的法术位。一旦你通过这种方式施展了一道法术，直到完成一次长休前你都不能再使用这个增益。`,
+      "哨兵": `哨兵 Sentinel
+通用专长（先决：等级4+，力量或敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+守护者 Guardian。当位于你5尺范围内的生物执行撤离动作后，或当它的攻击命中了除你以外的目标后，你可以立刻对该生物进行一次借机攻击。
+阻拦 Halt。你的借机攻击命中一名生物时，该生物的速度在当前回合剩余时间内变为0。`,
+      "影界触碰": `影界触碰 Shadow Touched
+通用专长（先决：等级4+）
+暴露在堕影冥界 Shadowfell 的魔法之下给予你以下增益：
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+暗影魔法 Shadow Magic。选择一道幻术或死灵学派的一环法术。你始终准备着你选择的这道法术与隐形术 Invisibility。你可以无需法术位地施展每道法术各一次，当你完成长休时，你重获以此法施展这些法术的能力。你也能够以你拥有的任意合适环阶的法术位施展这些法术。
+这些法术的施法属性是你以此专长提升的属性。`,
+      "神射手": `神射手 Sharpshooter
+通用专长（先决：等级4+，敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷提升1，至多提升至20。
+绕过掩体 Bypass Cover。你使用武器发动的远程攻击无视半身掩护和四分之三掩护。
+抵近射击 Firing in Melee。位于一个敌人5尺范围内的情况下，你使用远程武器发动的攻击检定不会因此具有劣势。
+百步穿杨 Long Shots。使用远程武器攻击超出常规射程的目标时，你的攻击检定不会因此具有劣势。`,
+      "盾牌大师": `盾牌大师 Shield Master
+通用专长（先决：等级4+，盾牌受训）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量提升1，至多提升至20。
+盾击 Shield Bash。当你通过攻击动作中的，由近战武器发动的一次攻击命中了位于你5尺内的生物时，如果你装备着盾牌，你就可以立即使用它来击打目标，迫使目标进行一次力量豁免检定（DC等于8+你的力量调整值+你的熟练加值）。如果豁免失败，目标将被你推离5尺远或因此陷入倒地状态（由你选择）。在每个你的回合中，此增益只能被使用一次。
+介入盾牌 Interpose Shield。当你受某效应影响而需要进行敏捷豁免来“只受一半伤害”时，若你豁免检定成功并正持握着一面盾牌，你就可以用反应来使你自己免受此次伤害。`,
+      "技艺专家": `技艺专家 Skill Expert
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至20。
+技能熟练 Skill Proficiency。你自选一个技能并获得其熟练。
+专精 Expertise。你选择一个拥有其熟练但不具备相应专精的技能，并获得其专精。`,
+      "隐伏者": `隐伏者 Skulker
+通用专长（先决：等级4+，敏捷13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷提升1，至多提升至20。
+盲视 Blindsight。你获得10尺距离的盲视。
+战争迷雾 Fog of War。你善于利用战斗中的混乱。你在战斗中通过执行躲藏动作时所做的任何敏捷（隐匿）检定都具有优势。
+狙击手 Sniper。如果你在躲藏中进行了攻击检定，但该次攻击未命中时，这次攻击将不会暴露你的位置。`,
+      "劈砍者": `劈砍者 Slasher
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+伤筋 Hamstring。每回合一次，当你用造成挥砍伤害的攻击命中一个生物时，你可以使其速度降低10尺，持续至你的下回合开始。
+强化重击 Enhanced Critical。当你掷出重击并对一个生物造成挥砍伤害时，该生物进行的所有攻击检定都将具有劣势，持续至你的下回合开始为止。`,
+      "飙速跑者": `飙速跑者 Speedy
+通用专长（先决：等级4+，敏捷或体质13+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的敏捷或体质提升1，至多提升至20。
+速度提升 Speed Increase。你的速度提升10尺。
+险地疾行 Dash Over Difficult Terrain。当你在自己的回合执行疾走动作时，在这个回合余下的时间里，困难地形不再会额外消耗你的移动力。
+灵活移动 Agile Movement。对你发动的借机攻击都具有劣势。`,
+      "法术射手": `法术射手 Spell Sniper
+通用专长（先决：等级4+，施法或契约魔法特性）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+绕过掩体 Bypass Cover。你为法术进行的攻击检定无视半身掩护和四分之三掩护。
+抵近施法 Casting in Melee。位于一个敌人5尺范围内的情况下，你用法术进行的攻击检定不会因此具有劣势。
+法术增距 Increased Range。当你施展一道具有至少10尺施法距离，且需要你进行一次攻击检定的法术时，这道法术的施法距离增加60尺。`,
+      "念动力": `念动力 Telekinetic
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+次级心灵遥控 Minor Telekinesis。你习得戏法法师之手 Mage Hand。你施展这道戏法时，你无需言语成分与姿势成分，且可以让这只灵体手隐形，还可以令它的施法距离以及其可远离你的最大距离均提升30尺。该法术的施法属性是你以此专长提升的属性。
+念力推撞 Telekinetic Shove。以一个附赠动作，你可以尝试以念动力推撞一个位于你30尺内的你可见的生物。当你这样做时，目标必须通过一次力量豁免（DC等于8+你用此专长提升的属性的调整值+你的熟练加值）否则将被你拉近或推离5尺。`,
+      "心灵感应": `心灵感应 Telepathic
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+传心呢喃 Telepathic Utterance。你可以和位于你60尺内任何你可见的生物用心灵感应进行交流。你的传心呢喃以一种你已知的语言进行，且该生物必须懂得这门语言才能理解你。你的主动沟通并不会给予该生物以心灵感应的形式回复你的能力。
+侦测思想 Detect Thoughts。你始终准备着法术侦测思想 Detect Thoughts。你可以无需法术位且无需法术成分地施展该法术，你必须完成长休后才能再次以此法施展该法术。你也能够以你拥有的任意合适环阶的法术位施展该法术。该法术的施法属性是你以此专长提升的属性。`,
+      "战地施法者": `战地施法者 War Caster
+通用专长（先决：等级4+，施法或契约魔法特性）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至20。
+专注 Concentration。你为维持专注的所做的体质豁免具有优势。
+响应法术 Reactive Spell。当一个生物因离开你的触及范围而引发你的借机攻击时，你能使用你的反应来对这个生物施展一道法术，而非发动一次借机攻击。这道法术的施法时间必须为动作，且必须将该生物选为法术的唯一目标。
+姿势成分 Somatic Components。即使你的一只手或双手上都有武器/盾牌，你也能满足法术的姿势成分要求。`,
+      "武器大师": `武器大师 Weapon Master
+通用专长（先决：等级4+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至20。
+精通词条 Mastery Property。你对武器的训练让你能够使用你自选的一种简单或军用武器的精通词条，前提是你熟练于该种武器。每当你完成一次长休，你能将所选的武器种类替换为你熟练的另一种武器。`,
+      "英勇战斗之恩惠": `英勇战斗之恩惠 Boon of Combat Prowess
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+无双锁定 Peerless Aim。当你的一次攻击检定失手时，你可以将其改为命中。该增益一经使用，下个你的回合开始后你才能再次使用它。`,
+      "次元旅行之恩惠": `次元旅行之恩惠 Boon of Dimensional Travel
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+闪烁步 Blink Steps。当你执行攻击动作或魔法动作后，你可以立即传送至多30尺的距离到一处你可见的未占据空间内。`,
+      "能量抗性之恩惠": `能量抗性之恩惠 Boon of Energy Resistance
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+能量抗性 Energy Resistances。从下列伤害类型中选择两种：强酸、寒冷、火焰、闪电、暗蚀、毒素、心灵、光耀或雷鸣。你获得所选伤害类型的抗性。每当你完成长休时，你都可以改变此处选择的伤害类型。
+能量重导 Energy Redirection。当你受到伤害时，若该伤害的伤害类型是你能量抗性增益中所选类型之一，你能够以反应来将一次相同类型的伤害传导给你60尺内的、可见的另一名生物（不能是对你而言处于全身掩护下的生物）。若你如此做，该生物必须通过一次敏捷豁免（DC等于8+你的体质调整值+你的熟练加值），否则其受到2d12+你的体质调整值伤害。`,
+      "扭曲命运之恩惠": `扭曲命运之恩惠 Boon of Fate
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+时来运转 Improve Fate。当你或位于你60尺内的另一名生物的D20检定中成功时或失败时，你可以投掷2d4，并将掷骰结果作为加值或减值附加到d20掷骰中。该增益一经使用，直至你投掷先攻、完成短休或完成长休你都无法再次使用。`,
+      "超凡强韧之恩惠": `超凡强韧之恩惠 Boon of Fortitude
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+身强体壮 Fortified Health。你的生命值上限增加40。此外，每当你恢复生命值时，你可以恢复等于你体质调整值的额外生命值。以此恢复了额外生命值后，直至下个你的回合开始后你才能再次受益于此效果。`,
+      "无敌攻势之恩惠": `无敌攻势之恩惠 Boon of Irresistible Offense
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的力量或敏捷提升1，至多提升至30。
+摧坚破甲 Overcome Defenses。你造成的钝击、挥砍与穿刺伤害始终无视抗性。
+无阻打击 Overwhelming Strike。当你为一次攻击检定投掷的d20骰出了20时，你可以对目标造成额外伤害，你造成的额外伤害等于你以此专长提升的属性的属性值，伤害类型与这次攻击的伤害类型相同。`,
+      "强力恢复之恩惠": `强力恢复之恩惠 Boon of Recovery
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+背水一战 Last Stand。当你的生命值将要降至0时，你可以改为降至1并恢复等于你生命值上限一半的生命值。该增益一经使用，直到完成长休你都无法再次被使用。
+重获生机 Recover Vitality。你获得一个有着十枚d10的治疗池。以一个附赠动作，你可以消耗治疗池中任意枚骰子来恢复你的生命值。投掷全部你消耗的骰子，将掷骰结果相加，即是你以此恢复的生命值。当你完成长休时，你的治疗池重获所有被消耗的骰子。`,
+      "博学多才之恩惠": `博学多才之恩惠 Boon of Skill
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+全能专家 All-Around Adept。你获得所有技能的熟练。
+专精 Expertise。选择一项你不具有专精的技能，你获得该技能的专精。`,
+      "神行无拘之恩惠": `神行无拘之恩惠 Boon of Speed
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+逃脱大师 Escape Artist。你能够以一个附赠动作执行撤离动作，并结束你陷入的受擒状态。
+风驰电掣 Quickness。你的速度提升30尺。`,
+      "法术溯回之恩惠": `法术溯回之恩惠 Boon of Spell Recall
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。
+免费施法 Free Casting。每当你使用一环到四环的法术位施展法术时，投掷1d4。若掷骰结果与你消耗的法术位环阶一致，则该法术位不会被消耗。`,
+      "暗夜精魂之恩惠": `暗夜精魂之恩惠 Boon of the Night Spirit
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+融身入影 Merge with Shadows。身处微光光照或黑暗期间，你可以用附赠动作令你获得隐形状态。隐形状态将在你执行动作/附赠动作/反应后立即结束。
+幽影化身 Shadowy Form。身处微光光照或黑暗期间，你具有除心灵和光耀伤害外所有伤害的抗性。`,
+      "真实视觉之恩惠": `真实视觉之恩惠 Boon of Truesight
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+真实视觉 Truesight。你获得60尺真实视觉。`
+    };
+
     function getFeatLevelDefaults() {
       const levels = [1, 4, 8, 12, 16, 19];
       const mainClass = classSelect.value;
@@ -7763,12 +8265,229 @@ ${data.description}`;
     function decorateFeatDescription(description) {
       description.addEventListener("dblclick", (event) => {
         event.preventDefault();
-        description.classList.add("expanded");
-        description.focus();
+        const expanded = description.classList.toggle("expanded");
+        if (expanded) description.focus();
       });
-      description.addEventListener("blur", () => {
-        description.classList.remove("expanded");
+    }
+
+    function populateFeatSelect(select) {
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "—";
+      select.appendChild(placeholder);
+
+      const custom = document.createElement("option");
+      custom.value = CUSTOM_VALUE;
+      custom.textContent = "自定义";
+      select.appendChild(custom);
+
+      for (const group of featCatalog) {
+        const separator = document.createElement("option");
+        separator.value = `__feat_group__${group.label}`;
+        separator.textContent = group.label;
+        separator.disabled = true;
+        select.appendChild(separator);
+
+        for (const name of group.items) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        }
+      }
+    }
+
+    function syncFeatCustomUI(row) {
+      const select = row.querySelector(".feat-name-select");
+      const customInput = row.querySelector(".feat-custom-name-input");
+      const reset = row.querySelector(".feat-custom-reset");
+      if (!select || !customInput || !reset) return;
+
+      const custom = select.value === CUSTOM_VALUE;
+      select.hidden = custom;
+      customInput.hidden = !custom;
+      reset.hidden = !custom;
+    }
+
+    function setFeatDescription(row, name) {
+      const description = row.querySelector(".feat-description");
+      if (!description) return;
+      const raw = name ? (featDescriptionData[name] || "") : "";
+      const breakIndex = raw.indexOf("\n");
+      const text = breakIndex >= 0 ? raw.slice(breakIndex + 1) : raw;
+      description.value = text;
+      description.classList.toggle("is-default", Boolean(text));
+      description.classList.remove("expanded");
+      description.scrollTop = 0;
+    }
+
+    const combatStyleCatalog = [
+      "箭术", "盲斗", "防御", "对决", "巨武器战斗", "拦截", "守护",
+      "投掷武器战斗", "双武器战斗", "徒手战斗", "集群战斗", "俯卧战斗",
+      "奥法武斗家"
+    ];
+
+    const combatStyleDescriptionData = {
+      "箭术": `战斗风格专长（先决：战斗风格特性）
+你使用远程武器进行的攻击检定获得+2加值。`,
+      "盲斗": `战斗风格专长（先决：战斗风格特性）
+你具有10尺<span class="term-green">盲视</span>。`,
+      "防御": `战斗风格专长（先决：战斗风格特性）
+着装轻甲、中甲或重甲期间，你的护甲等级获得+1加值。`,
+      "对决": `战斗风格专长（先决：战斗风格特性）
+当你单手持用一把近战武器且没有持用其他武器时，你使用那把武器进行的伤害掷骰获得+2加值。`,
+      "巨武器战斗": `战斗风格专长（先决：战斗风格特性）
+当你用双手持握的一把近战武器发动了一次攻击并为其进行伤害掷骰时，若该武器具有双手或多用词条，那么你便可以将伤害骰投出的1和2都视为3。`,
+      "拦截": `战斗风格专长（先决：战斗风格特性）
+当一名你可见的生物以攻击检定命中你5尺内的另一名生物*，你能够以反应减少对目标造成的伤害，使该伤害降低1d10+你的熟练加值。你必须持握着一面盾牌或者一把简易/军用武器才能使用这个反应。
+*译注：此处原文为 a creature you can see hits another creature within 5 feet of you，another 具体指的是对攻击生物而言还是对你而言在外网亦有所争论，请自行决断。`,
+      "守护": `战斗风格专长（先决：战斗风格特性）
+当一名你可见的生物对一个你5尺内的除你以外的目标发动攻击时，若你正持握着一面盾牌，你能够以反应将盾牌挡在中间。你对触发攻击检定施加<span class="term-green">劣势</span>，并且只要你还位于目标5尺内，其他所有对该目标进行的攻击检定也具有<span class="term-green">劣势</span>，持续至你的下回合开始。`,
+      "投掷武器战斗": `战斗风格专长（先决：战斗风格特性）
+当你使用具有投掷词条的武器进行远程攻击检定并命中时，你在该次伤害掷骰中获得+2加值。`,
+      "双武器战斗": `战斗风格专长（先决：战斗风格特性）
+当你因使用具有<span class="term-green">轻型</span>词条的武器而得以发动额外的攻击时，若此次额外的攻击的伤害本来无法加入你的属性调整值，你可以加入你的属性调整值。`,
+      "徒手战斗": `战斗风格专长（先决：战斗风格特性）
+当你使用<span class="term-green">徒手打击</span>命中并造成了伤害时，你可以改为造成1d6+你的力量调整值点钝击伤害，而非原本的<span class="term-green">徒手打击</span>伤害。如果你进行攻击检定时并没有持握任何武器与盾牌，则上述伤害中的d6将变为d8。
+每当你的回合开始时，你还可以对一个因你受擒的生物造成1d4点钝击伤害。`,
+      "集群战斗": `战斗风格专长（先决：战斗风格特性）
+当你以武器或徒手打击对生物发动近战攻击时，若该生物5尺内存在有至少一名你的盟友，且该盟友未陷入失能状态，你的伤害掷骰获得+1加值。若该生物5尺内存在有至少一名也具有此专长且未陷入失能状态的你的盟友，此加值提升至+2。`,
+      "俯卧战斗": `战斗风格专长（先决：战斗风格特性）
+在你陷入<span class="term-green">倒地</span>状态期间，你不会由于<span class="term-green">倒地</span>状态而在攻击检定上具有<span class="term-green">劣势</span>，且<span class="term-green">倒地</span>状态不会为对你发动的攻击提供<span class="term-green">优势</span>。`,
+      "奥法武斗家": `战斗风格专长（先决：战斗风格特性）
+你获得以下增益。
+你习得两道你选择的法师戏法。推荐选择<span class="custom-spell">法师之手 Mage Hand</span>和<span class="custom-spell">冷冻射线 Ray of Frost</span>。你施展这些法术的施法属性是智力、感知或魅力（在你选取此专长时选择）。
+每当你获得等级时，你可以将其中一道戏法替换为另一道法师戏法。`
+    };
+
+    function populateCombatStyleSelect(select) {
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "—";
+      select.appendChild(placeholder);
+
+      const custom = document.createElement("option");
+      custom.value = CUSTOM_VALUE;
+      custom.textContent = "自定义";
+      select.appendChild(custom);
+
+      for (const name of combatStyleCatalog) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      }
+    }
+
+    function syncCombatStyleCustomUI(row) {
+      const select = row.querySelector(".combat-style-select");
+      const input = row.querySelector(".combat-style-custom-input");
+      const reset = row.querySelector(".combat-style-custom-reset");
+      if (!select || !input || !reset) return;
+
+      const custom = select.value === CUSTOM_VALUE;
+      select.hidden = custom;
+      input.hidden = !custom;
+      reset.hidden = !custom;
+    }
+
+    function setCombatStyleDescription(row, name) {
+      const description = row.querySelector(".feat-description-rich");
+      if (!description) return;
+
+      if (!name) {
+        description.innerHTML = "";
+        description.classList.remove("is-default");
+      } else {
+        description.innerHTML = combatStyleDescriptionData[name] || "";
+        description.classList.add("is-default");
+      }
+      description.classList.remove("expanded");
+      description.scrollTop = 0;
+    }
+
+    function createCombatStyleRow(body, block) {
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      const nameControl = document.createElement("div");
+      nameControl.className = "feat-name-control";
+      const select = document.createElement("select");
+      select.className = "feat-name-select combat-style-select";
+      select.setAttribute("aria-label", "战斗风格");
+      populateCombatStyleSelect(select);
+
+      const customName = document.createElement("input");
+      customName.type = "text";
+      customName.className = "feat-custom-name-input combat-style-custom-input";
+      customName.placeholder = "自定义战斗风格";
+      customName.autocomplete = "off";
+      customName.setAttribute("aria-label", "自定义战斗风格名称");
+      customName.hidden = true;
+
+      const customReset = document.createElement("button");
+      customReset.type = "button";
+      customReset.className = "custom-reset combat-style-custom-reset";
+      customReset.textContent = "×";
+      customReset.title = "返回战斗风格选择";
+      customReset.setAttribute("aria-label", "返回战斗风格选择");
+      customReset.hidden = true;
+
+      nameControl.append(select, customName, customReset);
+      nameCell.append(nameControl);
+
+      const descriptionCell = document.createElement("td");
+      const description = document.createElement("div");
+      description.className = "feat-description feat-description-rich";
+      description.contentEditable = "true";
+      description.setAttribute("role", "textbox");
+      description.setAttribute("aria-multiline", "true");
+      description.setAttribute("aria-label", "战斗风格描述");
+      description.title = "双击展开或收起";
+      decorateFeatDescription(description);
+      description.addEventListener("input", () => {
+        description.classList.remove("is-default");
       });
+
+      select.addEventListener("change", () => {
+        if (select.value === CUSTOM_VALUE) {
+          customName.value = "";
+          syncCombatStyleCustomUI(row);
+          setCombatStyleDescription(row, "");
+          customName.focus();
+          return;
+        }
+
+        customName.value = "";
+        syncCombatStyleCustomUI(row);
+        setCombatStyleDescription(row, select.value);
+      });
+
+      customReset.addEventListener("click", () => {
+        select.value = "";
+        customName.value = "";
+        syncCombatStyleCustomUI(row);
+        setCombatStyleDescription(row, "");
+        select.focus();
+      });
+
+      syncCombatStyleCustomUI(row);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "feat-delete";
+      deleteButton.textContent = "×";
+      deleteButton.title = "删除此行";
+      deleteButton.setAttribute("aria-label", "删除此行");
+      deleteButton.addEventListener("click", () => {
+        row.remove();
+        if (body.children.length === 0) block.hidden = true;
+      });
+
+      descriptionCell.append(description, deleteButton);
+      row.append(nameCell, descriptionCell);
+      body.append(row);
+      return select;
     }
 
     function createFeatRow(level = "") {
@@ -7799,20 +8518,67 @@ ${data.description}`;
       levelCell.append(levelInput);
 
       const nameCell = document.createElement("td");
-      const nameInput = document.createElement("input");
-      nameInput.type = "text";
-      nameInput.className = "feat-name-input";
-      nameInput.autocomplete = "off";
-      nameInput.setAttribute("aria-label", "专长名称");
-      nameCell.append(nameInput);
+      const nameControl = document.createElement("div");
+      nameControl.className = "feat-name-control";
+      const nameSelect = document.createElement("select");
+      nameSelect.className = "feat-name-select";
+      nameSelect.setAttribute("aria-label", "专长名称");
+      populateFeatSelect(nameSelect);
+
+      const customNameInput = document.createElement("input");
+      customNameInput.type = "text";
+      customNameInput.className = "feat-custom-name-input";
+      customNameInput.placeholder = "自定义专长";
+      customNameInput.autocomplete = "off";
+      customNameInput.setAttribute("aria-label", "自定义专长名称");
+      customNameInput.hidden = true;
+
+      const customReset = document.createElement("button");
+      customReset.type = "button";
+      customReset.className = "custom-reset feat-custom-reset";
+      customReset.textContent = "×";
+      customReset.title = "返回专长选择";
+      customReset.setAttribute("aria-label", "返回专长选择");
+      customReset.hidden = true;
+
+      nameControl.append(nameSelect, customNameInput, customReset);
+      nameCell.append(nameControl);
 
       const descriptionCell = document.createElement("td");
       const description = document.createElement("textarea");
       description.className = "feat-description";
       description.rows = 1;
       description.autocomplete = "off";
+      description.title = "双击展开或收起";
       description.setAttribute("aria-label", "专长描述");
       decorateFeatDescription(description);
+      description.addEventListener("input", () => {
+        description.classList.remove("is-default");
+      });
+
+      nameSelect.addEventListener("change", () => {
+        if (nameSelect.value === CUSTOM_VALUE) {
+          customNameInput.value = "";
+          syncFeatCustomUI(row);
+          setFeatDescription(row, "");
+          customNameInput.focus();
+          return;
+        }
+
+        customNameInput.value = "";
+        syncFeatCustomUI(row);
+        setFeatDescription(row, nameSelect.value);
+      });
+
+      customReset.addEventListener("click", () => {
+        nameSelect.value = "";
+        customNameInput.value = "";
+        syncFeatCustomUI(row);
+        setFeatDescription(row, "");
+        nameSelect.focus();
+      });
+
+      syncFeatCustomUI(row);
 
       const deleteButton = document.createElement("button");
       deleteButton.type = "button";
@@ -7831,6 +8597,8 @@ ${data.description}`;
     }
 
     function createExtendedFeatRow(kind, body, block) {
+      if (kind === "combat") return createCombatStyleRow(body, block);
+
       const row = document.createElement("tr");
 
       const nameCell = document.createElement("td");
@@ -7908,8 +8676,8 @@ ${data.description}`;
       updateFeatAddState();
 
       const lastRow = featTableBody.lastElementChild;
-      const nameInput = lastRow ? lastRow.querySelector(".feat-name-input") : null;
-      if (nameInput) nameInput.focus();
+      const nameSelect = lastRow ? lastRow.querySelector(".feat-name-select") : null;
+      if (nameSelect) nameSelect.focus();
     }
 
     const skillGroups = [
@@ -8889,6 +9657,16 @@ ${data.description}`;
       return value >= 0 ? `+${value}` : String(value);
     }
 
+    function formatAbilityResult(value) {
+      if (value === null) return "—";
+      return Math.abs(value) >= 100 ? "##" : String(value);
+    }
+
+    function formatAbilityModifier(value) {
+      if (value === null) return "—";
+      return Math.abs(value) >= 100 ? "##" : formatModifier(value);
+    }
+
     function readAbilityNumber(input) {
       const raw = input.value.trim();
       if (raw === "") return null;
@@ -9133,6 +9911,63 @@ ${data.description}`;
       }
     }
 
+    const RICH_TABLE_TAGS = new Set([
+      "TABLE", "THEAD", "TBODY", "TFOOT", "TR", "TH", "TD",
+      "CAPTION", "COLGROUP", "COL"
+    ]);
+    const RICH_TABLE_ATTRIBUTES = new Set([
+      "colspan", "rowspan", "border", "cellpadding", "cellspacing",
+      "width", "height", "align", "valign", "bgcolor", "scope"
+    ]);
+    const RICH_STYLE_TAGS = new Set([...RICH_TABLE_TAGS, "SPAN", "FONT"]);
+    const RICH_STYLE_PROPERTIES = new Set([
+      "color", "background", "background-color",
+      "border", "border-top", "border-right", "border-bottom", "border-left",
+      "border-color", "border-style", "border-width",
+      "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
+      "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
+      "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
+      "border-collapse", "border-spacing",
+      "padding", "padding-top", "padding-right", "padding-bottom", "padding-left",
+      "margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
+      "text-align", "vertical-align", "font", "font-family", "font-size",
+      "font-style", "font-weight", "line-height", "width", "height",
+      "white-space", "table-layout", "text-decoration", "letter-spacing",
+      "word-break", "overflow-wrap", "caption-side", "empty-cells", "box-sizing"
+    ]);
+
+    function sanitizeRichStyle(styleText) {
+      if (!styleText) return "";
+      const probe = document.createElement("span");
+      probe.style.cssText = styleText;
+      const kept = [];
+
+      for (const property of probe.style) {
+        if (!RICH_STYLE_PROPERTIES.has(property)) continue;
+        let value = probe.style.getPropertyValue(property).trim();
+        if (!value) continue;
+        if (/url\s*\(|expression\s*\(|javascript:|@import|behavior\s*:|binding/i.test(value)) {
+          continue;
+        }
+        value = value.replace(/\s*!important\s*$/i, "");
+        kept.push(`${property}: ${value}`);
+      }
+
+      return kept.join("; ");
+    }
+
+    function copyRichTableAttributes(source, target) {
+      for (const attribute of source.attributes) {
+        const name = attribute.name.toLowerCase();
+        if (name === "style") {
+          const style = sanitizeRichStyle(attribute.value);
+          if (style) target.setAttribute("style", style);
+        } else if (RICH_TABLE_ATTRIBUTES.has(name)) {
+          target.setAttribute(name, attribute.value);
+        }
+      }
+    }
+
     function convertPastedNode(node, unwrapCurrent = false) {
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.nodeValue
@@ -9153,6 +9988,37 @@ ${data.description}`;
 
       if (skipTags.has(tag)) return null;
       if (tag === "BR") return document.createElement("br");
+
+      if (RICH_TABLE_TAGS.has(tag)) {
+        const tableElement = document.createElement(tag.toLowerCase());
+        copyRichTableAttributes(node, tableElement);
+        appendConvertedChildren(tableElement, node);
+        return tableElement;
+      }
+
+      if (tag === "FONT") {
+        const span = document.createElement("span");
+        const styles = [];
+        const color = (node.getAttribute("color") || "").trim();
+        const face = (node.getAttribute("face") || "").trim();
+        if (color) styles.push(`color: ${color}`);
+        if (face) styles.push(`font-family: ${face}`);
+        const extraStyle = sanitizeRichStyle(node.getAttribute("style"));
+        if (extraStyle) styles.push(extraStyle);
+        if (styles.length) span.setAttribute("style", styles.join("; "));
+        appendConvertedChildren(span, node);
+        return span.childNodes.length ? span : null;
+      }
+
+      if (tag === "SPAN" && !unwrapCurrent) {
+        const style = sanitizeRichStyle(node.getAttribute("style"));
+        if (style) {
+          const span = document.createElement("span");
+          span.setAttribute("style", style);
+          appendConvertedChildren(span, node);
+          return span.childNodes.length ? span : null;
+        }
+      }
 
       if (/^H[1-6]$/.test(tag)) {
         const title = document.createElement("span");
@@ -9414,6 +10280,10 @@ ${data.description}`;
       }
 
       syncSubclassCustomUI();
+      for (const row of featTableBody.children) syncFeatCustomUI(row);
+      for (const row of combatFeatBody.children) syncCombatStyleCustomUI(row);
+      for (const row of backpackGearBody.children) syncGearCustomUI(row);
+      for (const row of backpackToolBody.children) syncToolCustomUI(row);
       undoManager.restoring = false;
       undoManager.lastState = captureUndoState();
       undoManager.lastActionKey = null;
@@ -9520,10 +10390,11 @@ ${data.description}`;
       template.innerHTML = html || "";
       const allowedTags = new Set([
         "SPAN", "BR", "UL", "OL", "LI", "B", "STRONG", "I", "EM", "U",
-        "S", "STRIKE", "DIV", "P", "BLOCKQUOTE", "H1", "H2", "H3", "H4", "H5", "H6"
+        "S", "STRIKE", "DIV", "P", "BLOCKQUOTE", "H1", "H2", "H3", "H4", "H5", "H6",
+        "FONT", ...RICH_TABLE_TAGS
       ]);
       const allowedClasses = new Set([
-        "custom-title", "custom-term", "custom-spell", "custom-bold"
+        "custom-title", "custom-term", "custom-spell", "custom-bold", "term-green"
       ]);
       const blockedTags = new Set([
         "SCRIPT", "STYLE", "IFRAME", "OBJECT", "EMBED", "IMG", "SVG", "MATH"
@@ -9551,9 +10422,25 @@ ${data.description}`;
           }
 
           for (const attribute of [...node.attributes]) {
-            if (attribute.name.toLowerCase() !== "class") {
-              node.removeAttribute(attribute.name);
+            const name = attribute.name.toLowerCase();
+            if (name === "class") continue;
+
+            if (name === "style" && RICH_STYLE_TAGS.has(node.tagName)) {
+              const style = sanitizeRichStyle(attribute.value);
+              if (style) node.setAttribute("style", style);
+              else node.removeAttribute("style");
+              continue;
             }
+
+            if (RICH_TABLE_TAGS.has(node.tagName) && RICH_TABLE_ATTRIBUTES.has(name)) {
+              continue;
+            }
+
+            if (node.tagName === "FONT" && (name === "color" || name === "face" || name === "size")) {
+              continue;
+            }
+
+            node.removeAttribute(attribute.name);
           }
           const classes = [...node.classList].filter((name) => allowedClasses.has(name));
           if (classes.length) node.className = classes.join(" ");
@@ -9585,8 +10472,11 @@ ${data.description}`;
 
     function captureDynamicBuilderRows(body) {
       return [...body.children].map((row) => ({
-        controls: [...row.querySelectorAll("input, select, textarea")].map((element) => ({
-          value: element.value,
+        controls: [...row.querySelectorAll(
+          "input, select, textarea, [contenteditable='true']"
+        )].map((element) => ({
+          value: element.isContentEditable ? "" : element.value,
+          html: element.isContentEditable ? element.innerHTML : "",
           checked: element.type === "checkbox" || element.type === "radio"
             ? element.checked
             : null,
@@ -9630,8 +10520,20 @@ ${data.description}`;
 
     function applyCapturedRow(row, rowData) {
       if (!row) return;
-      const controls = [...row.querySelectorAll("input, select, textarea")];
-      const entries = rowData && Array.isArray(rowData.controls) ? rowData.controls : [];
+      const controls = [...row.querySelectorAll(
+        "input, select, textarea, [contenteditable='true']"
+      )];
+      let entries = rowData && Array.isArray(rowData.controls) ? rowData.controls : [];
+
+      const blankEntry = { value: "", html: "", checked: null, className: "" };
+      if (row.closest("#backpack-gear-body") && entries.length === 4) {
+        entries = [entries[0], blankEntry, ...entries.slice(1)];
+      } else if (row.closest("#backpack-tool-body") && entries.length === 6) {
+        entries = [entries[0], blankEntry, ...entries.slice(1)];
+      } else if (row.closest("#combat-feat-body") && entries.length === 2) {
+        entries = [entries[0], blankEntry, ...entries.slice(1)];
+      }
+
       entries.forEach((entry, index) => {
         applyCapturedControl(controls[index], entry);
       });
@@ -9641,14 +10543,18 @@ ${data.description}`;
       featTableBody.replaceChildren();
       for (const row of data.featRows || []) {
         createFeatRow("");
-        applyCapturedRow(featTableBody.lastElementChild, row);
+        const featRow = featTableBody.lastElementChild;
+        applyCapturedRow(featRow, row);
+        syncFeatCustomUI(featRow);
       }
       updateFeatAddState();
 
       combatFeatBody.replaceChildren();
       for (const row of data.combatFeatRows || []) {
         createExtendedFeatRow("combat", combatFeatBody, combatFeatBlock);
-        applyCapturedRow(combatFeatBody.lastElementChild, row);
+        const combatRow = combatFeatBody.lastElementChild;
+        applyCapturedRow(combatRow, row);
+        syncCombatStyleCustomUI(combatRow);
       }
       combatFeatBlock.hidden = combatFeatBody.children.length === 0;
 
@@ -9665,6 +10571,7 @@ ${data.description}`;
         const element = createBackpackGearRow();
         backpackGearBody.append(element);
         applyCapturedRow(element, row);
+        syncGearCustomUI(element);
       }
       updateBackpackSection("gear");
       updateBackpackGearTotals();
@@ -9674,6 +10581,7 @@ ${data.description}`;
         const element = createBackpackToolRow();
         backpackToolBody.append(element);
         applyCapturedRow(element, row);
+        syncToolCustomUI(element);
       }
       updateBackpackSection("tool");
 
@@ -10088,9 +10996,9 @@ ${data.description}`;
           : modifier + (proficient && pb !== null ? pb : 0) + (saveCorrection ?? 0);
 
         initialInput.classList.toggle("is-default", components[0] === 10);
-        valueOutput.textContent = value === null ? "—" : String(value);
-        modifierOutput.textContent = modifier === null ? "—" : formatModifier(modifier);
-        saveOutput.textContent = save === null ? "—" : formatModifier(save);
+        valueOutput.textContent = formatAbilityResult(value);
+        modifierOutput.textContent = formatAbilityModifier(modifier);
+        saveOutput.textContent = formatAbilityModifier(save);
         saveOutput.classList.toggle("is-proficient", proficient && pb !== null);
         saveOutput.title = proficient && pb !== null ? "已计入职业豁免熟练的 PB 与豁免修正" : "";
 
@@ -10803,11 +11711,24 @@ ${data.description}`;
       backpackGearTotalPrice.textContent = formatBackpackPrice(price);
     }
 
+    function syncGearCustomUI(row) {
+      const select = row.querySelector(".backpack-gear-select");
+      const input = row.querySelector(".backpack-gear-custom-name");
+      const reset = row.querySelector(".backpack-gear-custom-reset");
+      if (!select || !input || !reset) return;
+
+      const custom = select.value === CUSTOM_VALUE;
+      select.hidden = custom;
+      input.hidden = !custom;
+      reset.hidden = !custom;
+    }
+
     function applyGearDefaults(row) {
       const select = row.querySelector(".backpack-gear-select");
       const description = row.querySelector(".backpack-gear-description");
       const weight = row.querySelector(".backpack-gear-weight");
       const price = row.querySelector(".backpack-gear-price");
+      syncGearCustomUI(row);
       const data = adventuringGearData[select.value];
 
       if (!data) {
@@ -10849,11 +11770,48 @@ ${data.description}`;
         select.appendChild(option);
       }
 
+      const customOption = document.createElement("option");
+      customOption.value = CUSTOM_VALUE;
+      customOption.textContent = "自定义";
+      select.appendChild(customOption);
+
+      const nameControl = document.createElement("div");
+      nameControl.className = "backpack-name-control";
+      const customName = createBackpackInput(
+        "backpack-gear-custom-name",
+        "自定义冒险装备名称"
+      );
+      customName.placeholder = "自定义装备";
+      customName.hidden = true;
+      const customReset = document.createElement("button");
+      customReset.type = "button";
+      customReset.className = "custom-reset backpack-gear-custom-reset";
+      customReset.textContent = "×";
+      customReset.title = "返回冒险装备选择";
+      customReset.setAttribute("aria-label", "返回冒险装备选择");
+      customReset.hidden = true;
+      nameControl.append(select, customName, customReset);
+
       const description = createBackpackTextarea("backpack-gear-description", "冒险装备描述");
       const weight = createBackpackInput("backpack-gear-weight", "冒险装备重量");
       const price = createBackpackInput("backpack-gear-price", "冒险装备价格");
 
-      select.addEventListener("change", () => applyGearDefaults(row));
+      select.addEventListener("change", () => {
+        if (select.value === CUSTOM_VALUE) {
+          customName.value = "";
+          applyGearDefaults(row);
+          customName.focus();
+        } else {
+          customName.value = "";
+          applyGearDefaults(row);
+        }
+      });
+      customReset.addEventListener("click", () => {
+        select.value = "";
+        customName.value = "";
+        applyGearDefaults(row);
+        select.focus();
+      });
       for (const input of [description, weight, price]) {
         input.addEventListener("input", () => {
           input.classList.remove("is-default");
@@ -10864,13 +11822,26 @@ ${data.description}`;
       const deleteCell = document.createElement("td");
       deleteCell.append(createBackpackDeleteButton(row, "gear"));
       row.append(
-        createBackpackCell(select),
+        createBackpackCell(nameControl),
         createBackpackCell(description),
         createBackpackCell(weight),
         createBackpackCell(price),
         deleteCell
       );
+      syncGearCustomUI(row);
       return row;
+    }
+
+    function syncToolCustomUI(row) {
+      const select = row.querySelector(".backpack-tool-select");
+      const input = row.querySelector(".backpack-tool-custom-name");
+      const reset = row.querySelector(".backpack-tool-custom-reset");
+      if (!select || !input || !reset) return;
+
+      const custom = select.value === CUSTOM_VALUE;
+      select.hidden = custom;
+      input.hidden = !custom;
+      reset.hidden = !custom;
     }
 
     function applyToolDefaults(row) {
@@ -10880,6 +11851,7 @@ ${data.description}`;
       const craft = row.querySelector(".backpack-tool-craft");
       const weight = row.querySelector(".backpack-tool-weight");
       const price = row.querySelector(".backpack-tool-price");
+      syncToolCustomUI(row);
       const data = toolData[select.value];
 
       if (!data) {
@@ -10921,6 +11893,28 @@ ${data.description}`;
         select.appendChild(option);
       }
 
+      const customOption = document.createElement("option");
+      customOption.value = CUSTOM_VALUE;
+      customOption.textContent = "自定义";
+      select.appendChild(customOption);
+
+      const nameControl = document.createElement("div");
+      nameControl.className = "backpack-name-control";
+      const customName = createBackpackInput(
+        "backpack-tool-custom-name",
+        "自定义工具名称"
+      );
+      customName.placeholder = "自定义工具";
+      customName.hidden = true;
+      const customReset = document.createElement("button");
+      customReset.type = "button";
+      customReset.className = "custom-reset backpack-tool-custom-reset";
+      customReset.textContent = "×";
+      customReset.title = "返回工具选择";
+      customReset.setAttribute("aria-label", "返回工具选择");
+      customReset.hidden = true;
+      nameControl.append(select, customName, customReset);
+
       const ability = document.createElement("select");
       ability.className = "backpack-tool-ability";
       ability.setAttribute("aria-label", "工具属性");
@@ -10936,7 +11930,22 @@ ${data.description}`;
       const weight = createBackpackInput("backpack-tool-weight", "工具重量");
       const price = createBackpackInput("backpack-tool-price", "工具价格");
 
-      select.addEventListener("change", () => applyToolDefaults(row));
+      select.addEventListener("change", () => {
+        if (select.value === CUSTOM_VALUE) {
+          customName.value = "";
+          applyToolDefaults(row);
+          customName.focus();
+        } else {
+          customName.value = "";
+          applyToolDefaults(row);
+        }
+      });
+      customReset.addEventListener("click", () => {
+        select.value = "";
+        customName.value = "";
+        applyToolDefaults(row);
+        select.focus();
+      });
       ability.addEventListener("change", () => ability.classList.remove("is-default"));
       for (const input of [operation, craft, weight, price]) {
         input.addEventListener("input", () => input.classList.remove("is-default"));
@@ -10945,7 +11954,7 @@ ${data.description}`;
       const deleteCell = document.createElement("td");
       deleteCell.append(createBackpackDeleteButton(row, "tool"));
       row.append(
-        createBackpackCell(select),
+        createBackpackCell(nameControl),
         createBackpackCell(ability),
         createBackpackCell(operation),
         createBackpackCell(craft),
@@ -10953,6 +11962,7 @@ ${data.description}`;
         createBackpackCell(price),
         deleteCell
       );
+      syncToolCustomUI(row);
       return row;
     }
 
