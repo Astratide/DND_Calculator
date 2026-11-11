@@ -857,13 +857,102 @@
       margin-top: 12px;
     }
 
+    .appearance-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #808080;
+    }
+
     .appearance-title {
+      flex: 1 1 auto;
       padding: 4px;
       color: #fff;
-      background: #808080;
+      background: transparent;
       font-size: 0.86rem;
       font-weight: bold;
       text-align: center;
+    }
+
+    .appearance-image-import {
+      flex: 0 0 auto;
+      margin-right: 4px;
+      padding: 1px 7px;
+      color: #333;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+
+    .appearance-image-import:hover { border-color: #800000; }
+
+    .appearance-image-frame {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      min-height: 150px;
+      aspect-ratio: 4 / 3;
+      margin-top: 8px;
+      overflow: hidden;
+      background: #f2f2f0;
+      border: 1px solid #b8b8b8;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      resize: vertical;
+    }
+
+    .appearance-image-frame:active { cursor: grabbing; }
+
+    .appearance-image {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: auto;
+      height: auto;
+      max-width: none;
+      max-height: none;
+      object-fit: fill;
+      transform: translate(-50%, -50%);
+      transform-origin: center;
+      user-select: none;
+      -webkit-user-drag: none;
+      will-change: width, height, transform;
+    }
+
+    .appearance-image-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      z-index: 2;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.55);
+      border: 0;
+      border-radius: 0;
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .appearance-image-remove:hover { background: #800000; }
+
+    .appearance-image-hint {
+      position: absolute;
+      left: 6px;
+      bottom: 4px;
+      z-index: 2;
+      padding: 1px 4px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      font-size: 0.68rem;
+      pointer-events: none;
     }
 
     .appearance-text {
@@ -2790,6 +2879,83 @@
     .equipment-weapon-table tbody tr:nth-child(even) td { background: #EEEEEE; }
 
     .equipment-weapon-name-col { width: 110px; }
+
+    .equipment-table-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2px;
+    }
+
+    .equipment-add {
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      color: #111;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.8rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .equipment-add:hover { border-color: #800000; }
+
+    .equipment-action-col { width: 20px; }
+
+    .equipment-action-cell,
+    .equipment-action-head {
+      padding: 0 !important;
+      width: 20px;
+      text-align: center;
+    }
+
+    .equipment-row-delete {
+      width: 16px;
+      height: 20px;
+      padding: 0;
+      color: #888;
+      background: transparent;
+      border: 0;
+      font-size: 0.9rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .equipment-row-delete:hover { color: #c00; }
+
+    .weapon-name-control {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .weapon-name-control .equipment-select,
+    .weapon-name-control .weapon-custom-name {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .weapon-custom-name {
+      width: 100%;
+      padding: 2px 3px;
+      color: #111;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    .weapon-custom-name::placeholder { color: #aaa; }
+
+    .weapon-custom-reset {
+      width: 14px;
+      font-size: 0.95rem;
+    }
     .equipment-bonus-col { width: 54px; }
     .equipment-property-col { width: auto; }
     .equipment-mastery-col { width: 64px; }
@@ -3650,7 +3816,18 @@
   .ledger-actions,
   .table-head-add,
   .language-row-delete,
+  .equipment-table-actions,
+  .equipment-action-col,
+  .equipment-action-head,
+  .equipment-action-cell,
+  .equipment-row-delete,
+  .appearance-image-import,
+  .appearance-image-remove,
+  .appearance-image-hint,
   .tab { display: none !important; }
+
+  .appearance-title-row { background: #808080 !important; }
+  .appearance-image-frame { break-inside: avoid; page-break-inside: avoid; }
 
   .page-width {
     width: auto !important;
@@ -3878,9 +4055,11 @@
 
         <div class="builder-toolbar">
           <div class="builder-toolbar-actions">
+            <button id="builder-clear-data" class="builder-toolbar-button" type="button">清空数据</button>
             <button id="builder-export-json" class="builder-toolbar-button" type="button">导出 JSON</button>
             <button id="builder-import-json" class="builder-toolbar-button" type="button">导入 JSON</button>
             <button id="builder-export-pdf" class="builder-toolbar-button" type="button">导出 PDF / 打印</button>
+            <button id="builder-export-html" class="builder-toolbar-button" type="button">导出离线 HTML</button>
             <input id="builder-import-file" type="file" accept=".json,application/json" hidden>
           </div>
           <span id="builder-save-status" class="builder-save-status" aria-live="polite">自动保存已启用</span>
@@ -3935,8 +4114,17 @@
         </table>
 
         <div class="appearance-block">
-          <div class="appearance-title">人物形象</div>
+          <div class="appearance-title-row">
+            <div class="appearance-title">人物形象</div>
+            <button id="appearance-image-import" class="appearance-image-import" type="button">导入图片</button>
+            <input id="appearance-image-file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          </div>
           <textarea id="builder-appearance" class="appearance-text" placeholder="填写外貌、性格、习惯等人物形象描述。" aria-label="人物形象"></textarea>
+          <div id="appearance-image-frame" class="appearance-image-frame" hidden>
+            <img id="appearance-image" class="appearance-image" alt="角色形象" draggable="false">
+            <button id="appearance-image-remove" class="appearance-image-remove" type="button" title="删除图片" aria-label="删除图片">×</button>
+            <span class="appearance-image-hint">拖动移动 · 滚轮/双指缩放</span>
+          </div>
         </div>
 
         <table class="personality-table" aria-label="个性、理念、牵绊与缺陷">
@@ -4035,7 +4223,7 @@
           </table>
         </div>
 
-        <h3 class="builder-section-title">基础信息 Basic Info</h3>
+        <h3 class="builder-section-title">种族 Species</h3>
         <div class="builder-race-row">
           <label class="builder-field builder-race-field">
             <span>种族</span>
@@ -4902,7 +5090,7 @@
     </section>
   </main>
 
-  <script>
+    <script>
 (function (root) {
     "use strict";
 
@@ -6959,12 +7147,15 @@
     });
 
     const hashTab = window.location.hash.slice(1);
+    const documentTab = document.body.dataset.initialTab;
     const savedTab = readSavedTab();
     const initialTab = tabConfig[hashTab]
       ? hashTab
-      : tabConfig[savedTab]
-        ? savedTab
-        : "calculator";
+      : tabConfig[documentTab]
+        ? documentTab
+        : tabConfig[savedTab]
+          ? savedTab
+          : "calculator";
     selectTab(initialTab, false, false);
     clearVirtualHash();
     initializeAttackCalculator();
@@ -7150,10 +7341,29 @@
     const equipmentArmorStealth = document.getElementById("equipment-armor-stealth");
     const equipmentShieldAc = document.getElementById("equipment-shield-ac");
     const equipmentShieldEquipped = document.getElementById("equipment-shield-equipped");
+    const equipmentWeaponTable = document.querySelector(".equipment-weapon-table");
+    const equipmentWeaponBody = equipmentWeaponTable
+      ? equipmentWeaponTable.querySelector("tbody")
+      : null;
+    const magicEquipmentTable = document.querySelector(".magic-equipment-table");
+    const magicEquipmentBody = magicEquipmentTable
+      ? magicEquipmentTable.querySelector("tbody")
+      : null;
     const ledgerBody = document.getElementById("ledger-body");
     const ledgerAdd = document.getElementById("ledger-add");
     const ledgerBalance = document.getElementById("ledger-balance");
     const characterNotes = document.getElementById("character-notes");
+    const appearanceImageFrame = document.getElementById("appearance-image-frame");
+    const appearanceImage = document.getElementById("appearance-image");
+    const appearanceImageImport = document.getElementById("appearance-image-import");
+    const appearanceImageFile = document.getElementById("appearance-image-file");
+    const appearanceImageRemove = document.getElementById("appearance-image-remove");
+    const appearanceImageState = {
+      src: "",
+      scale: 1,
+      offsetX: 0,
+      offsetY: 0
+    };
     const languageBody = document.getElementById("language-body");
     const languageAdd = document.getElementById("language-add");
     const toolBody = document.getElementById("tool-body");
@@ -7169,9 +7379,11 @@
     const spellCantripCount = document.getElementById("spell-cantrip-count");
     const spellPreparedCount = document.getElementById("spell-prepared-count");
     const spellMainClass = document.getElementById("spell-main-class");
+    const builderClearData = document.getElementById("builder-clear-data");
     const builderExportJson = document.getElementById("builder-export-json");
     const builderImportJson = document.getElementById("builder-import-json");
     const builderExportPdf = document.getElementById("builder-export-pdf");
+    const builderExportHtml = document.getElementById("builder-export-html");
     const builderImportFile = document.getElementById("builder-import-file");
     const builderSaveStatus = document.getElementById("builder-save-status");
     const spellCantripGift = document.getElementById("spell-cantrip-gift");
@@ -7210,7 +7422,8 @@
         !specialAbilityBody || !spellCasterLabel || !spellCasterLevel || !spellCantripCount ||
         !spellPreparedCount || !spellMainClass || !spellCantripGift ||
         !spellAlwaysPrepared || !spellGiftSpells ||
-        !builderExportJson || !builderImportJson || !builderExportPdf ||
+        !builderClearData || !builderExportJson || !builderImportJson || !builderExportPdf ||
+        !builderExportHtml ||
         !builderImportFile || !builderSaveStatus ||
         spellSlotOutputs.some((output) => !output) ||
         !backpackGearBody || !backpackToolBody || !backpackMagicBody ||
@@ -7222,7 +7435,11 @@
         !multiClassFeatureBlock || !multiClassFeatureTitle || !multiClassFeatureText ||
         !equipmentArmorType || !equipmentArmorName || !equipmentArmorAc ||
         !equipmentArmorStealth || !equipmentShieldAc || !equipmentShieldEquipped ||
+        !equipmentWeaponTable || !equipmentWeaponBody ||
+        !magicEquipmentTable || !magicEquipmentBody ||
         !ledgerBody || !ledgerAdd || !ledgerBalance || !characterNotes ||
+        !appearanceImageFrame || !appearanceImage || !appearanceImageImport ||
+        !appearanceImageFile || !appearanceImageRemove ||
         !languageBody || !languageAdd || !toolBody || !toolAdd) {
       return;
     }
@@ -7978,6 +8195,271 @@
       const race = raceSelect.value;
       raceTraitsBox.innerHTML = raceTraits[race] || "";
       highlightTerms(raceTraitsBox);
+    }
+
+    function isValidAppearanceImageSource(src) {
+      return typeof src === "string" &&
+        /^data:image\/(png|jpeg|webp);base64,/i.test(src);
+    }
+
+    function getAppearanceImageBaseSize() {
+      const frameWidth = appearanceImageFrame.clientWidth;
+      const frameHeight = appearanceImageFrame.clientHeight;
+      if (!frameWidth || !frameHeight) return { width: 0, height: 0 };
+
+      const naturalWidth = appearanceImage.naturalWidth;
+      const naturalHeight = appearanceImage.naturalHeight;
+      if (!naturalWidth || !naturalHeight) {
+        return { width: frameWidth, height: frameHeight };
+      }
+
+      const frameRatio = frameWidth / frameHeight;
+      const imageRatio = naturalWidth / naturalHeight;
+      if (imageRatio > frameRatio) {
+        const height = frameHeight;
+        return { width: height * imageRatio, height };
+      }
+      const width = frameWidth;
+      return { width, height: width / imageRatio };
+    }
+
+    function clampAppearanceImageTransform() {
+      const frameWidth = appearanceImageFrame.clientWidth;
+      const frameHeight = appearanceImageFrame.clientHeight;
+      if (!frameWidth || !frameHeight) return;
+
+      const base = getAppearanceImageBaseSize();
+      const scale = Math.min(4, Math.max(0.2, Number(appearanceImageState.scale) || 1));
+      const maxX = Math.max(0, (base.width * scale - frameWidth) / 2);
+      const maxY = Math.max(0, (base.height * scale - frameHeight) / 2);
+      appearanceImageState.scale = scale;
+      appearanceImageState.offsetX = Math.min(maxX, Math.max(-maxX, Number(appearanceImageState.offsetX) || 0));
+      appearanceImageState.offsetY = Math.min(maxY, Math.max(-maxY, Number(appearanceImageState.offsetY) || 0));
+    }
+
+    function applyAppearanceImageTransform() {
+      const base = getAppearanceImageBaseSize();
+      const scale = appearanceImageState.scale;
+      if (base.width && base.height) {
+        appearanceImage.style.width = `${base.width * scale}px`;
+        appearanceImage.style.height = `${base.height * scale}px`;
+      }
+      appearanceImage.style.transform =
+        `translate(-50%, -50%) translate(${appearanceImageState.offsetX}px, ${appearanceImageState.offsetY}px)`;
+    }
+
+    function renderAppearanceImage() {
+      if (!appearanceImageState.src) {
+        appearanceImageFrame.hidden = true;
+        appearanceImage.removeAttribute("src");
+        return;
+      }
+
+      appearanceImageFrame.hidden = false;
+      if (appearanceImage.getAttribute("src") !== appearanceImageState.src) {
+        appearanceImage.src = appearanceImageState.src;
+      }
+      clampAppearanceImageTransform();
+      applyAppearanceImageTransform();
+    }
+
+    function restoreAppearanceImage(data) {
+      if (!data || !isValidAppearanceImageSource(data.src)) {
+        appearanceImageState.src = "";
+        appearanceImageState.scale = 1;
+        appearanceImageState.offsetX = 0;
+        appearanceImageState.offsetY = 0;
+        renderAppearanceImage();
+        return;
+      }
+
+      appearanceImageState.src = data.src;
+      appearanceImageState.scale = Number(data.scale) || 1;
+      appearanceImageState.offsetX = Number(data.offsetX) || 0;
+      appearanceImageState.offsetY = Number(data.offsetY) || 0;
+      renderAppearanceImage();
+    }
+
+    function clearAppearanceImage() {
+      appearanceImageState.src = "";
+      appearanceImageState.scale = 1;
+      appearanceImageState.offsetX = 0;
+      appearanceImageState.offsetY = 0;
+      renderAppearanceImage();
+      scheduleBuilderSave();
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(reader.error || new Error("读取图片失败。"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleAppearanceImageFile(file) {
+      if (!file) return;
+      const type = (file.type || "").toLowerCase();
+      const extensionMatches = /\.(png|jpe?g|webp)$/i.test(file.name || "");
+      if (!["image/png", "image/jpeg", "image/webp"].includes(type) &&
+          !(type === "" && extensionMatches)) {
+        window.alert("请选择 PNG、JPG 或 WebP 图片。");
+        return;
+      }
+      if (file.size > 8 * 1024 * 1024) {
+        window.alert("图片不能超过 8MB。");
+        return;
+      }
+
+      try {
+        const dataUrl = await readFileAsDataUrl(file);
+        const image = new Image();
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = () => reject(new Error("无法解析这张图片。"));
+          image.src = dataUrl;
+        });
+
+        const maxSize = 1600;
+        const ratio = Math.min(1, maxSize / Math.max(image.naturalWidth, image.naturalHeight));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.naturalWidth * ratio));
+        canvas.height = Math.max(1, Math.round(image.naturalHeight * ratio));
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        let source = canvas.toDataURL("image/webp", 0.86);
+        if (!source.startsWith("data:image/webp")) {
+          context.fillStyle = "#fff";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          source = canvas.toDataURL("image/jpeg", 0.88);
+        }
+
+        appearanceImageState.src = source;
+        appearanceImageState.scale = 1;
+        appearanceImageState.offsetX = 0;
+        appearanceImageState.offsetY = 0;
+        renderAppearanceImage();
+        scheduleBuilderSave();
+      } catch (error) {
+        window.alert(error.message || "图片导入失败。");
+      } finally {
+        appearanceImageFile.value = "";
+      }
+    }
+
+    let appearancePointers = new Map();
+    let appearanceDrag = null;
+    let appearancePinch = null;
+
+    function setupAppearanceImageInteraction() {
+      appearanceImage.addEventListener("load", () => {
+        clampAppearanceImageTransform();
+        applyAppearanceImageTransform();
+      });
+
+      if (typeof ResizeObserver !== "undefined") {
+        new ResizeObserver(() => {
+          if (!appearanceImageState.src) return;
+          clampAppearanceImageTransform();
+          applyAppearanceImageTransform();
+        }).observe(appearanceImageFrame);
+      }
+
+      appearanceImageImport.addEventListener("click", () => appearanceImageFile.click());
+      appearanceImageFile.addEventListener("change", () => {
+        const file = appearanceImageFile.files && appearanceImageFile.files[0];
+        handleAppearanceImageFile(file);
+      });
+      appearanceImageRemove.addEventListener("click", clearAppearanceImage);
+
+      appearanceImageFrame.addEventListener("pointerdown", (event) => {
+        if (!appearanceImageState.src) return;
+        if (event.target.closest(".appearance-image-remove")) return;
+
+        const frameRect = appearanceImageFrame.getBoundingClientRect();
+        const nearResizeHandle =
+          event.clientX >= frameRect.right - 24 &&
+          event.clientY >= frameRect.bottom - 24;
+        if (nearResizeHandle) return;
+
+        event.preventDefault();
+        appearanceImageFrame.setPointerCapture(event.pointerId);
+        appearancePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (appearancePointers.size === 1) {
+          appearanceDrag = {
+            startX: event.clientX,
+            startY: event.clientY,
+            startOffsetX: appearanceImageState.offsetX,
+            startOffsetY: appearanceImageState.offsetY
+          };
+          appearancePinch = null;
+        } else if (appearancePointers.size === 2) {
+          const points = [...appearancePointers.values()];
+          appearancePinch = {
+            distance: Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y),
+            scale: appearanceImageState.scale
+          };
+          appearanceDrag = null;
+        }
+      });
+
+      appearanceImageFrame.addEventListener("pointermove", (event) => {
+        if (!appearancePointers.has(event.pointerId)) return;
+        appearancePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (appearancePointers.size >= 2 && appearancePinch) {
+          const points = [...appearancePointers.values()];
+          const distance = Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+          appearanceImageState.scale = appearancePinch.scale * (distance / appearancePinch.distance);
+          clampAppearanceImageTransform();
+          applyAppearanceImageTransform();
+        } else if (appearanceDrag) {
+          appearanceImageState.offsetX = appearanceDrag.startOffsetX + event.clientX - appearanceDrag.startX;
+          appearanceImageState.offsetY = appearanceDrag.startOffsetY + event.clientY - appearanceDrag.startY;
+          clampAppearanceImageTransform();
+          applyAppearanceImageTransform();
+        }
+      });
+
+      const endPointer = (event) => {
+        appearancePointers.delete(event.pointerId);
+        if (appearancePointers.size < 2) appearancePinch = null;
+        if (appearancePointers.size === 1) {
+          const point = [...appearancePointers.values()][0];
+          appearanceDrag = {
+            startX: point.x,
+            startY: point.y,
+            startOffsetX: appearanceImageState.offsetX,
+            startOffsetY: appearanceImageState.offsetY
+          };
+        } else if (appearancePointers.size === 0) {
+          appearanceDrag = null;
+        }
+        scheduleBuilderSave();
+      };
+
+      appearanceImageFrame.addEventListener("pointerup", endPointer);
+      appearanceImageFrame.addEventListener("pointercancel", endPointer);
+
+      appearanceImageFrame.addEventListener("wheel", (event) => {
+        if (!appearanceImageState.src) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.08 : 0.92;
+        appearanceImageState.scale *= factor;
+        clampAppearanceImageTransform();
+        applyAppearanceImageTransform();
+        scheduleBuilderSave();
+      }, { passive: false });
+
+      window.addEventListener("resize", () => {
+        if (!appearanceImageState.src) return;
+        clampAppearanceImageTransform();
+        applyAppearanceImageTransform();
+      });
     }
 
     function setCustomBackgroundDefault() {
@@ -9832,10 +10314,97 @@ ${data.description}`;
       alignPlusIndicators();
     }
 
+    function syncWeaponCustomUI(row) {
+      const select = row.querySelector(".equipment-weapon-name-select");
+      const input = row.querySelector(".weapon-custom-name");
+      const reset = row.querySelector(".weapon-custom-reset");
+      if (!select || !input || !reset) return;
+
+      const custom = select.value === "自定义";
+      select.hidden = custom;
+      input.hidden = !custom;
+      reset.hidden = !custom;
+    }
+
+    function decorateWeaponNameControl(row) {
+      const select = row.querySelector(".equipment-weapon-name-select");
+      if (!select || select.parentElement.classList.contains("weapon-name-control")) return;
+
+      const control = document.createElement("div");
+      control.className = "weapon-name-control";
+      select.replaceWith(control);
+
+      const customName = document.createElement("input");
+      customName.type = "text";
+      customName.className = "weapon-custom-name";
+      customName.placeholder = "填入武器名称...";
+      customName.autocomplete = "off";
+      customName.setAttribute("aria-label", "自定义武器名称");
+      customName.hidden = true;
+
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "custom-reset weapon-custom-reset";
+      reset.textContent = "×";
+      reset.title = "返回武器选择";
+      reset.setAttribute("aria-label", "返回武器选择");
+      reset.hidden = true;
+
+      control.append(select, customName, reset);
+      reset.addEventListener("click", () => {
+        select.value = "";
+        customName.value = "";
+        syncWeaponCustomUI(row);
+        applyWeaponDefaults(select);
+        select.focus();
+      });
+      syncWeaponCustomUI(row);
+    }
+
+    function bindWeaponRow(row) {
+      if (!row || row.dataset.weaponBound === "true") return;
+      row.dataset.weaponBound = "true";
+      decorateWeaponNameControl(row);
+
+      const select = row.querySelector(".equipment-weapon-name-select");
+      const propertyInput = row.querySelector(".equipment-property-input");
+      const abilitySelect = row.querySelector(".equipment-ability-select");
+      const bonusInput = row.querySelector(".equipment-bonus-input");
+      const attackInput = row.querySelector(".equipment-attack-input");
+      const damageInput = row.querySelector(".equipment-damage-input");
+
+      select.addEventListener("change", () => {
+        applyWeaponDefaults(select);
+        if (select.value === "自定义") {
+          row.querySelector(".weapon-custom-name")?.focus();
+        }
+      });
+      propertyInput.addEventListener("input", () => {
+        propertyInput.classList.remove("is-default");
+      });
+      abilitySelect.addEventListener("change", () => {
+        abilitySelect.classList.remove("is-default");
+        updateWeaponRowDefaults(row, false);
+      });
+      bonusInput.addEventListener("input", () => {
+        updateWeaponBonusState(bonusInput);
+        updateWeaponRowDefaults(row, false);
+      });
+      attackInput.addEventListener("input", () => {
+        if (attackInput.value.trim() === "") updateWeaponRowDefaults(row, false);
+        else attackInput.classList.remove("is-default");
+      });
+      damageInput.addEventListener("input", () => {
+        if (damageInput.value.trim() === "") updateWeaponRowDefaults(row, false);
+        else damageInput.classList.remove("is-default");
+      });
+    }
+
     function applyWeaponDefaults(select) {
       const row = select.closest("tr");
       if (!row) return;
 
+      syncWeaponCustomUI(row);
       const data = weaponData[select.value];
       const propertyInput = row.querySelector(".equipment-property-input");
       const damageInput = row.querySelector(".equipment-damage-input");
@@ -9844,6 +10413,21 @@ ${data.description}`;
       const abilitySelect = row.querySelector(".equipment-ability-select");
       const attackInput = row.querySelector(".equipment-attack-input");
       const bonusInput = row.querySelector(".equipment-bonus-input");
+
+      if (select.value === "自定义") {
+        propertyInput.value = "";
+        typeSelect.value = "";
+        masterySelect.value = "";
+        abilitySelect.value = "";
+        abilitySelect.classList.remove("is-default");
+        propertyInput.classList.remove("is-default");
+        attackInput.value = "";
+        damageInput.value = "";
+        attackInput.classList.remove("is-default");
+        damageInput.classList.remove("is-default");
+        updateWeaponBonusState(bonusInput);
+        return;
+      }
 
       if (data) {
         propertyInput.value = data.properties;
@@ -9871,6 +10455,104 @@ ${data.description}`;
       }
 
       updateWeaponBonusState(bonusInput);
+    }
+
+    function ensureEquipmentActionCell(row, deletable = false) {
+      let cell = row.querySelector(".equipment-action-cell");
+      if (!cell) {
+        cell = document.createElement("td");
+        cell.className = "equipment-action-cell";
+        row.append(cell);
+      }
+      if (!deletable) return cell;
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "equipment-row-delete";
+      deleteButton.textContent = "×";
+      deleteButton.title = "删除此行";
+      deleteButton.setAttribute("aria-label", "删除此行");
+      deleteButton.addEventListener("click", () => row.remove());
+      cell.replaceChildren(deleteButton);
+      return cell;
+    }
+
+    function setupEquipmentActionColumn(table) {
+      const colgroup = table.querySelector("colgroup");
+      if (colgroup && !colgroup.querySelector(".equipment-action-col")) {
+        const col = document.createElement("col");
+        col.className = "equipment-action-col";
+        colgroup.append(col);
+      }
+
+      const headerRow = table.querySelector("thead tr:last-child");
+      if (headerRow && !headerRow.querySelector(".equipment-action-head")) {
+        const th = document.createElement("th");
+        th.className = "equipment-action-head";
+        th.setAttribute("aria-hidden", "true");
+        headerRow.append(th);
+      }
+
+      for (const row of table.querySelectorAll("tbody tr")) {
+        ensureEquipmentActionCell(row);
+      }
+    }
+
+    function addEquipmentPlusButton(table, label, handler) {
+      const scroll = table.closest(".equipment-scroll");
+      if (!scroll || scroll.querySelector(".equipment-table-actions")) return;
+
+      const bar = document.createElement("div");
+      bar.className = "equipment-table-actions";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "equipment-add";
+      button.textContent = "＋";
+      button.title = label;
+      button.setAttribute("aria-label", label);
+      button.addEventListener("click", handler);
+      bar.append(button);
+      scroll.insertBefore(bar, table);
+    }
+
+    function createAddedWeaponRow() {
+      const template = equipmentWeaponBody.querySelector("tr");
+      const row = template.cloneNode(true);
+      row.removeAttribute("data-weapon-bound");
+      row.dataset.addedWeaponRow = "";
+
+      for (const input of row.querySelectorAll("input")) {
+        input.value = "";
+        input.classList.remove("is-default");
+      }
+      for (const select of row.querySelectorAll("select")) {
+        select.selectedIndex = 0;
+        select.classList.remove("is-default");
+      }
+
+      const customName = row.querySelector(".weapon-custom-name");
+      if (customName) customName.value = "";
+      ensureEquipmentActionCell(row, true);
+      bindWeaponRow(row);
+      applyWeaponDefaults(row.querySelector(".equipment-weapon-name-select"));
+      return row;
+    }
+
+    function createAddedMagicEquipmentRow() {
+      const template = magicEquipmentBody.querySelector("tr");
+      const row = template.cloneNode(true);
+      row.dataset.addedMagicRow = "";
+
+      for (const input of row.querySelectorAll("input")) {
+        input.value = "";
+        input.classList.remove("is-default");
+      }
+      for (const select of row.querySelectorAll("select")) {
+        select.selectedIndex = 0;
+      }
+
+      ensureEquipmentActionCell(row, true);
+      return row;
     }
 
     let plusMeasureCanvas = null;
@@ -10540,6 +11222,7 @@ ${data.description}`;
       for (const row of combatFeatBody.children) syncCombatStyleCustomUI(row);
       for (const row of backpackGearBody.children) syncGearCustomUI(row);
       for (const row of backpackToolBody.children) syncToolCustomUI(row);
+      for (const row of equipmentWeaponBody.querySelectorAll("tr")) syncWeaponCustomUI(row);
       undoManager.restoring = false;
       undoManager.lastState = captureUndoState();
       undoManager.lastActionKey = null;
@@ -10622,6 +11305,7 @@ ${data.description}`;
 
     const BUILDER_STORAGE_KEY = "dnd5e2024.builder.v1";
     const BUILDER_BACKUP_KEY = "dnd5e2024.builder.backup.v1";
+    const EMBEDDED_SEEN_PREFIX = "dnd5e2024.embeddedSeen.";
     const builderPersistence = {
       restoring: false,
       timer: null,
@@ -10637,7 +11321,9 @@ ${data.description}`;
       "#backpack-magic-body",
       "#ledger-body",
       "[data-custom-language-row]",
-      "[data-custom-tool-row]"
+      "[data-custom-tool-row]",
+      "[data-added-weapon-row]",
+      "[data-added-magic-row]"
     ].join(",");
 
     function isInDynamicBuilderRow(element) {
@@ -10754,6 +11440,20 @@ ${data.description}`;
       }));
     }
 
+    function captureAddedEquipmentRows(container, selector) {
+      return [...container.querySelectorAll(selector)].map((row) => ({
+        controls: [...row.querySelectorAll("input, select, textarea, [contenteditable='true']")]
+          .map((element) => ({
+            value: element.isContentEditable ? "" : element.value,
+            html: element.isContentEditable ? element.innerHTML : "",
+            checked: element.type === "checkbox" || element.type === "radio"
+              ? element.checked
+              : null,
+            className: element.className
+          }))
+      }));
+    }
+
     function captureBuilderData() {
       return {
         schema: "dnd5e2024.character",
@@ -10776,7 +11476,21 @@ ${data.description}`;
         toolCustomRows: captureCustomLanguageToolRows(
           toolBody,
           "[data-custom-tool-row]"
-        )
+        ),
+        weaponAddedRows: captureAddedEquipmentRows(
+          equipmentWeaponBody,
+          "[data-added-weapon-row]"
+        ),
+        magicEquipmentAddedRows: captureAddedEquipmentRows(
+          magicEquipmentBody,
+          "[data-added-magic-row]"
+        ),
+        appearanceImage: {
+          src: appearanceImageState.src,
+          scale: appearanceImageState.scale,
+          offsetX: appearanceImageState.offsetX,
+          offsetY: appearanceImageState.offsetY
+        }
       };
     }
 
@@ -10940,6 +11654,25 @@ ${data.description}`;
         "[data-custom-tool-row]",
         data.toolCustomRows
       );
+
+      for (const row of equipmentWeaponBody.querySelectorAll("[data-added-weapon-row]")) {
+        row.remove();
+      }
+      for (const rowData of data.weaponAddedRows || []) {
+        const row = createAddedWeaponRow();
+        equipmentWeaponBody.append(row);
+        applyCapturedRow(row, rowData);
+        syncWeaponCustomUI(row);
+      }
+
+      for (const row of magicEquipmentBody.querySelectorAll("[data-added-magic-row]")) {
+        row.remove();
+      }
+      for (const rowData of data.magicEquipmentAddedRows || []) {
+        const row = createAddedMagicEquipmentRow();
+        magicEquipmentBody.append(row);
+        applyCapturedRow(row, rowData);
+      }
     }
 
     function restoreBuilderData(data) {
@@ -10948,6 +11681,7 @@ ${data.description}`;
       }
 
       builderPersistence.restoring = true;
+      restoreAppearanceImage(data.appearanceImage);
 
       const staticControls = new Map(
         captureStaticBuilderControls().map((entry) => [entry.key, entry])
@@ -10998,6 +11732,9 @@ ${data.description}`;
 
       applyStatic();
       syncSubclassCustomUI();
+      for (const row of equipmentWeaponBody.querySelectorAll("tr")) {
+        syncWeaponCustomUI(row);
+      }
       updateBackpackSection("gear");
       updateBackpackSection("tool");
       updateBackpackSection("magic");
@@ -11049,6 +11786,39 @@ ${data.description}`;
         return false;
       }
 
+      const embedded = document.getElementById("dnd-embedded-data");
+      if (embedded) {
+        const embeddedId = embedded.dataset.embeddedId || "default";
+        let seen = false;
+        try {
+          seen = localStorage.getItem(`${EMBEDDED_SEEN_PREFIX}${embeddedId}`) === "1";
+        } catch (error) {
+          seen = false;
+        }
+
+        if (!seen) {
+          try {
+            const embeddedData = JSON.parse(embedded.textContent);
+            if (!embeddedData ||
+                embeddedData.schema !== "dnd5e2024.character" ||
+                embeddedData.version !== 1) {
+              throw new Error("离线角色卡数据格式不正确。");
+            }
+            restoreBuilderData(embeddedData);
+            try {
+              localStorage.setItem(`${EMBEDDED_SEEN_PREFIX}${embeddedId}`, "1");
+            } catch (error) {
+              // 存储不可用时不阻断首次载入。
+            }
+            saveBuilderData();
+            setBuilderSaveStatus("已载入离线角色卡。");
+            return true;
+          } catch (error) {
+            setBuilderSaveStatus("离线角色卡数据损坏，已忽略。", true);
+          }
+        }
+      }
+
       try {
         const raw = localStorage.getItem(BUILDER_STORAGE_KEY);
         if (!raw) {
@@ -11068,6 +11838,151 @@ ${data.description}`;
       } catch (error) {
         setBuilderSaveStatus("自动保存数据损坏，已忽略。", true);
         return false;
+      }
+    }
+
+    function clearBuilderData() {
+      if (!window.confirm("确定要清空当前角色卡的所有数据吗？")) return;
+      if (!window.confirm("再次确认：清空后自动保存也会被删除，此操作无法撤销。")) return;
+
+      builderPersistence.restoring = true;
+      const embedded = document.getElementById("dnd-embedded-data");
+      if (embedded) {
+        try {
+          const embeddedId = embedded.dataset.embeddedId || "default";
+          localStorage.setItem(`${EMBEDDED_SEEN_PREFIX}${embeddedId}`, "1");
+        } catch (error) {
+          // 存储不可用时仍继续刷新。
+        }
+      }
+      try {
+        localStorage.removeItem(BUILDER_STORAGE_KEY);
+        localStorage.removeItem(BUILDER_BACKUP_KEY);
+      } catch (error) {
+        // 存储不可用时仍刷新页面以清空当前界面。
+      }
+      window.location.reload();
+    }
+
+    function sanitizeExportName(name) {
+      return (name || "角色卡").replace(/[\\/:*?"<>|]/g, "_").trim() || "角色卡";
+    }
+
+    function prepareOfflineExportClone() {
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll("#dnd-embedded-data").forEach((node) => node.remove());
+      clone.querySelectorAll(
+        ".equipment-table-actions, .equipment-action-col, .equipment-action-head, .equipment-action-cell"
+      ).forEach((node) => node.remove());
+
+      for (const control of clone.querySelectorAll(".weapon-name-control")) {
+        const select = control.querySelector(".equipment-weapon-name-select");
+        if (select) control.replaceWith(select);
+      }
+
+      clone.querySelectorAll(
+        "[data-added-weapon-row], [data-added-magic-row], " +
+        "[data-custom-language-row], [data-custom-tool-row]"
+      ).forEach((node) => node.remove());
+
+      for (const selector of [
+        "#feat-table-body", "#combat-feat-body", "#special-ability-body",
+        "#backpack-gear-body", "#backpack-tool-body", "#backpack-magic-body",
+        "#ledger-body", "#skill-tables"
+      ]) {
+        const element = clone.querySelector(selector);
+        if (element) element.replaceChildren();
+      }
+
+      const combatBlock = clone.querySelector("#combat-feat-block");
+      if (combatBlock) combatBlock.hidden = true;
+      const specialBlock = clone.querySelector("#special-ability-block");
+      if (specialBlock) specialBlock.hidden = true;
+
+      const imageFrame = clone.querySelector("#appearance-image-frame");
+      if (imageFrame) {
+        imageFrame.hidden = true;
+        imageFrame.querySelector("#appearance-image")?.removeAttribute("src");
+      }
+
+      const saveStatus = clone.querySelector("#builder-save-status");
+      if (saveStatus) saveStatus.textContent = "自动保存已启用";
+      clone.querySelector("body")?.setAttribute("data-initial-tab", "builder");
+      return clone;
+    }
+
+    async function fetchResourceText(url) {
+      const response = await fetch(url, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`无法读取资源：${url}`);
+      return response.text();
+    }
+
+    async function inlineOfflineExportResources(clone) {
+      for (const link of [...clone.querySelectorAll('link[rel="stylesheet"]')]) {
+        const href = link.getAttribute("href");
+        if (!href) continue;
+        const css = await fetchResourceText(new URL(href, window.location.href).href);
+        const style = document.createElement("style");
+        style.textContent = css;
+        link.replaceWith(style);
+      }
+
+      for (const script of [...clone.querySelectorAll("script[src]")]) {
+        const src = script.getAttribute("src");
+        if (!src) continue;
+        const content = await fetchResourceText(new URL(src, window.location.href).href);
+        const inlineScript = document.createElement("script");
+        inlineScript.textContent = content;
+        script.replaceWith(inlineScript);
+      }
+    }
+
+    function getOfflineExportClone() {
+      const template = window.__DND_OFFLINE_TEMPLATE__;
+      if (typeof template === "string" && template.trim()) {
+        const documentNode = new DOMParser().parseFromString(template, "text/html");
+        const clone = documentNode.documentElement.cloneNode(true);
+        clone.querySelectorAll("#dnd-embedded-data").forEach((node) => node.remove());
+        clone.querySelector("body")?.setAttribute("data-initial-tab", "builder");
+        return clone;
+      }
+      return prepareOfflineExportClone();
+    }
+
+    async function exportOfflineHtml() {
+      try {
+        const clone = getOfflineExportClone();
+        await inlineOfflineExportResources(clone);
+
+        const embeddedId = typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `card-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const dataScript = document.createElement("script");
+        dataScript.id = "dnd-embedded-data";
+        dataScript.type = "application/json";
+        dataScript.dataset.embeddedId = embeddedId;
+        dataScript.textContent = JSON.stringify(captureBuilderData())
+          .replace(/<\/script/gi, "<\\/script");
+        clone.querySelector("head")?.append(dataScript);
+
+        const source = `<!DOCTYPE html>\n${clone.outerHTML}`;
+        const blob = new Blob([source], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `${sanitizeExportName(characterName.value.trim())}_离线角色卡.html`;
+        document.body.append(anchor);
+        anchor.click();
+        anchor.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setBuilderSaveStatus("已导出离线 HTML。");
+      } catch (error) {
+        window.alert(
+          "离线 HTML 导出失败。\n\n" +
+          "如果当前打开的是拆分资源版 index.html，浏览器可能禁止读取本地 CSS/JS；" +
+          "请使用 DND数据计算器.html 便携版导出。"
+        );
+        setBuilderSaveStatus("离线 HTML 导出失败。", true);
       }
     }
 
@@ -11122,7 +12037,9 @@ ${data.description}`;
     }
 
     function initializeBuilderPersistence() {
+      builderClearData.addEventListener("click", clearBuilderData);
       builderExportJson.addEventListener("click", downloadBuilderJson);
+      builderExportHtml.addEventListener("click", exportOfflineHtml);
       builderImportJson.addEventListener("click", () => builderImportFile.click());
       builderExportPdf.addEventListener("click", () => window.print());
 
@@ -11939,37 +12856,22 @@ ${data.description}`;
 
     window.addEventListener("resize", alignPlusIndicators);
 
-    for (const select of document.querySelectorAll(".equipment-weapon-name-select")) {
-      select.addEventListener("change", () => applyWeaponDefaults(select));
-      const row = select.closest("tr");
-
-      const propertyInput = row.querySelector(".equipment-property-input");
-      propertyInput.addEventListener("input", () => propertyInput.classList.remove("is-default"));
-
-      const abilitySelect = row.querySelector(".equipment-ability-select");
-      abilitySelect.addEventListener("change", () => {
-        abilitySelect.classList.remove("is-default");
-        updateWeaponRowDefaults(row, false);
-      });
-
-      const bonusInput = row.querySelector(".equipment-bonus-input");
-      bonusInput.addEventListener("input", () => {
-        updateWeaponBonusState(bonusInput);
-        updateWeaponRowDefaults(row, false);
-      });
-
-      const attackInput = row.querySelector(".equipment-attack-input");
-      attackInput.addEventListener("input", () => {
-        if (attackInput.value.trim() === "") updateWeaponRowDefaults(row, false);
-        else attackInput.classList.remove("is-default");
-      });
-
-      const damageInput = row.querySelector(".equipment-damage-input");
-      damageInput.addEventListener("input", () => {
-        if (damageInput.value.trim() === "") updateWeaponRowDefaults(row, false);
-        else damageInput.classList.remove("is-default");
-      });
+    setupEquipmentActionColumn(equipmentWeaponTable);
+    setupEquipmentActionColumn(magicEquipmentTable);
+    for (const row of equipmentWeaponBody.querySelectorAll("tr")) {
+      bindWeaponRow(row);
     }
+
+    addEquipmentPlusButton(equipmentWeaponTable, "添加武器", () => {
+      const row = createAddedWeaponRow();
+      equipmentWeaponBody.append(row);
+      row.querySelector(".equipment-weapon-name-select")?.focus();
+    });
+    addEquipmentPlusButton(magicEquipmentTable, "添加装备", () => {
+      const row = createAddedMagicEquipmentRow();
+      magicEquipmentBody.append(row);
+      row.querySelector(".magic-equipment-name")?.focus();
+    });
 
     populateArmorNames();
     updateArmorDefaults();
@@ -12537,6 +13439,7 @@ ${data.description}`;
     addLedgerRow(false);
     addLedgerRow(false);
     addLedgerRow(false);
+    setupAppearanceImageInteraction();
 
     initializeBuilderPersistence();
 
