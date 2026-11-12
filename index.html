@@ -13,7 +13,7 @@
         var preference = localStorage.getItem("dnd5e2024.theme") || "system";
         if (!/^(system|light|dark)$/.test(preference)) preference = "system";
         var size = parseInt(localStorage.getItem("dnd5e2024.fontSize"), 10);
-        if (!Number.isFinite(size) || size < 14 || size > 24) size = 16;
+        if (!Number.isFinite(size) || size < 10 || size > 24) size = 16;
         var resolved = preference;
         if (preference === "system") {
           resolved = window.matchMedia &&
@@ -790,12 +790,20 @@
       justify-content: center;
       width: 15px;
       height: 15px;
+      padding: 0;
       color: #800000;
+      background: transparent;
       border: 1px solid #800000;
       border-radius: 50%;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
       font-size: 0.68rem;
       font-weight: bold;
       line-height: 1;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
     }
 
     .tooltip-deity-table {
@@ -4626,6 +4634,40 @@ main.page-width {
   .builder-png-menu { display: none !important; }
 }
 
+.subclass-under-level select,
+.subclass-under-level input {
+  color: #999999 !important;
+  -webkit-text-fill-color: #999999 !important;
+}
+
+.subclass-under-level select option {
+  color: #999999;
+}
+
+.subclass-under-level input::placeholder {
+  color: #999999 !important;
+}
+
+.panel .subclass-under-level select,
+.panel .subclass-under-level input {
+  color: #999999 !important;
+  -webkit-text-fill-color: #999999 !important;
+}
+
+.panel .subclass-under-level select option {
+  color: #999999;
+}
+
+.panel .subclass-under-level input::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme="dark"] .panel .subclass-under-level select,
+html[data-theme="dark"] .panel .subclass-under-level input {
+  color: #999999 !important;
+  -webkit-text-fill-color: #999999 !important;
+}
+
 </style>
 </head>
 <body>
@@ -4660,8 +4702,8 @@ main.page-width {
       <span>正文内容字体大小</span>
       <output id="settings-font-output" for="settings-font-range">16px</output>
     </label>
-    <input id="settings-font-range" class="settings-font-range" type="range" min="14" max="24" step="1" value="16" aria-label="正文内容字体大小">
-    <div class="settings-font-scale" aria-hidden="true"><span>14px</span><span>24px</span></div>
+    <input id="settings-font-range" class="settings-font-range" type="range" min="10" max="24" step="1" value="16" aria-label="正文内容字体大小">
+    <div class="settings-font-scale" aria-hidden="true"><span>10px</span><span>24px</span></div>
     <p class="settings-hint">主题与字体设置仅保存在当前浏览器；导出角色卡不会包含显示设置。</p>
   </div>
 
@@ -4836,7 +4878,7 @@ main.page-width {
             </select>
           </label>
           <label class="builder-field">
-            <span class="faith-label">信仰<span class="faith-help reference-tooltip-trigger" data-reference-tooltip="faith" tabindex="0" role="button" aria-label="查看费伦神系">?</span></span>
+            <span class="faith-label">信仰<button class="faith-help reference-tooltip-trigger" type="button" data-reference-tooltip="faith" aria-label="查看费伦神系" title="查看费伦神系">?</button></span>
             <input id="builder-faith" type="text" placeholder="任意填写" autocomplete="off">
           </label>
         </div>
@@ -9588,6 +9630,24 @@ window.AdventureTraits = {
       syncSelectEmpty(subclassField);
       if (subclassField === subclassSelect) syncSubclassCustomUI();
       updateSummary();
+    }
+
+    function setSubclassMuted(control, muted) {
+      if (!control) return;
+      control.classList.toggle("subclass-under-level", muted);
+      const wrapper = control.closest(".field-control") || control.parentElement;
+      if (wrapper) wrapper.classList.toggle("subclass-under-level", muted);
+    }
+
+    function updateSubclassLevelColor() {
+      const mainLevel = getLevel(levelInput);
+      setSubclassMuted(subclassSelect, mainLevel !== null && mainLevel < 3);
+      setSubclassMuted(customSubclassInput, mainLevel !== null && mainLevel < 3);
+
+      for (const row of getExtraMultiRows()) {
+        const level = getLevel(row.querySelector(".profession-row-level"));
+        setSubclassMuted(row.querySelector(".profession-row-subclass"), level !== null && level < 3);
+      }
     }
 
     function highlightTerms(root) {
@@ -14420,6 +14480,7 @@ ${data.description}`;
     }
 
     function updateSummary() {
+      updateSubclassLevelColor();
       const parts = [];
       const name = characterName.value.trim();
       if (name) parts.push(name);
@@ -14816,6 +14877,23 @@ ${data.description}`;
       target.addEventListener("focusin", () => scheduleReferenceTooltip(target));
       target.addEventListener("focusout", cancelReferenceTooltip);
     }
+
+    const faithHelp = document.querySelector(".faith-help");
+    if (faithHelp) {
+      faithHelp.addEventListener("pointerdown", (event) => event.stopPropagation());
+      faithHelp.addEventListener("contextmenu", (event) => event.preventDefault());
+      faithHelp.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        showReferenceTooltip(faithHelp);
+      });
+    }
+
+    document.addEventListener("pointerdown", (event) => {
+      if (referenceTooltip.hidden) return;
+      if (referenceTooltip.contains(event.target) || event.target.closest("[data-reference-tooltip]")) return;
+      cancelReferenceTooltip();
+    });
 
     referenceTooltip.addEventListener("mouseenter", () => {
       if (referenceTooltipHideTimer !== null) {
@@ -15720,7 +15798,7 @@ ${data.description}`;
   function readFontSize() {
     try {
       const value = parseInt(localStorage.getItem(FONT_KEY), 10);
-      return Number.isFinite(value) && value >= 14 && value <= 24 ? value : 16;
+      return Number.isFinite(value) && value >= 10 && value <= 24 ? value : 16;
     } catch (error) {
       return 16;
     }
@@ -15754,7 +15832,7 @@ ${data.description}`;
   }
 
   function applyFontSize(size, persist = true) {
-    const value = Math.min(24, Math.max(14, Number(size) || 16));
+    const value = Math.min(24, Math.max(10, Number(size) || 16));
     root.style.setProperty("--content-zoom", (value / 16).toFixed(3));
     fontRange.value = String(value);
     fontOutput.textContent = `${value}px`;
