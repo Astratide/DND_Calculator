@@ -755,8 +755,56 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       font-size: 0.82rem;
       line-height: 1.65;
-      pointer-events: none;
+      pointer-events: auto;
     }
+
+    .faith-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .faith-help {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      color: #800000;
+      border: 1px solid #800000;
+      border-radius: 50%;
+      font-size: 0.68rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .tooltip-deity-table {
+      width: 100%;
+      margin: 4px 0;
+      border: 0;
+      border-collapse: collapse;
+      background: transparent;
+      table-layout: fixed;
+    }
+
+    .tooltip-deity-table th,
+    .tooltip-deity-table td {
+      padding: 2px 4px;
+      background: transparent;
+      border: 0;
+      font-size: 0.76rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .tooltip-deity-table th { font-weight: bold; }
+
+    .tooltip-deity-table tbody tr:nth-child(even) td {
+      background: #EEEEEE;
+    }
+
+    .tooltip-deity-table th:nth-child(1),
+    .tooltip-deity-table td:nth-child(1) { width: 58%; }
 
     .reference-tooltip .reference-title {
       display: block;
@@ -1153,6 +1201,41 @@
 
     .language-row-delete:hover { color: #c00; }
 
+    .language-tool-control {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .language-tool-select,
+    .language-tool-custom-input {
+      flex: 1 1 auto;
+      min-width: 0;
+      width: 100%;
+      height: 28px;
+      padding: 3px 2px;
+      color: #111;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.82rem;
+      text-align: center;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: none;
+      text-align-last: center;
+    }
+
+    .language-tool-custom-input::placeholder { color: #aaa; }
+
+    .language-tool-custom-reset {
+      width: 14px;
+      font-size: 0.95rem;
+    }
+
     .language-tool-input {
       width: 100%;
       height: 28px;
@@ -1318,6 +1401,65 @@
 
     .custom-race-editor { margin-top: 10px; }
 
+    .custom-background-editor { margin-top: 10px; }
+
+    .custom-background-table {
+      width: 100%;
+      max-width: 780px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+      border: 1px solid #b8b8b8;
+      font-size: 0.86rem;
+    }
+
+    .custom-background-table .custom-background-label-col { width: 92px; }
+
+    .custom-background-table th,
+    .custom-background-table td {
+      padding: 4px 6px;
+      border: 1px solid #b8b8b8;
+      vertical-align: middle;
+    }
+
+    .custom-background-table thead th {
+      padding: 5px;
+      color: #fff;
+      background: #808080;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .custom-background-table tbody th {
+      color: #fff;
+      background: #808080;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .custom-background-table tbody td { background: #fff; }
+
+    .custom-background-value {
+      min-height: 24px;
+      padding: 3px 4px;
+      color: #111;
+      outline: none;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .custom-background-value:empty::before {
+      content: attr(data-placeholder);
+      color: #999;
+      pointer-events: none;
+    }
+
+    .custom-background-value:focus {
+      outline: 1px solid #800000;
+      outline-offset: -1px;
+    }
+
     .custom-editor-toolbar {
       display: flex;
       justify-content: flex-end;
@@ -1427,6 +1569,75 @@
     .race-traits li { margin: 0 0 3px; }
 
     .race-traits b { font-weight: bold; }
+
+    .profession-section-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .profession-section-head .builder-section-title {
+      flex: 1 1 auto;
+      margin: 0;
+    }
+
+    .profession-add {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      color: #111;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      font-size: 0.85rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .profession-add:hover { border-color: #800000; }
+
+    .profession-row-select,
+    .profession-row-level {
+      width: 100%;
+      min-width: 0;
+      padding: 4px 2px;
+      color: #111;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.84rem;
+      text-align: center;
+    }
+
+    .profession-row-level { appearance: textfield; -moz-appearance: textfield; }
+
+    .profession-row-level::-webkit-inner-spin-button,
+    .profession-row-level::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .profession-level-cell { position: relative; padding-right: 18px !important; }
+
+    .multi-row-delete {
+      position: absolute;
+      right: 1px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 20px;
+      padding: 0;
+      color: #888;
+      background: transparent;
+      border: 0;
+      font-size: 0.9rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .multi-row-delete:hover { color: #c00; }
 
     .profession-table {
       width: 100%;
@@ -2487,6 +2698,15 @@
     .spell-main-class-item { grid-area: main; }
     .spell-prepared-group { grid-area: prepared; }
 
+    .spell-multiclass-note {
+      margin: 7px 0 0;
+      color: #777;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .spell-multiclass-note[hidden] { display: none; }
+
     .spell-summary-item {
       display: flex;
       align-items: center;
@@ -2879,6 +3099,38 @@
     .equipment-weapon-table tbody tr:nth-child(even) td { background: #EEEEEE; }
 
     .equipment-weapon-name-col { width: 110px; }
+
+    .equipment-armor-name-control {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .equipment-armor-name-control .equipment-select,
+    .equipment-armor-custom-name {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .equipment-armor-custom-name {
+      width: 100%;
+      padding: 2px 3px;
+      color: #111;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    .equipment-armor-custom-name::placeholder { color: #aaa; }
+
+    .equipment-armor-reset {
+      width: 14px;
+      font-size: 0.95rem;
+    }
 
     .equipment-table-actions {
       display: flex;
@@ -3824,6 +4076,8 @@
   .appearance-image-import,
   .appearance-image-remove,
   .appearance-image-hint,
+  .profession-add,
+  .multi-row-delete,
   .tab { display: none !important; }
 
   .appearance-title-row { background: #808080 !important; }
@@ -4091,7 +4345,7 @@
             </select>
           </label>
           <label class="builder-field">
-            <span>信仰</span>
+            <span class="faith-label">信仰<span class="faith-help reference-tooltip-trigger" data-reference-tooltip="faith" tabindex="0" role="button" aria-label="查看费伦神系">?</span></span>
             <input id="builder-faith" type="text" placeholder="任意填写" autocomplete="off">
           </label>
         </div>
@@ -4182,16 +4436,36 @@
           </label>
         </div>
         <div id="builder-background-traits" class="race-traits" aria-live="polite" hidden></div>
-        <div id="builder-custom-background-editor" class="custom-race-editor" hidden>
-          <div class="custom-editor-toolbar" role="toolbar" aria-label="自定义背景格式">
-            <button type="button" class="custom-format" data-format="plain">正文</button>
-            <button type="button" class="custom-format" data-format="bold">粗体</button>
-            <button type="button" class="custom-format" data-format="title">标题</button>
-            <button type="button" class="custom-format" data-format="term">术语</button>
-            <button type="button" class="custom-format" data-format="spell">法术</button>
-            <button type="button" class="custom-format" data-format="list">• 列表</button>
-          </div>
-          <div id="builder-custom-background-traits" class="custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此填写自定义背景。"></div>
+        <div id="builder-custom-background-editor" class="custom-background-editor" hidden>
+          <table class="custom-background-table" aria-label="自定义背景">
+            <colgroup>
+              <col class="custom-background-label-col">
+              <col>
+              <col class="custom-background-label-col">
+              <col>
+            </colgroup>
+            <thead><tr><th colspan="4">自定义背景</th></tr></thead>
+            <tbody>
+              <tr>
+                <th scope="row">属性值</th>
+                <td><div id="custom-background-abilities" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="你的背景列出了角色的三项属性值。将其中一项提升2，另一项提升1；或者将三项都分别增加1。这些提升都不能使得属性值超过20。"></div></td>
+                <th scope="row">专长</th>
+                <td><div id="custom-background-feat" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="背景为你的角色提供一项特定的起源专长。"></div></td>
+              </tr>
+              <tr>
+                <th scope="row">技能熟练</th>
+                <td colspan="3"><div id="custom-background-skills" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="背景可使你的角色熟练掌握两种特定的技能。"></div></td>
+              </tr>
+              <tr>
+                <th scope="row">工具熟练</th>
+                <td colspan="3"><div id="custom-background-tools" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="每个背景会赋予角色一种工具的熟练，可以是一种特定工具，也可以是从工匠工具类别中选择的一种。"></div></td>
+              </tr>
+              <tr>
+                <th scope="row">背景装备</th>
+                <td colspan="3"><div id="custom-background-equipment" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="每个背景会提供两个选择：一套行装或50GP"></div></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <table class="background-story-table" aria-label="背景故事">
@@ -4265,7 +4539,10 @@
       </div>
 
       <div class="panel">
-        <h3 class="builder-section-title">职业信息 Class Info</h3>
+        <div class="profession-section-head">
+          <h3 class="builder-section-title">职业信息 Class Info</h3>
+          <button id="multi-class-add" class="profession-add" type="button" title="添加兼职职业" aria-label="添加兼职职业">＋</button>
+        </div>
         <table class="profession-table">
           <caption class="sr-only">角色职业信息</caption>
           <thead>
@@ -4295,7 +4572,7 @@
               </td>
               <td><input id="builder-level" type="text" inputmode="numeric" maxlength="2" value="1" autocomplete="off" aria-label="主职等级"></td>
             </tr>
-            <tr>
+            <tr id="builder-multi-row" hidden>
               <th scope="row">兼职</th>
               <td>
                 <div class="field-control">
@@ -4705,10 +4982,10 @@
                     <option value="中甲">中甲</option>
                     <option value="重甲">重甲</option>
                   </select></td>
-                  <td><select id="equipment-armor-name" class="equipment-select" aria-label="护甲名称"><option value="">—</option><option value="法师护甲">法师护甲</option><option value="大法师法袍">大法师法袍</option><option value="武僧">武僧</option><option value="野蛮人">野蛮人</option><option value="龙术">龙术</option><option value="舞蹈诗">舞蹈诗</option><option value="巨灵流光">巨灵流光</option><option value="蛇鳞甲">蛇鳞甲</option><option value="自定义">自定义</option></select></td>
+                  <td><div class="equipment-armor-name-control"><select id="equipment-armor-name" class="equipment-select" aria-label="护甲名称"><option value="">—</option><option value="法师护甲">法师护甲</option><option value="大法师法袍">大法师法袍</option><option value="武僧">武僧</option><option value="野蛮人">野蛮人</option><option value="龙术">龙术</option><option value="舞蹈诗">舞蹈诗</option><option value="巨灵流光">巨灵流光</option><option value="蛇鳞甲">蛇鳞甲</option><option value="自定义">自定义</option></select><input id="equipment-armor-custom-name" class="equipment-input equipment-armor-custom-name" type="text" placeholder="填入护甲名称..." autocomplete="off" aria-label="自定义护甲名称" hidden><button id="equipment-armor-reset" class="custom-reset equipment-armor-reset" type="button" title="返回护甲选择" aria-label="返回护甲选择" hidden>×</button></div></td>
                   <td><input id="equipment-armor-ac" class="equipment-input is-default" type="text" value="10+敏捷调整值" autocomplete="off" aria-label="护甲AC"></td>
                   <td><select id="equipment-armor-stealth" class="equipment-select" aria-label="隐匿劣势"><option value="否" selected>否</option><option value="是">是</option></select></td>
-                  <td><select id="equipment-shield-equipped" class="equipment-select" aria-label="盾牌已装备"><option value="是" selected>是</option><option value="否">否</option></select></td>
+                  <td><select id="equipment-shield-equipped" class="equipment-select" aria-label="盾牌已装备"><option value="是">是</option><option value="否" selected>否</option></select></td>
                   <td><input id="equipment-shield-name" class="equipment-input" type="text" value="盾牌" autocomplete="off" aria-label="盾牌名称"></td>
                   <td class="equipment-shield-ac-cell"><span class="equipment-shield-plus" aria-hidden="true">+</span><input id="equipment-shield-ac" class="equipment-input is-default" type="text" value="2" inputmode="numeric" autocomplete="off" aria-label="盾牌AC"></td>
                 </tr>
@@ -4875,6 +5152,8 @@
             </label>
           </div>
         </div>
+
+        <p id="spell-multiclass-note" class="spell-multiclass-note" hidden>兼职的施法特性也会给你额外的可习得戏法和可准备法术，但不会在这里被自动计算，请自行查看职业特性表格来确定自己的法术数量。</p>
 
         <table class="spell-table" aria-label="法术位与已准备法术">
           <colgroup>
@@ -7284,6 +7563,7 @@
     const customSubclassInput = document.getElementById("builder-subclass-custom");
     const subclassReset = document.getElementById("builder-subclass-reset");
     const classReset = document.getElementById("builder-class-reset");
+    const multiClassAdd = document.getElementById("multi-class-add");
     const multiClassSelect = document.getElementById("builder-multi-class");
     const multiLevelInput = document.getElementById("builder-multi-level");
     const multiSubclassSelect = document.getElementById("builder-multi-subclass");
@@ -7296,7 +7576,6 @@
     const backgroundSelect = document.getElementById("builder-background");
     const backgroundTraitsBox = document.getElementById("builder-background-traits");
     const customBackgroundEditor = document.getElementById("builder-custom-background-editor");
-    const customBackgroundTraits = document.getElementById("builder-custom-background-traits");
     const summary = document.getElementById("builder-summary");
     const totalLevelOutput = document.getElementById("builder-total-level");
     const pbOutput = document.getElementById("builder-pb");
@@ -7337,6 +7616,8 @@
     const multiClassFeatureText = document.getElementById("multi-class-feature-text");
     const equipmentArmorType = document.getElementById("equipment-armor-type");
     const equipmentArmorName = document.getElementById("equipment-armor-name");
+    const equipmentArmorCustomName = document.getElementById("equipment-armor-custom-name");
+    const equipmentArmorReset = document.getElementById("equipment-armor-reset");
     const equipmentArmorAc = document.getElementById("equipment-armor-ac");
     const equipmentArmorStealth = document.getElementById("equipment-armor-stealth");
     const equipmentShieldAc = document.getElementById("equipment-shield-ac");
@@ -7378,6 +7659,7 @@
     const spellCasterLevel = document.getElementById("spell-caster-level");
     const spellCantripCount = document.getElementById("spell-cantrip-count");
     const spellPreparedCount = document.getElementById("spell-prepared-count");
+    const spellMulticlassNote = document.getElementById("spell-multiclass-note");
     const spellMainClass = document.getElementById("spell-main-class");
     const builderClearData = document.getElementById("builder-clear-data");
     const builderExportJson = document.getElementById("builder-export-json");
@@ -7406,10 +7688,11 @@
     if (!raceSelect || !subraceField || !subraceSelect || !customRaceInput || !raceReset ||
         !customRaceEditor || !customRaceTraits || !characterName || !alignmentSelect ||
         !classSelect || !levelInput || !subclassSelect || !customClassInput ||
-        !customSubclassInput || !subclassReset || !classReset || !multiClassSelect || !multiLevelInput ||
+        !customSubclassInput || !subclassReset || !classReset || !multiClassAdd ||
+        !multiClassSelect || !multiLevelInput ||
         !multiSubclassSelect || !customMultiClassInput || !customMultiSubclassInput ||
         !multiClassReset || !customSavePanel || !builderPanel || !raceTraitsBox || !backgroundSelect ||
-        !backgroundTraitsBox || !customBackgroundEditor || !customBackgroundTraits ||
+        !backgroundTraitsBox || !customBackgroundEditor ||
         !summary || !totalLevelOutput ||
         !pbOutput || !saveProfOutput || !abilityTooltip || !referenceTooltip || !combatHp || !combatInitiative ||
         !combatSpellAbility || !combatSpellDc || !combatSpellAttack || !combatAc ||
@@ -7420,6 +7703,7 @@
         !featTableBody || !featAdd || !featStyleAdd || !combatFeatBlock ||
         !combatFeatBody || !specialAbilityAdd || !specialAbilityBlock ||
         !specialAbilityBody || !spellCasterLabel || !spellCasterLevel || !spellCantripCount ||
+        !spellMulticlassNote ||
         !spellPreparedCount || !spellMainClass || !spellCantripGift ||
         !spellAlwaysPrepared || !spellGiftSpells ||
         !builderClearData || !builderExportJson || !builderImportJson || !builderExportPdf ||
@@ -7433,7 +7717,8 @@
         !skillTables || !skillSummary || !coreTraitBody ||
         !mainClassFeatureBlock || !mainClassFeatureTitle || !mainClassFeatureText ||
         !multiClassFeatureBlock || !multiClassFeatureTitle || !multiClassFeatureText ||
-        !equipmentArmorType || !equipmentArmorName || !equipmentArmorAc ||
+        !equipmentArmorType || !equipmentArmorName || !equipmentArmorCustomName ||
+        !equipmentArmorReset || !equipmentArmorAc ||
         !equipmentArmorStealth || !equipmentShieldAc || !equipmentShieldEquipped ||
         !equipmentWeaponTable || !equipmentWeaponBody ||
         !magicEquipmentTable || !magicEquipmentBody ||
@@ -8462,17 +8747,6 @@
       });
     }
 
-    function setCustomBackgroundDefault() {
-      if (customBackgroundTraits.innerHTML.trim()) return;
-      customBackgroundTraits.innerHTML = `<span class="custom-title">自定义背景</span><br>
-<b>属性值：</b>任选一项+2，一项+1<br>
-<b>专长：</b>任意起源专长<br>
-<b>技能熟练：</b>任选两项技能<br>
-<b>工具熟练：</b>任选一项工具<br>
-<b>装备：</b>50GP<br><br>
-在此处填写所用背景的特征。`;
-    }
-
     function renderBackgroundTraits() {
       const value = backgroundSelect.value;
 
@@ -8485,7 +8759,6 @@
       if (value === "自定义背景") {
         backgroundTraitsBox.hidden = true;
         customBackgroundEditor.hidden = false;
-        setCustomBackgroundDefault();
         return;
       }
 
@@ -9797,7 +10070,11 @@ ${data.description}`;
       };
       const classes = [
         { name: classSelect.value, level: getLevel(levelInput), subclass: currentMainSubclass() },
-        { name: multiClassSelect.value, level: getLevel(multiLevelInput), subclass: currentMultiSubclass() }
+        ...getExtraMultiEntries().map((entry) => ({
+          name: entry.classSelect.value,
+          level: getLevel(entry.levelInput),
+          subclass: entry.subclassSelect.value
+        }))
       ];
       let total = 0;
 
@@ -9814,6 +10091,25 @@ ${data.description}`;
       }
 
       return Math.min(20, total);
+    }
+
+    function extraMulticlassHasSpellcasting() {
+      const spellcastingClasses = new Set([
+        "吟游诗人", "牧师", "德鲁伊", "术士", "法师",
+        "圣武士", "游侠", "奇械师", "魔契师"
+      ]);
+      const thirdCasterSubclasses = {
+        "战士": "奥法骑士",
+        "游荡者": "诡术师",
+        "武僧": "秘术武者"
+      };
+
+      return getExtraMultiEntries().some((entry) => {
+        const name = entry.classSelect.value;
+        if (!name) return false;
+        if (spellcastingClasses.has(name)) return true;
+        return thirdCasterSubclasses[name] === entry.subclassSelect.value;
+      });
     }
 
     function getPreparedSpellCount() {
@@ -9916,6 +10212,7 @@ ${data.description}`;
       spellMainClass.textContent = classSelect.value
         ? `${currentMainClassName()} ${mainLevel === null ? "?" : mainLevel}级`
         : "—";
+      spellMulticlassNote.hidden = !extraMulticlassHasSpellcasting();
 
       const slots = warlock ? [] : (spellSlotsByCasterLevel[casterLevel] || []);
 
@@ -10091,11 +10388,25 @@ ${data.description}`;
       equipmentArmorName.append(placeholder);
 
       for (const name of names) {
+        if (name === "自定义") continue;
         const option = document.createElement("option");
         option.value = name;
         option.textContent = name;
         equipmentArmorName.append(option);
       }
+
+      const customOption = document.createElement("option");
+      customOption.value = "自定义";
+      customOption.textContent = "自定义";
+      equipmentArmorName.append(customOption);
+      syncArmorCustomUI();
+    }
+
+    function syncArmorCustomUI() {
+      const custom = equipmentArmorName.value === "自定义";
+      equipmentArmorName.hidden = custom;
+      equipmentArmorCustomName.hidden = !custom;
+      equipmentArmorReset.hidden = !custom;
     }
 
     const armorAcConfig = {
@@ -10123,6 +10434,7 @@ ${data.description}`;
     };
 
     function updateArmorDefaults(force = false) {
+      syncArmorCustomUI();
       const name = equipmentArmorName.value;
       const type = equipmentArmorType.value;
       const stealth = armorData[name] ? armorData[name].stealth : "否";
@@ -11218,6 +11530,7 @@ ${data.description}`;
       }
 
       syncSubclassCustomUI();
+      syncArmorCustomUI();
       for (const row of featTableBody.children) syncFeatCustomUI(row);
       for (const row of combatFeatBody.children) syncCombatStyleCustomUI(row);
       for (const row of backpackGearBody.children) syncGearCustomUI(row);
@@ -11323,7 +11636,8 @@ ${data.description}`;
       "[data-custom-language-row]",
       "[data-custom-tool-row]",
       "[data-added-weapon-row]",
-      "[data-added-magic-row]"
+      "[data-added-magic-row]",
+      "[data-extra-multi-row]"
     ].join(",");
 
     function isInDynamicBuilderRow(element) {
@@ -11432,7 +11746,7 @@ ${data.description}`;
 
     function captureCustomLanguageToolRows(container, selector) {
       return [...container.querySelectorAll(selector)].map((row) => ({
-        controls: [...row.querySelectorAll("input")].map((element) => ({
+        controls: [...row.querySelectorAll("input, select")].map((element) => ({
           value: element.value,
           checked: null,
           className: element.className
@@ -11485,6 +11799,10 @@ ${data.description}`;
           magicEquipmentBody,
           "[data-added-magic-row]"
         ),
+        extraMultiRows: captureAddedEquipmentRows(
+          document.querySelector(".profession-table tbody"),
+          "[data-extra-multi-row]"
+        ),
         appearanceImage: {
           src: appearanceImageState.src,
           scale: appearanceImageState.scale,
@@ -11531,6 +11849,77 @@ ${data.description}`;
       });
     }
 
+    function populateLanguageToolSelect(select) {
+      const blank = document.createElement("option");
+      blank.value = "";
+      blank.textContent = "—";
+      select.appendChild(blank);
+
+      for (const name of Object.keys(toolData)) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      }
+
+      const custom = document.createElement("option");
+      custom.value = CUSTOM_VALUE;
+      custom.textContent = "自定义";
+      select.appendChild(custom);
+    }
+
+    function syncLanguageToolCustomUI(control) {
+      const select = control.querySelector(".language-tool-select");
+      const input = control.querySelector(".language-tool-custom-input");
+      const reset = control.querySelector(".language-tool-custom-reset");
+      if (!select || !input || !reset) return;
+
+      const custom = select.value === CUSTOM_VALUE;
+      select.hidden = custom;
+      input.hidden = !custom;
+      reset.hidden = !custom;
+    }
+
+    function createLanguageToolControl() {
+      const control = document.createElement("div");
+      control.className = "language-tool-control";
+
+      const select = document.createElement("select");
+      select.className = "language-tool-select";
+      select.setAttribute("aria-label", "工具");
+      populateLanguageToolSelect(select);
+
+      const customInput = document.createElement("input");
+      customInput.type = "text";
+      customInput.className = "language-tool-custom-input";
+      customInput.placeholder = "自定义工具";
+      customInput.autocomplete = "off";
+      customInput.setAttribute("aria-label", "自定义工具名称");
+      customInput.hidden = true;
+
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "custom-reset language-tool-custom-reset";
+      reset.textContent = "×";
+      reset.title = "返回工具选择";
+      reset.setAttribute("aria-label", "返回工具选择");
+      reset.hidden = true;
+
+      control.append(select, customInput, reset);
+      select.addEventListener("change", () => {
+        syncLanguageToolCustomUI(control);
+        if (select.value === CUSTOM_VALUE) customInput.focus();
+      });
+      reset.addEventListener("click", () => {
+        select.value = "";
+        customInput.value = "";
+        syncLanguageToolCustomUI(control);
+        select.focus();
+      });
+      syncLanguageToolCustomUI(control);
+      return control;
+    }
+
     function createLanguageToolRow(kind, deletable = false) {
       const row = document.createElement("tr");
       if (deletable) {
@@ -11539,15 +11928,17 @@ ${data.description}`;
 
       for (let index = 0; index < 2; index += 1) {
         const cell = document.createElement("td");
-        const input = document.createElement("input");
-        input.type = "text";
-        input.className = "language-tool-input";
-        input.autocomplete = "off";
-        input.setAttribute("aria-label", `${
-          kind === "language" ? "语言" : "工具"
-        }${deletable ? "（自定义）" : ""}`);
-        input.addEventListener("input", () => input.classList.remove("is-default"));
-        cell.append(input);
+        if (kind === "tool") {
+          cell.append(createLanguageToolControl());
+        } else {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.className = "language-tool-input";
+          input.autocomplete = "off";
+          input.setAttribute("aria-label", "语言");
+          input.addEventListener("input", () => input.classList.remove("is-default"));
+          cell.append(input);
+        }
         row.append(cell);
       }
 
@@ -11576,6 +11967,9 @@ ${data.description}`;
         );
         container.append(row);
         applyCapturedRow(row, rowData);
+        for (const control of row.querySelectorAll(".language-tool-control")) {
+          syncLanguageToolCustomUI(control);
+        }
       }
     }
 
@@ -11673,6 +12067,27 @@ ${data.description}`;
         magicEquipmentBody.append(row);
         applyCapturedRow(row, rowData);
       }
+
+      const professionBody = document.querySelector(".profession-table tbody");
+      if (professionBody) {
+        for (const row of professionBody.querySelectorAll("[data-extra-multi-row]")) {
+          row.remove();
+        }
+        for (const rowData of data.extraMultiRows || []) {
+          const row = createExtraMultiRow();
+          professionBody.append(row);
+          applyCapturedRow(row, rowData);
+          const classField = row.querySelector(".profession-row-class");
+          const subclassField = row.querySelector(".profession-row-subclass");
+          const levelField = row.querySelector(".profession-row-level");
+          levelField.disabled = !classField.value;
+          subclassField.disabled = !classField.value;
+          if (classField.value) {
+            updateSubclassFor(classField, levelField, subclassField, true);
+          }
+        }
+        updateExtraMultiAddState();
+      }
     }
 
     function restoreBuilderData(data) {
@@ -11732,6 +12147,10 @@ ${data.description}`;
 
       applyStatic();
       syncSubclassCustomUI();
+      syncArmorCustomUI();
+      for (const control of toolBody.querySelectorAll(".language-tool-control")) {
+        syncLanguageToolCustomUI(control);
+      }
       for (const row of equipmentWeaponBody.querySelectorAll("tr")) {
         syncWeaponCustomUI(row);
       }
@@ -12085,6 +12504,120 @@ ${data.description}`;
       syncClassFeatureEditors();
     }
 
+    function getExtraMultiRows() {
+      return [...document.querySelectorAll("[data-extra-multi-row]")];
+    }
+
+    function getExtraMultiEntries() {
+      return getExtraMultiRows().map((row) => ({
+        row,
+        classSelect: row.querySelector(".profession-row-class"),
+        subclassSelect: row.querySelector(".profession-row-subclass"),
+        levelInput: row.querySelector(".profession-row-level")
+      })).filter((entry) => entry.classSelect && entry.subclassSelect && entry.levelInput);
+    }
+
+    function getExtraMultiLevelSum() {
+      return getExtraMultiEntries().reduce((sum, entry) => {
+        if (!entry.classSelect.value) return sum;
+        return sum + (getLevel(entry.levelInput) ?? 0);
+      }, 0);
+    }
+
+    function updateExtraMultiAddState() {
+      const count = getExtraMultiRows().length;
+      multiClassAdd.disabled = count >= 5;
+      multiClassAdd.title = count >= 5 ? "最多5个兼职" : "添加兼职职业";
+    }
+
+    function createExtraMultiRow() {
+      const row = document.createElement("tr");
+      row.dataset.extraMultiRow = "";
+
+      const typeCell = document.createElement("th");
+      typeCell.scope = "row";
+      typeCell.textContent = "兼职";
+
+      const classCell = document.createElement("td");
+      const classField = document.createElement("select");
+      classField.className = "profession-row-select profession-row-class";
+      classField.setAttribute("aria-label", "兼职职业");
+      populateClassSelect(classField, "—");
+      classField.querySelector(`option[value="${CUSTOM_VALUE}"]`)?.remove();
+      classCell.append(classField);
+
+      const subclassCell = document.createElement("td");
+      const subclassField = document.createElement("select");
+      subclassField.className = "profession-row-select profession-row-subclass";
+      subclassField.setAttribute("aria-label", "兼职子职");
+      subclassField.disabled = true;
+      const empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = "—";
+      subclassField.append(empty);
+      subclassCell.append(subclassField);
+
+      const levelCell = document.createElement("td");
+      levelCell.className = "profession-level-cell";
+      const levelField = document.createElement("input");
+      levelField.type = "text";
+      levelField.inputMode = "numeric";
+      levelField.maxLength = 2;
+      levelField.value = "1";
+      levelField.disabled = true;
+      levelField.autocomplete = "off";
+      levelField.className = "profession-row-level";
+      levelField.setAttribute("aria-label", "兼职等级");
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "multi-row-delete";
+      deleteButton.textContent = "×";
+      deleteButton.title = "删除此兼职";
+      deleteButton.setAttribute("aria-label", "删除此兼职");
+      deleteButton.addEventListener("click", () => {
+        row.remove();
+        updateExtraMultiAddState();
+        updateSummary();
+      });
+      levelCell.append(levelField, deleteButton);
+
+      classField.addEventListener("change", () => {
+        levelField.disabled = !classField.value;
+        if (!classField.value) {
+          levelField.value = "1";
+          emptySubclass(subclassField, "—", true);
+        } else {
+          if (!getLevel(levelField)) levelField.value = "1";
+          updateSubclassFor(classField, levelField, subclassField, false);
+        }
+        updateSummary();
+      });
+      levelField.addEventListener("input", () => {
+        clampLevelInput(levelField);
+        if (classField.value) updateSubclassFor(classField, levelField, subclassField, true);
+        updateSummary();
+      });
+      levelField.addEventListener("change", () => {
+        normalizeLevel(levelField);
+        if (classField.value) updateSubclassFor(classField, levelField, subclassField, true);
+        updateSummary();
+      });
+      subclassField.addEventListener("change", updateSummary);
+
+      row.append(typeCell, classCell, subclassCell, levelCell);
+      return row;
+    }
+
+    function addExtraMultiRow() {
+      if (getExtraMultiRows().length >= 5) return;
+      const row = createExtraMultiRow();
+      const tableBody = document.querySelector(".profession-table tbody");
+      if (!tableBody) return;
+      tableBody.append(row);
+      updateExtraMultiAddState();
+      row.querySelector(".profession-row-class")?.focus();
+    }
+
     function getModifierValue(key) {
       const output = document.getElementById(`mod-${key}`);
       if (!output) return null;
@@ -12096,7 +12629,7 @@ ${data.description}`;
 
     function getCombatTotalLevel() {
       const mainLevel = classSelect.value ? (getLevel(levelInput) ?? 0) : 0;
-      const multiLevel = multiClassSelect.value ? (getLevel(multiLevelInput) ?? 0) : 0;
+      const multiLevel = getExtraMultiLevelSum();
       return { total: mainLevel + multiLevel, mainLevel, multiLevel };
     }
 
@@ -12159,13 +12692,13 @@ ${data.description}`;
         syncCombatCorrectionPlus(input);
       }
 
-      const { total, mainLevel, multiLevel } = getCombatTotalLevel();
+      const { total, mainLevel } = getCombatTotalLevel();
       const pb = total >= 1 ? Math.floor((total - 1) / 4) + 2 : null;
       const conMod = getModifierValue("con") ?? 0;
       const dexMod = getModifierValue("dex") ?? 0;
       const wisMod = getModifierValue("wis") ?? 0;
       const mainDie = getClassHitDie(classSelect);
-      const multiDie = getClassHitDie(multiClassSelect);
+      const extraEntries = getExtraMultiEntries();
 
       const diceParts = [];
       let hp = 0;
@@ -12180,7 +12713,10 @@ ${data.description}`;
         }
       }
 
-      if (multiLevel > 0 && multiDie > 0) {
+      for (const entry of extraEntries) {
+        const multiLevel = entry.classSelect.value ? (getLevel(entry.levelInput) ?? 0) : 0;
+        const multiDie = getClassHitDie(entry.classSelect);
+        if (multiLevel <= 0 || multiDie <= 0) continue;
         diceParts.push(`${multiLevel}d${multiDie}`);
         for (let i = 0; i < multiLevel; i += 1) {
           hp += firstLevel ? multiDie : Math.floor(multiDie / 2) + 1;
@@ -12189,7 +12725,7 @@ ${data.description}`;
         }
       }
 
-      const hasLevels = mainLevel + multiLevel > 0;
+      const hasLevels = mainLevel + getExtraMultiLevelSum() > 0;
       combatHitDice.textContent = diceParts.length ? diceParts.join(" + ") : "—";
 
       if (combatManual.hp) {
@@ -12226,7 +12762,7 @@ ${data.description}`;
 
     function updateDerivedStats() {
       const mainLevel = classSelect.value ? (getLevel(levelInput) ?? 0) : 0;
-      const multiLevel = multiClassSelect.value ? (getLevel(multiLevelInput) ?? 0) : 0;
+      const multiLevel = getExtraMultiLevelSum();
       const totalLevel = mainLevel + multiLevel;
       const pb = totalLevel >= 1 ? Math.floor((totalLevel - 1) / 4) + 2 : null;
 
@@ -12303,12 +12839,12 @@ ${data.description}`;
         if (mainSubclass) parts.push(mainSubclass);
       }
 
-      const multiName = currentMultiClassName();
-      if (multiName) {
-        const multiLevel = getLevel(multiLevelInput);
+      for (const entry of getExtraMultiEntries()) {
+        const multiName = entry.classSelect.value;
+        if (!multiName) continue;
+        const multiLevel = getLevel(entry.levelInput);
         parts.push(`兼职 ${multiName}${multiLevel === null ? "" : ` ${multiLevel}级`}`);
-        const multiSubclass = currentMultiSubclass();
-        if (multiSubclass) parts.push(multiSubclass);
+        if (entry.subclassSelect.value) parts.push(entry.subclassSelect.value);
       }
 
       summary.textContent = parts.join(" · ");
@@ -12436,12 +12972,61 @@ ${data.description}`;
 </table>`,
       tool: `<span class="reference-title">工具熟练 Tool Proficiency</span>
 <p>如果你具有某个工具的熟练，则你可以在使用这个工具进行任意属性检定时加入你的熟练加值。如果你同时拥有该次属性检定中所使用到的技能的熟练，你在这次检定中还会具有<b class="term-green">优势</b>。</p>
-<p>你的特性或许会给予你某个工具的熟练。</p>`
+<p>你的特性或许会给予你某个工具的熟练。</p>`,
+      faith: `<span class="reference-title">费伦神系</span>
+<table class="tooltip-deity-table">
+  <thead><tr><th>神祇</th><th>典型崇拜者</th></tr></thead>
+  <tbody>
+    <tr><td>阿曼纳塔，太阳之神</td><td>农民、立法者、旅行者</td></tr>
+    <tr><td>阿斯蒙蒂斯，放纵之神</td><td>腐败的政客、绝望的平民</td></tr>
+    <tr><td>欧吕尔，寒冬之神</td><td>德鲁伊、寒冷地区的居民</td></tr>
+    <tr><td>阿祖斯，法师之神</td><td>奥术施法者</td></tr>
+    <tr><td>班恩，暴政之神</td><td>征服者、战士、武僧、暴君</td></tr>
+    <tr><td>本莎芭，厄运之神</td><td>赌徒、红袍巫师、游荡者</td></tr>
+    <tr><td>巴尔，谋杀之神</td><td>刺客、杀人犯</td></tr>
+    <tr><td>裳缇亚，农业之神</td><td>农民、园丁、自耕农</td></tr>
+    <tr><td>希瑞克，谎言之神</td><td>骗子、操纵者、渴求权力之人</td></tr>
+    <tr><td>迪尼尔，写作之神</td><td>贤者、抄写员、学生、教师</td></tr>
+    <tr><td>伊莉丝翠，歌谣与月光之神</td><td>剑舞者、精灵、表演艺术家</td></tr>
+    <tr><td>埃达丝，和平之神</td><td>德鲁伊、和平主义者、垂死之人</td></tr>
+    <tr><td>贡德，工艺之神</td><td>工匠、手工艺人、工程师、发明家</td></tr>
+    <tr><td>海姆，守望之神</td><td>探险家、战士、警卫、圣武士</td></tr>
+    <tr><td>伊尔马特，忍耐之神</td><td>武僧、受压迫者、穷人</td></tr>
+    <tr><td>凯兰沃，死者之神</td><td>丧葬工作者、垂死之人</td></tr>
+    <tr><td>洛山达，黎明与新生之神</td><td>贵族、运动员、商人、年轻人</td></tr>
+    <tr><td>蕾拉，幻象之神</td><td>演员、骗子、幻术师、游荡者</td></tr>
+    <tr><td>黎尔拉，欢乐之神</td><td>吟游诗人、舞者、诗人、狂欢者、歌手</td></tr>
+    <tr><td>罗丝，蜘蛛之神</td><td>邪恶卓尔、幽暗地域旅行者</td></tr>
+    <tr><td>劳薇塔，痛苦之神</td><td>遭受痛苦或背叛之人</td></tr>
+    <tr><td>犸拉，猎杀之神</td><td>野蛮人、猎人、兽化人</td></tr>
+    <tr><td>马斯克，盗贼之神</td><td>刺客、游荡者、盗贼、骗子</td></tr>
+    <tr><td>梅丽凯，森林之神</td><td>妖精、林务员、游侠</td></tr>
+    <tr><td>密里耳，诗歌之神</td><td>吟游诗人、演说家、诗人、歌手</td></tr>
+    <tr><td>米尔寇，死亡之神</td><td>死灵法师、不死生物</td></tr>
+    <tr><td>密斯特拉，魔法之神</td><td>任何使用魔法之人</td></tr>
+    <tr><td>欧格玛，知识之神</td><td>档案管理员、制图师、贤者</td></tr>
+    <tr><td>红骑士，策略之神</td><td>战士、游戏玩家、战略家</td></tr>
+    <tr><td>塞伦涅，月亮之神</td><td>兽化人、水手、施法者</td></tr>
+    <tr><td>莎尔，黑暗与失落之神</td><td>任何遭受痛苦或失落之人</td></tr>
+    <tr><td>山达柯尔，旅行之神</td><td>向导、探险家、游侠、旅行者</td></tr>
+    <tr><td>西凡纳斯，荒野自然之神</td><td>野蛮人、德鲁伊、游侠、木精灵</td></tr>
+    <tr><td>淑妮，爱与美之神</td><td>艺术家、享乐主义者、恋人</td></tr>
+    <tr><td>塔洛娜，毒药与疾病之神</td><td>遭受瘟疫之人</td></tr>
+    <tr><td>塔洛斯，风暴之神</td><td>野蛮人、德鲁伊、掠夺者</td></tr>
+    <tr><td>坦帕斯，战争之神</td><td>战士、雇佣兵、武者</td></tr>
+    <tr><td>托姆，勇气与牺牲之神</td><td>守护者、骑士、圣武士</td></tr>
+    <tr><td>泰摩拉，幸运之神</td><td>赌徒、竖琴手、商人、游荡者</td></tr>
+    <tr><td>提尔，正义之神</td><td>法官、执法者、律师、圣武士</td></tr>
+    <tr><td>安博里，海洋之神</td><td>沿海居民、水手</td></tr>
+    <tr><td>渥金，贸易之神</td><td>商人、富人、交易者</td></tr>
+  </tbody>
+</table>`
     };
 
     const REFERENCE_TOOLTIP_DELAY = 500;
     let referenceTooltipTarget = null;
     let referenceTooltipTimer = null;
+    let referenceTooltipHideTimer = null;
 
     function scheduleReferenceTooltip(target) {
       if (referenceTooltipTimer !== null) window.clearTimeout(referenceTooltipTimer);
@@ -12456,7 +13041,21 @@ ${data.description}`;
         window.clearTimeout(referenceTooltipTimer);
         referenceTooltipTimer = null;
       }
+      if (referenceTooltipHideTimer !== null) {
+        window.clearTimeout(referenceTooltipHideTimer);
+        referenceTooltipHideTimer = null;
+      }
       hideReferenceTooltip();
+    }
+
+    function scheduleReferenceTooltipHide() {
+      if (referenceTooltipHideTimer !== null) {
+        window.clearTimeout(referenceTooltipHideTimer);
+      }
+      referenceTooltipHideTimer = window.setTimeout(() => {
+        referenceTooltipHideTimer = null;
+        hideReferenceTooltip();
+      }, 160);
     }
 
     function positionReferenceTooltip(target) {
@@ -12479,6 +13078,10 @@ ${data.description}`;
       const content = referenceTooltipContents[target.dataset.referenceTooltip];
       if (!content) return;
 
+      if (referenceTooltipHideTimer !== null) {
+        window.clearTimeout(referenceTooltipHideTimer);
+        referenceTooltipHideTimer = null;
+      }
       referenceTooltip.innerHTML = content;
       referenceTooltip.hidden = false;
       referenceTooltipTarget = target;
@@ -12614,12 +13217,23 @@ ${data.description}`;
 
     for (const target of document.querySelectorAll("[data-reference-tooltip]")) {
       target.addEventListener("mouseenter", () => scheduleReferenceTooltip(target));
-      target.addEventListener("mouseleave", cancelReferenceTooltip);
+      target.addEventListener("mouseleave", scheduleReferenceTooltipHide);
       target.addEventListener("focusin", () => scheduleReferenceTooltip(target));
       target.addEventListener("focusout", cancelReferenceTooltip);
     }
 
-    window.addEventListener("scroll", cancelReferenceTooltip, true);
+    referenceTooltip.addEventListener("mouseenter", () => {
+      if (referenceTooltipHideTimer !== null) {
+        window.clearTimeout(referenceTooltipHideTimer);
+        referenceTooltipHideTimer = null;
+      }
+    });
+    referenceTooltip.addEventListener("mouseleave", scheduleReferenceTooltipHide);
+
+    window.addEventListener("scroll", (event) => {
+      if (referenceTooltip.contains(event.target)) return;
+      cancelReferenceTooltip();
+    }, true);
     window.addEventListener("resize", cancelReferenceTooltip);
 
     updateDerivedStats();
@@ -12833,8 +13447,19 @@ ${data.description}`;
       updateCombatStats();
     });
     equipmentArmorName.addEventListener("change", () => {
+      syncArmorCustomUI();
       updateArmorDefaults(true);
       updateCombatStats();
+      if (equipmentArmorName.value === "自定义") equipmentArmorCustomName.focus();
+    });
+
+    equipmentArmorReset.addEventListener("click", () => {
+      equipmentArmorName.value = "";
+      equipmentArmorCustomName.value = "";
+      syncArmorCustomUI();
+      updateArmorDefaults(true);
+      updateCombatStats();
+      equipmentArmorName.focus();
     });
     equipmentArmorAc.addEventListener("input", () => {
       if (equipmentArmorAc.value.trim() === "") updateArmorDefaults(true);
@@ -13424,6 +14049,9 @@ ${data.description}`;
     addBackpackRow("gear");
     addBackpackRow("tool");
     addBackpackRow("magic");
+    multiClassAdd.addEventListener("click", addExtraMultiRow);
+    updateExtraMultiAddState();
+
     languageAdd.addEventListener("click", () => {
       const row = createLanguageToolRow("language", true);
       languageBody.append(row);
@@ -13439,6 +14067,13 @@ ${data.description}`;
     addLedgerRow(false);
     addLedgerRow(false);
     addLedgerRow(false);
+
+    for (const cell of toolBody.querySelectorAll("td:not(.language-action-cell)")) {
+      if (cell.querySelector("input.language-tool-input")) {
+        cell.replaceChildren(createLanguageToolControl());
+      }
+    }
+
     setupAppearanceImageInteraction();
 
     initializeBuilderPersistence();
