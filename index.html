@@ -3,10 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#800000">
   <meta name="description" content="DND 5e 2024 数据计算器：计算 onedice 掷骰期望，以及包含命中和重击的攻击期望伤害。">
   <title>DND 5e 2024 数据计算器</title>
+  <script>
+    (function () {
+      try {
+        var preference = localStorage.getItem("dnd5e2024.theme") || "system";
+        if (!/^(system|light|dark)$/.test(preference)) preference = "system";
+        var size = parseInt(localStorage.getItem("dnd5e2024.fontSize"), 10);
+        if (!Number.isFinite(size) || size < 14 || size > 24) size = 16;
+        var resolved = preference;
+        if (preference === "system") {
+          resolved = window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        document.documentElement.dataset.themePreference = preference;
+        document.documentElement.dataset.theme = resolved;
+        document.documentElement.style.setProperty("--content-zoom", (size / 16).toFixed(3));
+      } catch (error) {}
+    })();
+  </script>
     <style>
 * { box-sizing: border-box; }
 
@@ -1051,6 +1071,41 @@
     }
 
     .personality-table td { background: #fff; }
+
+    .personality-field {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .personality-field input {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .trait-random {
+      flex: 0 0 auto;
+      width: 27px;
+      height: 27px;
+      margin-right: 3px;
+      padding: 0;
+      color: #800000;
+      background: #fff;
+      border: 1px solid #c9b7b7;
+      border-radius: 0;
+      font-size: 0.85rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .trait-random:hover:not(:disabled) { border-color: #800000; }
+
+    .trait-random:disabled {
+      color: #aaa;
+      border-color: #ddd;
+      cursor: not-allowed;
+    }
 
     .personality-table input {
       width: 100%;
@@ -4078,6 +4133,7 @@
   .appearance-image-hint,
   .profession-add,
   .multi-row-delete,
+  .trait-random,
   .tab { display: none !important; }
 
   .appearance-title-row { background: #808080 !important; }
@@ -4165,6 +4221,411 @@
   tr { break-inside: avoid; page-break-inside: avoid; }
 }
 
+/* Display settings */
+.header-right {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.settings-button {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  padding: 0;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 7px;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.settings-button:hover,
+.settings-button[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: #fff;
+}
+
+.settings-panel {
+  position: fixed;
+  top: 86px;
+  right: 24px;
+  z-index: 300;
+  width: min(330px, calc(100vw - 32px));
+  padding: 14px 16px;
+  color: #222;
+  background: #fff;
+  border: 1px solid #999;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.settings-panel[hidden] { display: none; }
+
+.settings-panel-title {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  color: #800000;
+  border-bottom: 1px solid #800000;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+
+.settings-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 9px;
+  color: #333;
+  font-size: 0.82rem;
+}
+
+.settings-field select {
+  min-width: 130px;
+  padding: 4px 6px;
+  color: #111;
+  background: #fff;
+  border: 1px solid #aaa;
+  border-radius: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.82rem;
+}
+
+.settings-font-range {
+  width: 100%;
+  margin-top: 8px;
+  accent-color: #800000;
+}
+
+.settings-font-scale {
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 0.68rem;
+}
+
+.settings-hint {
+  margin: 9px 0 0;
+  color: #888;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+main.page-width {
+  zoom: var(--content-zoom, 1);
+}
+
+@media screen {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    background: #111;
+  }
+
+  html[data-theme="dark"] body {
+    background: #111 !important;
+    color: #e6e6e6 !important;
+  }
+
+  html[data-theme="dark"] .site-header {
+    background: #2b1111 !important;
+    color: #f2f2f2 !important;
+  }
+
+  html[data-theme="dark"] .site-title,
+  html[data-theme="dark"] .tab[aria-selected="true"] {
+    color: #fff !important;
+  }
+
+  html[data-theme="dark"] .tab {
+    color: rgba(255, 255, 255, 0.68) !important;
+  }
+
+  html[data-theme="dark"] .tab:hover {
+    color: #fff !important;
+  }
+
+  html[data-theme="dark"] .panel {
+    color: #e6e6e6 !important;
+    background: #1c1c1c !important;
+    border-color: #555 !important;
+  }
+
+  html[data-theme="dark"] .panel * {
+    color: #e6e6e6 !important;
+    background-color: transparent !important;
+    border-color: #4a4a4a !important;
+  }
+
+  html[data-theme="dark"] .panel input,
+  html[data-theme="dark"] .panel select,
+  html[data-theme="dark"] .panel textarea,
+  html[data-theme="dark"] .panel [contenteditable="true"] {
+    color: #eee !important;
+    background-color: #252525 !important;
+    border-color: #555 !important;
+  }
+
+  html[data-theme="dark"] .panel input::placeholder,
+  html[data-theme="dark"] .panel textarea::placeholder,
+  html[data-theme="dark"] .panel [contenteditable="true"]:empty::before {
+    color: #888 !important;
+  }
+
+  html[data-theme="dark"] .panel button {
+    color: #eee !important;
+    background-color: #2b2b2b !important;
+    border-color: #555 !important;
+  }
+
+  html[data-theme="dark"] .panel .panel-title,
+  html[data-theme="dark"] .panel .builder-section-title,
+  html[data-theme="dark"] .panel .custom-title,
+  html[data-theme="dark"] .panel .maroon,
+  html[data-theme="dark"] .panel .reference-title {
+    color: #f0a0a0 !important;
+  }
+
+  html[data-theme="dark"] .panel .term-green {
+    color: #82dd8b !important;
+  }
+
+  html[data-theme="dark"] .panel .custom-spell {
+    color: #c6a8ff !important;
+  }
+
+  html[data-theme="dark"] .panel .appearance-image-frame {
+    background: #171717 !important;
+  }
+
+  html[data-theme="dark"] .panel .ability-tooltip,
+  html[data-theme="dark"] .panel .reference-tooltip {
+    color: #eee !important;
+    background: #222 !important;
+    border-color: #666 !important;
+  }
+
+  html[data-theme="dark"] .panel .ledger-title-row th,
+  html[data-theme="dark"] .panel .ledger-column-row th,
+  html[data-theme="dark"] .panel .ledger-summary-row th {
+    background-color: #333 !important;
+    color: #fff !important;
+  }
+
+  html[data-theme="dark"] .panel .ledger-table tbody .ledger-income-cell {
+    background-color: #1b2c3a !important;
+  }
+
+  html[data-theme="dark"] .panel .ledger-table tbody .ledger-expense-cell {
+    background-color: #3a241c !important;
+  }
+
+  html[data-theme="dark"] .panel .ability-table tbody td:nth-child(2),
+  html[data-theme="dark"] .panel .ability-table tbody td:nth-child(9) {
+    background-color: #2b291c !important;
+  }
+
+  html[data-theme="dark"] .panel .ability-table tbody td:nth-child(10) {
+    background-color: #1b2933 !important;
+  }
+
+  html[data-theme="dark"] .settings-panel {
+    color: #e6e6e6;
+    background: #1f1f1f;
+    border-color: #666;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  html[data-theme="dark"] .settings-panel-title {
+    color: #f0a0a0;
+    border-color: #a55;
+  }
+
+  html[data-theme="dark"] .settings-field {
+    color: #ddd;
+  }
+
+  html[data-theme="dark"] .settings-field select {
+    color: #eee;
+    background: #2a2a2a;
+    border-color: #555;
+  }
+
+  html[data-theme="dark"] .settings-font-scale,
+  html[data-theme="dark"] .settings-hint {
+    color: #999;
+  }
+
+  html[data-theme="dark"] .settings-button {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.65);
+  }
+}
+
+@media print {
+  .settings-button,
+  .settings-panel { display: none !important; }
+  main.page-width { zoom: 1 !important; }
+}
+
+@media (max-width: 760px) {
+  .header-right {
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tabs { flex-wrap: wrap; }
+  .settings-button { margin-bottom: 0; }
+  .settings-panel { top: 76px; right: 12px; }
+}
+
+@media screen {
+  html[data-theme="dark"] .design-page {
+    color: #e6e6e6 !important;
+  }
+
+  html[data-theme="dark"] .design-page-title,
+  html[data-theme="dark"] .design-page > h3 {
+    color: #f0a0a0 !important;
+    border-color: #a55 !important;
+  }
+}
+
+.builder-png-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.builder-png-menu {
+  position: absolute;
+  top: calc(100% + 3px);
+  right: 0;
+  z-index: 130;
+  display: flex;
+  flex-direction: column;
+  min-width: 178px;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid #999;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+}
+
+.builder-png-menu[hidden] { display: none; }
+
+.builder-png-menu button {
+  padding: 6px 9px;
+  color: #222;
+  background: transparent;
+  border: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.76rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.builder-png-menu button:hover { background: #f0e8e8; }
+
+.png-export-mode .builder-toolbar,
+.png-export-mode .custom-editor-toolbar,
+.png-export-mode .backpack-toolbar,
+.png-export-mode .feat-add,
+.png-export-mode .feat-style-add,
+.png-export-mode .feat-delete,
+.png-export-mode .backpack-add,
+.png-export-mode .backpack-delete,
+.png-export-mode .custom-reset,
+.png-export-mode .trait-random,
+.png-export-mode .table-head-add,
+.png-export-mode .language-row-delete,
+.png-export-mode .equipment-table-actions,
+.png-export-mode .equipment-row-delete,
+.png-export-mode .appearance-image-import,
+.png-export-mode .appearance-image-remove,
+.png-export-mode .appearance-image-hint,
+.png-export-mode .profession-add,
+.png-export-mode .multi-row-delete,
+.png-export-mode .ledger-actions,
+.png-export-mode .settings-button,
+.png-export-mode .settings-panel,
+.png-export-mode button {
+  display: none !important;
+}
+
+.png-export-mode input,
+.png-export-mode select,
+.png-export-mode textarea {
+  color: #111 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  resize: none !important;
+}
+
+.png-export-mode select { background-image: none !important; }
+
+.png-export-mode input::placeholder,
+.png-export-mode textarea::placeholder {
+  color: transparent !important;
+}
+
+.png-export-mode [contenteditable="true"]:empty::before,
+.png-export-mode [data-placeholder]:empty::before {
+  content: none !important;
+}
+
+.png-export-mode textarea {
+  height: auto !important;
+  overflow: visible !important;
+  field-sizing: content;
+}
+
+.png-export-mode .appearance-image-frame { resize: none !important; }
+
+.png-export-mode .png-export-empty { display: none !important; }
+
+.png-export-mode .panel {
+  margin-bottom: 0 !important;
+}
+
+.png-export-mode .panel + .panel {
+  margin-top: 12px !important;
+}
+
+.png-export-stack {
+  display: block;
+  background: #f8f8f6;
+}
+
+@media screen {
+  html[data-theme="dark"] .builder-png-menu {
+    color: #e6e6e6;
+    background: #1f1f1f;
+    border-color: #666;
+  }
+
+  html[data-theme="dark"] .builder-png-menu button {
+    color: #e6e6e6;
+    background: transparent;
+  }
+
+  html[data-theme="dark"] .builder-png-menu button:hover {
+    background: #3a2a2a;
+  }
+}
+
+@media print {
+  .builder-png-wrap,
+  .builder-png-menu { display: none !important; }
+}
+
 </style>
 </head>
 <body>
@@ -4172,15 +4633,37 @@
     <div class="page-width">
       <div class="header-row">
         <h1 class="site-title">DND 5e 2024 数据计算器</h1>
-        <nav class="tabs" role="tablist" aria-label="功能页面">
-          <button class="tab" id="tab-calculator" type="button" role="tab" aria-selected="true" aria-controls="panel-calculator" tabindex="0" data-tab="calculator">期望计算</button>
-          <button class="tab" id="tab-builder" type="button" role="tab" aria-selected="false" aria-controls="panel-builder" tabindex="-1" data-tab="builder">角色构筑</button>
-          <button class="tab" id="tab-monster" type="button" role="tab" aria-selected="false" aria-controls="panel-monster" tabindex="-1" data-tab="monster">怪物设计</button>
-          <button class="tab" id="tab-encounter" type="button" role="tab" aria-selected="false" aria-controls="panel-encounter" tabindex="-1" data-tab="encounter">遭遇构筑</button>
-        </nav>
+        <div class="header-right">
+          <nav class="tabs" role="tablist" aria-label="功能页面">
+            <button class="tab" id="tab-calculator" type="button" role="tab" aria-selected="true" aria-controls="panel-calculator" tabindex="0" data-tab="calculator">期望计算</button>
+            <button class="tab" id="tab-builder" type="button" role="tab" aria-selected="false" aria-controls="panel-builder" tabindex="-1" data-tab="builder">角色构筑</button>
+            <button class="tab" id="tab-monster" type="button" role="tab" aria-selected="false" aria-controls="panel-monster" tabindex="-1" data-tab="monster">怪物设计</button>
+            <button class="tab" id="tab-encounter" type="button" role="tab" aria-selected="false" aria-controls="panel-encounter" tabindex="-1" data-tab="encounter">遭遇构筑</button>
+          </nav>
+          <button id="settings-button" class="settings-button" type="button" aria-label="显示设置" aria-controls="settings-panel" aria-expanded="false" title="显示设置">...</button>
+        </div>
       </div>
     </div>
   </header>
+
+  <div id="settings-panel" class="settings-panel" role="dialog" aria-label="显示设置" hidden>
+    <div class="settings-panel-title">显示设置</div>
+    <label class="settings-field">
+      <span>主题</span>
+      <select id="theme-select">
+        <option value="system">跟随系统</option>
+        <option value="light">白天</option>
+        <option value="dark">黑夜</option>
+      </select>
+    </label>
+    <label class="settings-field">
+      <span>正文内容字体大小</span>
+      <output id="settings-font-output" for="settings-font-range">16px</output>
+    </label>
+    <input id="settings-font-range" class="settings-font-range" type="range" min="14" max="24" step="1" value="16" aria-label="正文内容字体大小">
+    <div class="settings-font-scale" aria-hidden="true"><span>14px</span><span>24px</span></div>
+    <p class="settings-hint">主题与字体设置仅保存在当前浏览器；导出角色卡不会包含显示设置。</p>
+  </div>
 
   <main class="page-width">
     <section id="panel-calculator" role="tabpanel" aria-labelledby="tab-calculator" tabindex="0">
@@ -4313,6 +4796,14 @@
             <button id="builder-export-json" class="builder-toolbar-button" type="button">导出 JSON</button>
             <button id="builder-import-json" class="builder-toolbar-button" type="button">导入 JSON</button>
             <button id="builder-export-pdf" class="builder-toolbar-button" type="button">导出 PDF / 打印</button>
+            <div class="builder-png-wrap">
+              <button id="builder-export-png" class="builder-toolbar-button" type="button" aria-haspopup="menu" aria-expanded="false">导出 PNG</button>
+              <div id="builder-png-menu" class="builder-png-menu" role="menu" hidden>
+                <button type="button" role="menuitem" data-png-card="info">导出角色信息 PNG</button>
+                <button type="button" role="menuitem" data-png-card="class">导出职业信息 PNG</button>
+                <button type="button" role="menuitem" data-png-card="spell-backpack">导出法术/背包 PNG</button>
+              </div>
+            </div>
             <button id="builder-export-html" class="builder-toolbar-button" type="button">导出离线 HTML</button>
             <input id="builder-import-file" type="file" accept=".json,application/json" hidden>
           </div>
@@ -4385,22 +4876,22 @@
           <tbody>
             <tr>
               <th scope="rowgroup" rowspan="2">个性</th>
-              <td><input id="builder-personality-1" type="text" autocomplete="off" aria-label="个性1"></td>
+              <td><div class="personality-field"><input id="builder-personality-1" type="text" autocomplete="off" aria-label="个性1"><button class="trait-random" type="button" data-trait="personality" data-target="builder-personality-1" title="随机个性" aria-label="随机个性1">🎲</button></div></td>
             </tr>
             <tr>
-              <td><input id="builder-personality-2" type="text" autocomplete="off" aria-label="个性2"></td>
+              <td><div class="personality-field"><input id="builder-personality-2" type="text" autocomplete="off" aria-label="个性2"><button class="trait-random" type="button" data-trait="personality" data-target="builder-personality-2" title="随机个性" aria-label="随机个性2">🎲</button></div></td>
             </tr>
             <tr>
               <th scope="row">理念</th>
-              <td><input id="builder-ideal" type="text" autocomplete="off" aria-label="理念"></td>
+              <td><div class="personality-field"><input id="builder-ideal" type="text" autocomplete="off" aria-label="理念"><button class="trait-random" type="button" data-trait="ideal" data-target="builder-ideal" title="随机理念" aria-label="随机理念">🎲</button></div></td>
             </tr>
             <tr>
               <th scope="row">牵绊</th>
-              <td><input id="builder-bond" type="text" autocomplete="off" aria-label="牵绊"></td>
+              <td><div class="personality-field"><input id="builder-bond" type="text" autocomplete="off" aria-label="牵绊"><button class="trait-random" type="button" data-trait="bond" data-target="builder-bond" title="随机牵绊" aria-label="随机牵绊">🎲</button></div></td>
             </tr>
             <tr>
               <th scope="row">缺陷</th>
-              <td><input id="builder-flaw" type="text" autocomplete="off" aria-label="缺陷"></td>
+              <td><div class="personality-field"><input id="builder-flaw" type="text" autocomplete="off" aria-label="缺陷"><button class="trait-random" type="button" data-trait="flaw" data-target="builder-flaw" title="随机缺陷" aria-label="随机缺陷">🎲</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -7543,8 +8034,733 @@
 </script>
 
   <script>
+window.AdventureTraits = {
+  "自定义背景_牵绊": [
+    "1. 寻找幸福。我生活安稳却并不快乐，于是踏上旅途寻找真正能让自己满足的人生。",
+    "2. 博爱之心。我无法对他人的苦难视而不见，决定离开家乡去帮助更多需要帮助的人。",
+    "3. 追求野心。我不满足于平凡生活，想通过冒险证明自己能成就大事。",
+    "4. 懒惰野心。我想获得名望和财富，却希望靠一次惊天冒险少走弯路。",
+    "5. 渴望注目。我受够了被忽视，决定靠冒险成为众人谈论的焦点。",
+    "6. 预言所指。某个预言提到了我的名字，我因此离开熟悉的生活去面对命运。",
+    "7. 一饭之恩。某位旅人曾在危难时善待我，我因此追随对方踏上旅途。",
+    "8. 自卑驱使。我总觉得自己不如别人，于是冒险只为证明自己并非无能之辈。",
+    "9. 遗愿清单。我得知自己时日无多，决定在生命结束前完成一串疯狂愿望。",
+    "10. 旧错难忘。我年轻时犯下的错误酿成后果，如今必须离乡去弥补。",
+    "11. 挑战自我。我觉得安稳生活太过容易，主动去寻找更艰难的考验。",
+    "12. 英雄情结。我一听见有人求助就无法拒绝，最终被卷入远方的冒险。",
+    "13. 守护家园。家乡即将被贵族、商会或怪物夺走，我外出寻找解决之法。",
+    "14. 控制欲望。我想掌控自己的命运，不愿继续被家庭、领主或传统安排人生。",
+    "15. 偿还债务。我欠下金钱、人情或救命恩情，只能冒险赚钱或还债。",
+    "16. 保护弱者。我将保护某个脆弱之人视为使命，因此护送对方踏上旅程。",
+    "17. 寻找意义。我拥有不错生活却感到空虚，于是离开家乡寻找人生使命。",
+    "18. 渴望被爱。我渴望真正的关怀与归属，便去远方寻找能接纳自己的人。",
+    "19. 需要命令。我习惯服从命令，失去主人或组织后只好跟随冒险队寻找方向。",
+    "20. 地下活动。我在参与一些见不得光的活动，如果我的上司或亲朋好友知道了我在干啥我就有麻烦了。",
+    "21. 嫉妒之心。我羡慕某人的力量、财富或名声，于是踏上冒险想要超越对方。",
+    "22. 美德化身。我立誓践行某种美德，如仁慈、勇气或诚实，并以冒险考验自己。",
+    "23. 逆境奋起。长期遭受嘲笑或打压后，我决定离乡证明那些人全都错了。",
+    "24. 关键营救。某个所有人都关心的亲友遭遇危险，我因此离家营救。",
+    "25. 失败骑士。我曾未能保护重要之人，如今踏上旅途发誓不再失败。",
+    "26. 家族荣誉。我想为家族争光，或洗刷家族蒙受的耻辱。",
+    "27. 再寻家园。我的族群失去家园，我因此外出寻找能让族人安居的新土地。",
+    "28. 美食诱惑。我听说远方有传说中的美食，于是把冒险当成美食巡礼。",
+    "29. 伟大正义。我相信正义必须被维护，因此离开安逸生活去对抗邪恶。",
+    "30. 传播快乐。我希望把欢笑带给阴暗的地方，因此踏上旅途。",
+    "31. 探索真理。我渴望知识、奥秘或魔法发现，即使毫无实际利益也愿冒险。",
+    "32. 玩笑至上。我热爱恶作剧和笑料，哪怕因此陷入危险也乐此不疲。",
+    "33. 寻觅爱情。我离乡寻找爱情、亲情、友情或某种更深的情感联结。",
+    "34. 旧日创伤。过去的虐待、背叛或灾难塑造了我，使我不得不面对外面的世界。",
+    "35. 追求荣耀。我害怕被历史遗忘，于是通过冒险寻求永恒名声。",
+    "36. 证明强大。我希望别人承认自己是强者，因此不断寻找危险对手。",
+    "37. 收集癖好。我想集齐某类稀有物品、遗物、怪物标本或魔法知识。",
+    "38. 贪婪驱使。我想获得财富、宝石或魔法宝物，冒险只是最快的道路。",
+    "39. 医疗费用。我需要大笔钱为自己或亲人治疗重病，只能外出冒险。",
+    "40. 享乐人生。我觉得安稳生活太无聊，想见识世间各种刺激与享受。",
+    "41. 隐秘目的。我表面上参与冒险，实际上暗中追查自己的私人目标。",
+    "42. 只想回家。我外出并非因为热爱冒险，而是为了解决麻烦后安心回家。",
+    "43. 荣誉至上。我把获得荣耀看得比安全、利益甚至生命更重要。",
+    "44. 朴素愿望。我只是想实现一个简单目标，比如买块地、开酒馆或养活家人。",
+    "45. 渴望强大。我想变得足够强，能保护自己、亲友或不再被人轻视。",
+    "46. 追求美貌。我寻找魔法、秘药或神恩，希望恢复或获得理想中的容貌。",
+    "47. 渴望自由。我想摆脱奴役、契约、家族束缚或命运枷锁。",
+    "48. 寻觅真爱。我离开家乡，是为了寻找真正爱自己而非利用自己的人。",
+    "49. 渴望平凡。我因血统、诅咒或力量无法过普通生活，只好冒险寻找解决方法。",
+    "50. 渴望特别。我厌倦平凡日子，想通过冒险成为与众不同的人。",
+    "51. 祖先传承。我发现我的祖先其实名声远扬，但它的故事遗失在了漫长时间的长河中。我试图让这段传奇故事重现在当下。",
+    "52. 寻找朋友。我孤独太久，加入冒险队只是想拥有真正的伙伴。",
+    "53. 虚张自尊。我用傲慢掩饰自卑，冒险是为了让自己相信自己值得尊重。",
+    "54. 投身危险。我受不了平静日子，主动寻找战斗、怪物和生死一线的刺激。",
+    "55. 受辱激励。曾有人嘲笑我毫无前途，我因此离乡证明自己能成功。",
+    "56. 救命之债。某人曾救过我一命，我踏上旅途只为偿还这份恩情。",
+    "57. 只为好玩。我觉得冒险听起来有趣，于是毫不犹豫地离开家门。",
+    "58. 无可挽回。我认为某个腐朽之地已经没救，决定外出寻找新希望或毁掉旧秩序。",
+    "59. 私人恩怨。我卷入冒险并非为了大义，而是因为这件事触及了我的私事。",
+    "60. 爱人幸福。我愿意牺牲自己的安稳生活，只为让所爱之人得到幸福。",
+    "61. 寻找挚爱。我的亲人、恋人或好友失踪，我不惜远行也要找到对方。",
+    "62. 免费点心。我最初只是被免费食宿吸引，却阴差阳错加入了冒险。",
+    "63. 留下遗产。我想在世界上留下自己的名字、作品、血脉或传说。",
+    "64. 童年梦想。我小时候梦想成为英雄、骑士、法师或探险家，如今终于出发。",
+    "65. 黄金迷恋。我对黄金或某种财富近乎痴迷，愿为此深入任何遗迹。",
+    "66. 欲望难填。我渴望权力、知识、尊重或感官享乐，冒险是满足欲望的方式。",
+    "67. 争夺秘宝。某件神秘物品引来众人追逐，我也因此离乡加入争夺。",
+    "68. 挑战意义。我放弃舒适工作，选择更有意义却危险的冒险道路。",
+    "69. 任务膨胀。我本只接了个小任务，却不断被新麻烦拖向更大的冒险。",
+    "70. 过往阴影。我曾侥幸从敌人手上逃脱，而我担心在准备好前被追上。",
+    "71. 奖赏诱惑。我原本不想离乡，但丰厚奖赏让我改变了主意。",
+    "72. 善意谎言。我被一个谎言说服踏上旅程，直到后来才发现真相。",
+    "73. 忘却初衷。我原本有崇高目标，却在旅途中逐渐迷失，仍继续向前。",
+    "74. 为国效力。我相信国家利益高于个人安稳，因此接受远行任务。",
+    "75. 指令之意。我为了宗主、导师、神明或领主的指令或任务而踏上旅途。",
+    "76. 热爱自然。我为保护森林、河流、野兽或自然平衡而离开家园。",
+    "77. 不再受伤。我曾被欺凌或背叛，如今冒险只为变强到无人能再伤害自己。",
+    "78. 我的家人。我的父母亲或亲人曾对我有过深远影响……或许她们不需要我也能过得很好。",
+    "79. 渴望认可。我想让某个重要之人看见自己、承认自己，于是追求功绩。",
+    "80. 非为革命。我加入正义事业并非为了理想，而是为了私利、人情或机会。",
+    "81. 继承遗产。我得知某笔遗产、封地或宝藏的线索，必须亲自远行确认。",
+    "82. 只为钱财。我没有宏大理想，只是冒险报酬足够高。",
+    "83. 反抗苦难。我曾受某种压迫、疾病、战争或怪物伤害，如今决心与其对抗。",
+    "84. 绝不为奴。没有人有权利把另一个人当作货物。",
+    "85. 重获行动。我因伤病失去能力，为寻找康复、义肢或魔法治疗而冒险。",
+    "86. 友情之力。我为了朋友的梦想、安危或请求而离开自己的舒适生活。",
+    "87. 爱之力量。我因爱而行动，无论是拯救、守护还是追随某人。",
+    "88. 姐妹同心。我受到女性亲友、姐妹会或女导师鼓舞，加入旅途。",
+    "89. 自尊骄傲。我不能忍受自己被看低，于是靠冒险赢回尊严。",
+    "90. 珍物托付。我得到某件重要物品的托付，必须带着它完成某个使命。",
+    "91. 梦想职业。我想成为骑士、吟游诗人、宫廷法师或猎魔人，于是踏上历练。",
+    "92. 怒向诸神。我认为神明亏欠自己或世人，决定寻找质问甚至反抗神祇的方法。",
+    "93. 复仇之路。某人伤害了我或我的亲友，我离乡追寻复仇机会。",
+    "94. 重启世界。我认为旧世界已腐烂，想寻找足以改变时代的力量。",
+    "95. 优越的无聊。我衣食无忧却无聊透顶，于是用冒险填补空虚。",
+    "96. 救世愧疚。我总想着那些自己没能救下的人，因此不断冒险弥补遗憾。",
+    "97. 违抗命运。预言宣称我必将失败或堕落，我出发只为证明命运错了。",
+    "98. 复活亡者。我寻找禁术、神器或神恩，想让死去的重要之人复生。",
+    "99. 入职福利。我加入危险组织或冒险小队，只因为待遇、医疗或身份保障很诱人。",
+    "100. 学债压力。我背负学费、学徒债或学院贷款，只能靠冒险偿还。",
+    "101. 幸存愧疚。我在灾难中活了下来，因愧疚而冒险保护更多人。",
+    "102. 回家之路。我被困异乡或异界，冒险只为找到回家的方法。",
+    "103. 狂人之名。我的理论或发现曾被嘲笑为疯狂，我踏上旅途寻找证据。",
+    "104. 追求刺激。我迷恋惊险体验，哪里危险就往哪里去。",
+    "105. 悲剧梦想。我追逐一个几乎不可能实现的愿望，却仍不愿放弃。",
+    "106. 被迫作恶。我被诅咒、契约或威胁控制，冒险是为了摆脱不得不作恶的命运。",
+    "107. 临门失败。我曾在目标即将达成时失败，如今重新出发只为完成它。",
+    "108. 忠诚不灭。我对某人、组织、信仰或家乡极度忠诚，因此愿意远行。",
+    "109. 使命空缺。我失去原本的人生职责后陷入迷茫，只好冒险寻找新使命。",
+    "110. 怒火难平。某件事激起我无法压制的愤怒，使我离家追查或讨伐元凶。",
+    "111. 极端理想。我有高尚目标，却愿意采取危险甚至残酷的手段达成。",
+    "112. 借人成愿。我自己无法实现梦想，于是帮助另一个人成功，仿佛替自己圆梦。",
+    "113. 讨子认可。我是父母或导师，却渴望晚辈认可，只好用行动证明自己。",
+    "114. 讨父认可。我渴望父母、导师或族长一句称赞，于是出外建立功绩。",
+    "115. 强化之路。我寻找魔法师、工匠或神秘势力，想修复或强化自己的身体。",
+    "116. 追求希望。灾难将临，但我相信世界仍有希望，于是离开安稳之地去寻找能改变局势的火种。",
+    "117. 沉迷执念。我被某个目标深深迷住，即使生活不错也无法停下追寻。",
+    "118. 抵抗诱惑。我知道自己会被某种力量诱惑，于是远行寻找克制它的方法。",
+    "119. 绝望逃离。我因家乡、亲情或人生陷入绝望，只能通过离开来寻找出路。",
+    "120. 证明勇气。我想证明自己的勇气、力量或成熟，便主动投入危险旅程。"
+  ],
+  "自定义背景_个性特点_仅混乱阵营": [
+    "1. 自吹自擂。我喜欢夸耀自己的能力和成就。",
+    "2. 冲动。我常常不加思索地行动。",
+    "3. 叛逆。我不喜欢被规则束缚，也不服从权威，常常质疑和挑战上级或规则。",
+    "4. 自我中心。我以自我为中心，关注自己的利益和感受。",
+    "5. 随性。我随心所欲，难以被约束。",
+    "6. 不可预测。我行为难以预料，常常出人意料。",
+    "7. 自由。我追求自由，不愿被任何人或事束缚。",
+    "8. 反传统。我反感于传统束缚，喜欢打破常规。",
+    "9. 及时行乐。你知道吗？今朝有酒今朝醉，明日愁来明日愁。",
+    "10. 自由如风。我自人间漫浪，平生之事亦无谓南北西东。"
+  ],
+  "自定义背景_个性特点_仅善良阵营": [
+    "1. 慈悲。我关心他人的痛苦，愿意提供帮助。",
+    "2. 乐于助人。我喜欢帮助他人，尤其是在他们需要时。",
+    "3. 诚实。我坚持说真话，遵循道德准则。",
+    "4. 和善。我待人友好，乐于与他人相处。",
+    "5. 宽容。我能够理解和原谅他人的过错。",
+    "6. 谦逊。我不自夸，尊重他人的价值。",
+    "7. 慷慨。我愿意分享自己的资源和财富。"
+  ],
+  "自定义背景_个性特点_仅邪恶阵营": [
+    "1. 不诚实。我经常说谎或隐瞒真相。",
+    "2. 睚眦必报。我难以原谅冒犯自己的人，总想报复。",
+    "3. 残忍。我对他人的痛苦漠不关心，甚至乐于施加伤害。",
+    "4. 贪婪。我渴望财富和权力，难以满足。",
+    "5. 自私。我优先考虑自己的利益，忽视他人需求。",
+    "6. 冷酷。我缺乏同情心，情感上冷漠。",
+    "7. 狡诈。我善于欺骗和操控他人以达成目的。",
+    "8. 易怒。我容易被激怒，情绪波动大。",
+    "9. 残酷。世界残酷无情，我也如此。"
+  ],
+  "自定义背景_个性特点_仅守序阵营": [
+    "1. 合作。我善于与他人协作，共同达成目标。",
+    "2. 忠诚。我对朋友、组织或信仰保持坚定的忠诚。",
+    "3. 严以待人。我对他人要求严格，注重规范和纪律。",
+    "4. 有条不紊。我做事有计划，注重秩序和效率。",
+    "5. 公正。我追求公平，力求公正处理事务。",
+    "6. 纪律。我遵守规则和制度，保持自律。",
+    "7. 守信。我重视承诺，言出必行。",
+    "8. 服务。我已知晓了有什么是凌驾于生理琐事之上的伟大志业。"
+  ],
+  "自定义背景_个性特点_仅中立阵营": [
+    "1. 自私。我优先考虑自己的利益，忽视他人需求。",
+    "2. 冷漠。我对他人的情感和需求缺乏关注。",
+    "3. 简练。我说话和行动都追求简洁高效。",
+    "4. 务实。我注重实际效果，倾向于现实的解决方案。",
+    "5. 理性。我以逻辑和理智为主导，避免情绪化决策。"
+  ],
+  "自定义背景_个性特点_任意阵营": [
+    "1. 好辩。我喜欢与人争论，乐于表达自己的观点。",
+    "2. 真实。我只会说真话，撒谎对我而言是一种羞辱。",
+    "3. 傲慢。我对自己的能力和成就充满自信，甚至有些自负。",
+    "4. 急躁。我难以耐心等待，容易急于行动。",
+    "5. 易怒。我容易被激怒，情绪波动大。",
+    "6. 粗鲁。我言行直接，常常忽略礼节。",
+    "7. 沉闷。我性格内向，缺乏活力和激情。",
+    "8. 好奇。我对世界充满好奇，喜欢探索未知。",
+    "9. 安静。我性格沉稳，喜欢保持低调。",
+    "10. 亲切。我看起来待人友好，乐于与他人相处。",
+    "11. 多疑。我对他人的动机和行为保持怀疑态度。",
+    "12. 作品。生活也许就像一团混沌的狂风乱雨，但当我创造出我的作品后，那一切都无所谓了。",
+    "13. 绝对中心。我认为自己是世界的中心，所有事物都应围绕我展开。",
+    "14. 宣扬艺术。我坚信每个人都有通过艺术表达他们真实自我的能力，我乐于暗中促使他们走上正确的方向。",
+    "15. 虚无论。到最后，只会剩下混乱无序。事物终有一天溃灭。",
+    "16. 谎言。我唯一学到的事情那就是现实是谎言，什么事情都无所谓。所以还费什么劲呢？",
+    "17. 执着。当我发现我感兴趣的事物，在我彻底理解或完成它之前，我是不会停止的。这让我彻夜不眠。",
+    "18. 话痨。我对谈话对象的要求不高只要保持微笑，时不时点个头，总之醒着就好！",
+    "19. 幽默。我喜欢用幽默的方式与人交流，常常用笑声化解尴尬和紧张。",
+    "20. 智慧至上。没我聪明的人说什么我都当耳旁风。我只对比我聪明的生物感兴趣。",
+    "21. 音乐与故事。我喜欢听歌和听故事，还喜欢分享给他人，让大家都能感受到舒适和平静。",
+    "22. 生命至上。我对那些不把自己生命当回事的人没有耐心。",
+    "23. 收钱办事。我总是愿意按照提供的钱财，干相应的活儿。",
+    "24. 他们的名字。我经常背诵我曾经认识和失去的人的名字，这样我就能保持对他们的记忆。",
+    "25. 斗争心。我不断计算着我下一步该如何动作。如果我不能领先他人一步，就代表我落后了他们一步。",
+    "26. 得过且过。我讨厌人们试图弄清楚一个严肃的事情。",
+    "27. 悲观。这片大地糟透了，我不认为有什么事情值得被期待。",
+    "28. 心理创伤。我的心中总是萦绕着战争时的记忆，那些残暴的画面总是挥之不去。",
+    "29. 谨慎多疑。由于我的不幸经历，我对外界保持警惕，不轻易信任他人。",
+    "30. 力量至上。力量是最重要的衡量标准，强者受到尊敬，弱者则被鄙视。",
+    "31. 绝不抛弃。有人在战场上救过我的命。因而现在我也不会丢下任何一个朋友。",
+    "32. 遗物。我带着一枚重要之人的遗物，失去他的情景我仍历历在目。",
+    "33. 惨烈创伤。我永远不会忘记队伍曾遭受到的那场惨败，以及当时的敌人。",
+    "34. 信任。我所在的小队是我的家，我对我队友的信任从不动摇。",
+    "35. 光复。我与一个已覆灭的组织或国家有着牢不可破的联系，我为了看到它的重归而奋斗。",
+    "36. 报复。一个雇主或队友公开羞辱或背叛了我，我将对其进行报复。",
+    "37. 孤独。我给许多小物件取了名字，时不时与之倾诉。它们是我唯一的伙伴。"
+  ],
+  "自定义背景_理念_仅善良阵营": [
+    "1. 美好。我追求世界的美好与和谐。",
+    "2. 慈善。我关心他人的福祉，乐于施予帮助。",
+    "3. 大义。我坚持正义与道德原则。",
+    "4. 生命。我尊重生命，珍视每一个生命个体。",
+    "5. 尊重。我尊重他人的权利和尊严。",
+    "6. 救死扶伤。我发誓要保护并救治那些需要帮助的人。",
+    "7. 仁爱。我关心他人的幸福，愿意为他人付出。",
+    "8. 号召。我积极号召他人参与善行，推动社会正义。",
+    "9. 好奇与理解。表达重视谁的最好方式就是去了解他们。"
+  ],
+  "自定义背景_理念_仅邪恶阵营": [
+    "1. 支配。我渴望掌控他人和局势。（邪恶）",
+    "2. 贪婪。我对财富和权力有无尽的渴望。（邪恶）",
+    "3. 力量。我追求强大的力量以实现自己的目标。（邪恶）",
+    "4. 痛苦。我乐于看到他人受苦，甚至施加痛苦。（邪恶）",
+    "5. 惩罚。我相信通过惩罚可以维持秩序或实现目的。（邪恶）",
+    "6. 复仇。我追求对敌人的报复，渴望让他们付出代价。（邪恶）",
+    "7. 贪婪。我的战利品彰显我的成功。（邪恶）",
+    "8. 权力。我渴望掌控一切，只有当我统治一切时才能觉得安心。（邪恶）",
+    "9. 狭隘。我认为除我外的其他所有人都不完美。（邪恶）"
+  ],
+  "自定义背景_理念_仅守序阵营": [
+    "1. 团结。我重视团队合作，强调集体利益。（守序）",
+    "2. 公正。我追求公平，力求公正处理事务。（守序）",
+    "3. 荣誉。我重视个人和集体的声誉与尊严。（守序）",
+    "4. 逻辑。我以理性和逻辑为指导，做出决策。（守序）",
+    "5. 尽责。我认真履行自己的职责和承诺。（守序）",
+    "6. 传统。我尊重和遵循传统与习俗。（守序）",
+    "7. 保护。我致力于保护我的盟友。（守序）",
+    "8. 稳定。我必须维持该地区目前的平衡状态。（守序）"
+  ],
+  "自定义背景_理念_仅中立阵营": [
+    "1. 平衡。我追求各方力量的平衡，避免偏颇。（中立）",
+    "2. 知识。我重视知识的积累和运用。（中立）",
+    "3. 和平共存。我主张不同势力和生物之间的和平共处。（中立）",
+    "4. 节制。我注重自我约束，避免过度行为。（中立）",
+    "5. 中立。我保持中立立场，不偏向任何一方。（中立）",
+    "6. 人民。我关心民众的福祉，注重社会整体利益。（中立）"
+  ],
+  "自定义背景_理念_仅混乱阵营": [
+    "1. 转变。我追求变化和革新，喜欢打破常规。",
+    "2. 创造性。我善于创造和创新，喜欢独特的解决方案。",
+    "3. 自由。我追求自由，不愿被任何人或事束缚。",
+    "4. 自主。我重视自主权，喜欢独立做决定。",
+    "5. 无下限。我不受约束，行为不受限制。",
+    "6. 稀奇古怪。我喜欢与众不同，追求奇特和独特。",
+    "7. 混乱之美。我欣赏混乱中的美感，认为秩序并非唯一的价值。",
+    "8. 自决。所有生物都有权决定自己的生活与结局。",
+    "9. 同情。我分担彼此的痛苦，使我们更接近和平与团结。"
+  ],
+  "自定义背景_理念_任意阵营": [
+    "1. 好奇与探索。我对世界充满好奇，喜欢探索未知。（任意）",
+    "2. 冒险。我乐于迎接挑战，追求刺激与新奇。（任意）",
+    "3. 自由。我追求自由，不愿被任何人或事束缚。（任意）",
+    "4. 变化。我适应环境变化，喜欢多样性和新鲜感。（任意）",
+    "5. 机遇。我善于抓住机会，实现自己的目标。（任意）",
+    "6. 命运。我相信命运的安排，顺应天命而行。（任意）",
+    "7. 知识。若不学习，纵活千百年又有何意义？（任意）",
+    "8. 团队。我的团队对我真的很重要。（任意）",
+    "9. 抱负。我追求卓越和成就，渴望实现自己的理想。（任意）",
+    "10. 发现。我渴望探索未知，追求新知和发现。（任意）",
+    "11. 荣耀。我追求声誉和荣誉，渴望被人尊敬。（任意）",
+    "12. 国家。我忠于自己的国家，致力于国家的繁荣与安全。（任意）",
+    "13. 报偿。我追求应得的回报和认可。（任意）"
+  ],
+  "自定义背景_缺陷": [
+    "1. 沉迷浪漫。我喜欢禁忌的爱情或易被浪漫打动。",
+    "2. 颓废。我喜欢颓废的乐趣。",
+    "3. 傲慢。我有时会忘记其他人并不如我这般博学或强大",
+    "4. 羡慕。我羡慕另一个生物的财产或地位。",
+    "5. 贪婪。我有压倒性的贪婪。",
+    "6. 易怒。我时常发怒。",
+    "7. 恐惧。我有特殊的恐惧症，例如害怕虫子或血液。",
+    "8. 羞耻。我有羞耻或令人愤慨的经历。",
+    "9. 罪行。我曾犯下不可告人的罪行或恶行，我最好永远保守这个秘密。",
+    "10. 鲁莽。我勇敢而鲁莽，常常做出冲动的决定。",
+    "11. 自信。我过度自信，常常低估风险或高估自己的能力。",
+    "12. 固执。我固执己见，难以接受他人的意见或建议。",
+    "13. 易受影响。我容易受到他人影响，难以坚持自己的立场。",
+    "14. 缺乏耐心。我缺乏耐心，常常急于求成。",
+    "15. 谨慎。我过于谨慎，常常错失良机。",
+    "16. 优柔寡断。我优柔寡断，难以做出果断的决定。",
+    "17. 缺乏自信。我缺乏自信，常常怀疑自己的能力。",
+    "18. 情绪化。我情绪化，很容易受到情绪的影响，难以保持冷静。",
+    "19. 胆小。我有些胆小，常常害怕面对危险或挑战。",
+    "20. 被害妄想。我确信我认识的每个人都在密谋反对我。",
+    "21. 贪财。如果有足够多的金钱回报，我会冒任何风险。",
+    "22. 爱钱如命。我有时会因贪财做出短视的决定。",
+    "23. 不择手段。我认为为了实现目标需要不择手段，哪怕是牺牲无辜者。",
+    "24. 自私。自己顾不好自己的家伙，只能算活该。",
+    "25. 摒弃弱者。除那些久经沙场的战士外，任何人都不值得我尊重。",
+    "26. 偷窃癖。如果我比原主人更需要某物，那我拿走就不算偷。"
+  ],
+  "个性_侍僧": [
+    "1. 我崇拜某个英雄，并时刻以其事迹作为榜样。（侍僧）",
+    "2. 我能在最狂乱的敌人间寻找共鸣，然后感化他们一同为和平而努力。（侍僧）",
+    "3. 我在每个事件和行动中看到预兆。神试图对我们说话，我们只需要听即可。（侍僧）",
+    "4. 没有什么能动摇我的乐观态度。（侍僧）",
+    "5. 我任何情况下都喜欢引用（或错引）圣典和格言。（侍僧）",
+    "6. 我能容忍（或无法容忍）其他信仰并且尊重（或谴责）对其他神的崇拜。（侍僧）",
+    "7. 我喜爱美食、饮料以及同信仰神庙中的精英分子们的高层圈子。粗野的生活令我烦躁。（侍僧）",
+    "8. 我在神庙中生活的太久了，以至于我在与外面世界的人们打交道时缺乏实际经验。（侍僧）"
+  ],
+  "理念_侍僧": [
+    "1. 传统Traditions。古代崇拜与献祭的传统必须被保护并维持。（侍僧；守序）",
+    "2. 仁爱Charity。我总是试图帮助那些需要帮助的人，无论个人的花费如何。（侍僧；善良）",
+    "3. 改变Change。我们必须协助引发神在世界中一直为之工作的改变。（侍僧；混乱）",
+    "4. 权力Power。我希望有一天能够升格到所信仰宗教中等级的最高点。（侍僧；守序）",
+    "5. 信仰Faith。我信任神能指引我的行为。我信奉如果自己努力工作，事情就会变得顺利。（侍僧；守序）",
+    "6. 抱负Aspiration。我将自己的行动与他或她的教导相较，求证明自己配得上吾主的喜爱。（侍僧；任何）"
+  ],
+  "牵绊_侍僧": [
+    "1. 为了找回很久前丢失的与我信仰相关的一件古代遗物，我可以付出生命。（侍僧）",
+    "2. 终有一天我会对谴责我为异端的罪恶神庙组织复仇。（侍僧）",
+    "3. 我欠那位在我的双亲死亡时收养我的教士一条命。（侍僧）",
+    "4. 我做的每一件事情都是为了普罗大众。（侍僧）",
+    "5. 为了保卫我曾服务的神庙我可以做任何事情。（侍僧）",
+    "6. 我试图去保护一部神圣典籍，而我的敌人认为它是异端的并寻求摧毁它。（侍僧）"
+  ],
+  "缺点_侍僧": [
+    "1. 我评价他人十分严苛，并且对自己更加苛刻。（侍僧）",
+    "2. 我过于信任那些在我神庙的阶级中控制权势的人。（侍僧）",
+    "3. 我的虔诚有时令我盲目信任那些声称与我信仰相同的人。（侍僧）",
+    "4. 我思想呆板僵化，不懂变通。（侍僧）",
+    "5. 我会怀疑陌生人并将他们想成最坏的情况。（侍僧）",
+    "6. 一旦我选择了一个目标，就会变得执迷于它以至于因此损害自己生命中的所有其他事物。（侍僧）"
+  ],
+  "个性_骗子": [
+    "1. 我容易招蜂引蝶，爱情生活是也不断的离离合合。（骗子）",
+    "2. 我在什么情境下都会说笑，尤其在不合时宜时更是如此。（骗子）",
+    "3. 我爱用逢迎的手段获取所求之物。（骗子）",
+    "4. 我是天生的赌徒，一旦有回报的可能，我就会不顾风险。（骗子）",
+    "5. 我什么时候都爱说点谎话，而不论是否有必要。（骗子）",
+    "6. 讽刺和挖苦是我的首选武器。（骗子）",
+    "7. 我身上挂着一排圣徽，随时随地都可以祈祷随便哪位神保佑。（骗子）",
+    "8. 我会把任何可能有点价值的玩意儿都收集起来。（骗子）"
+  ],
+  "理念_骗子": [
+    "1. 自主Independence。我的灵魂自由自在——没人能对我指手画脚。（骗子；混乱）",
+    "2. 公平Fairness。我从不在那些穷得失不起钱的人身上捞钱。（骗子；守序）",
+    "3. 仁爱Charity。我把赚来的钱分给真正需要的人。（骗子；善良）",
+    "4. 创新Creativity。我从不玩两次同样的把戏。（骗子；混乱）",
+    "5. 友谊Friendship。钱财来去如流水，友情长存如青山。（骗子；善良）",
+    "6. 抱负Aspiration。我决心走向成功。（骗子；任意）"
+  ],
+  "牵绊_骗子": [
+    "1. 我敲诈错了人，所以必须确保那家伙不和我或者任何我在意的人再度打上交道。（骗子）",
+    "2. 我的导师是个可能正在某个监牢里面烂着的糟糕人物，然而我欠他很多很多。（骗子）",
+    "3. 我在某个地方有个未曾见过我的孩子。我正为他改变这个世界。（骗子）",
+    "4. 我是贵族出身，我早晚一天会从剽窃我领地和头衔的人身上把一切都抢回来。（骗子）",
+    "5. 一个大人物杀了我的爱人。要不了多久，我就会向他复仇。（骗子）",
+    "6. 我毁了一个不该被骗的人。我试图弥补我的过失，但是可能永远不会原谅自己。（骗子）"
+  ],
+  "缺点_骗子": [
+    "1. 我对漂亮脸蛋没有抵抗力。（骗子）",
+    "2. 我总是欠债，并且把不义之财花在奢侈品上，还花得比赚得快。（骗子）",
+    "3. 我确信没人能用我骗人的方式骗到我。（骗子）",
+    "4. 我从不满足于现有的财产，而一旦涉及钱财我就会不畏风险。（骗子）",
+    "5. 我会按捺不住冲动去欺骗远比自己强的人。（骗子）",
+    "6. 尽管我难以启齿且痛恨不已，但是见势不妙我会转身就逃，并且只顾把自己藏好。（骗子）"
+  ],
+  "个性_罪犯": [
+    "1. 我总是计划好事情变糟时的应对方法。（罪犯）",
+    "2. 无论情形如何我总能保持冷静。我从不会忽然提高音调或是让情绪影响自己。（罪犯）",
+    "3. 我每到一个新地方做的第一件事就是记下每个有价值之物的位置——或是可能藏有类似东西的地点。（罪犯）",
+    "4. 比起制造一个新敌人，我宁可交一个新朋友。（罪犯）",
+    "5. 我极端的不易信任他人。表面上看上去越公正的人通常都藏着越多见不得光的事。（罪犯）",
+    "6. 我不会考虑某个情形中的风险。永远别跟我谈几率。（罪犯）",
+    "7. 令我做某件事的最好手段就是跟我说不能那样做。（罪犯）",
+    "8. 最轻微的侮辱也能把我气炸了。（罪犯）"
+  ],
+  "理念_罪犯": [
+    "1. 荣誉Honor。我不会偷行家的东西。（罪犯；守序）",
+    "2. 自由Freedom。枷锁的存在意义即是被打破，而那些铸造枷锁的人也该受同样对待。（罪犯；混乱）",
+    "3. 仁爱Charity。我从富人处窃取财富然后帮助有需要的人。（罪犯；善良）",
+    "4. 贪婪Greed。为了致富我愿意做任何事。（罪犯；邪恶）",
+    "5. 人民People。我忠于我的朋友而非任何理想，此外的其他人就算下到冥河Styx里也与我无关。（罪犯；中立）",
+    "6. 救赎Redemption。人人心中有善念。（罪犯；善良）"
+  ],
+  "牵绊_罪犯": [
+    "1. 我试图偿还一个慷慨的资助者的老债务。（罪犯）",
+    "2. 我的非法所得是为了支持我的家庭。（罪犯）",
+    "3. 我有一件重要的东西被夺走了，并且我想要把它偷回来。（罪犯）",
+    "4. 我会成为有史以来最伟大的盗贼。（罪犯）",
+    "5. 我因一桩严重罪行而内疚。并希望从中寻求自我救赎。（罪犯）",
+    "6. 我深爱的某人因我犯下的错误而死。而我决不会让这种事情再发生了。（罪犯）"
+  ],
+  "缺点_罪犯": [
+    "1. 当我看到一些有价值的东西时，就会一心只想如何偷到它。（罪犯）",
+    "2. 在面对金钱与朋友间的抉择时，我通常都选择金钱。（罪犯）",
+    "3. 每当要记住某个计划时，我总会忘掉。就是无法忘掉，我也会选择性无视它。（罪犯）",
+    "4. 我撒谎时会故意作出某些习惯动作。（罪犯）",
+    "5. 当事情看起来似乎开始糟糕时，我会转身掉头就跑。（罪犯）",
+    "6. 一名无辜者因我犯下的某桩罪行而进了监狱。这事我觉得挺好的。（罪犯）"
+  ],
+  "个性_艺人": [
+    "1. 我知道一个几乎适合所有情况的故事。（艺人）",
+    "2. 我到一个新地方后就会着手收集当地的流言和小道消息。（艺人）",
+    "3. 我是无可救药的浪漫病，总是在找“有缘人”。（艺人）",
+    "4. 我周围的人都不会生气太久，因为我总能缓和紧张的气氛。（艺人）",
+    "5. 我喜欢精妙的讽刺，即使那是对我的讽刺也一样。（艺人）",
+    "6. 我一旦不能成为众人焦点就会很难受。（艺人）",
+    "7. 我是完美主义者。（艺人）",
+    "8. 我的情绪和思想变得和弹琴轮指一样快。（艺人）"
+  ],
+  "理念_艺人": [
+    "1. 美好Beauty。我表演时的世界会显得更美好。（艺人；善良）",
+    "2. 传统Tradition。过去的故事、史诗以及歌谣塑造了我们，因而他们不该被遗忘。（艺人；守序）",
+    "3. 创新Creativity。世界需要崭新的创意和大胆的行动。（艺人；混乱）",
+    "4. 贪婪Greed。我只是为名为利罢了。（艺人；邪恶）",
+    "5. 人民People。我喜欢表演时人们脸上的笑容。那就是我想要的。（艺人；中立）",
+    "6. 正直Honesty。艺术展现灵魂。它应当发自内心，揭露本我。（艺人；任意）"
+  ],
+  "牵绊_艺人": [
+    "1. 我的乐器是我最宝贵的财富，它纪念着某个我所爱之人。（艺人）",
+    "2. 有人偷走了我珍爱的乐器，而我一定要夺回来。（艺人）",
+    "3. 我要不惜一切代价让自己出名。（艺人）",
+    "4. 我崇拜古老传奇中的某位英雄，并时时以他作榜样。（艺人）",
+    "5. 只要能证明我比那个可恨的对手强，我愿意做任何事情。（艺人）",
+    "6. 我可以为老剧团的同伴做任何事。（艺人）"
+  ],
+  "缺点_艺人": [
+    "1. 我会不择手段的去获取声誉和名望。（艺人）",
+    "2. 我对漂亮脸蛋非常着迷。（艺人）",
+    "3. 某个丑闻让我背井离乡。而这麻烦依然如影随形。（艺人）",
+    "4. 我曾经讽刺过一个贵族，现在他仍然想要我的脑袋。而这错误我可能还会再犯。（艺人）",
+    "5. 我总是忍不住道出自己的真实感受。而我的刻薄言辞也经常带给我麻烦。（艺人）",
+    "6. 就算我尽了全力，我的朋友们还是认为我靠不住。（艺人）"
+  ],
+  "个性_工匠": [
+    "1. 我确信能做的事就要做到最好。而我必须要做到最好我是完美主义者。（工匠）",
+    "2. 我瞧不起那些不懂审美的家伙。（工匠）",
+    "3. 我总是想搞清楚事物如何运作，人们为何奔波。（工匠）",
+    "4. 我有一肚子格言警句，总是能恰到好处地掉书袋。（工匠）",
+    "5. 我对那些不像我那样努力工作、公平竞争的人并不会以礼相待。（工匠）",
+    "6. 我喜欢对我的行当高谈阔论。（工匠）",
+    "7. 我不会轻易花钱，砍价也总是砍到最低。（工匠）",
+    "8. 我在我这行鼎鼎有名，而我要确保所有人都认同这点。如果人们没听说过我，就会让我大吃一惊。（工匠）"
+  ],
+  "理念_工匠": [
+    "1. 团结Community。加强集体团结，保卫社区安全，是文明人应尽的义务。（工匠；守序）",
+    "2. 慷慨Generosity。既然我有天赋，我就要造福世界。（工匠；善良）",
+    "3. 自由Freedom。任何人都有选择营生方式的自由。（工匠；混乱）",
+    "4. 贪婪Greed。我干这行就只为钱。（工匠；邪恶）",
+    "5. 人民People。我为我在乎的人奋斗，而不是为了什么理想。（工匠；中立）",
+    "6. 抱负Aspiration。我努力钻研是为了成为本行中的翘楚。（工匠；任意）"
+  ],
+  "牵绊_工匠": [
+    "1. 我学习技艺的厂房对我来说是世界上最重要的地方。（工匠）",
+    "2. 我为某人造出了一件绝世珍品，却发现对方根本配不上它。而我仍在找配得上它的人。（工匠）",
+    "3. 公会造就了今天的我，因此我仍欠公会良多。（工匠）",
+    "4. 我为了向某人求爱而攒钱。（工匠）",
+    "5. 终有一天，我会回到公会，然后证明我是最厉害的工匠其中。（工匠）",
+    "6. 我要向那个破坏我工坊，毁掉我生活的邪恶势力复仇。（工匠）"
+  ],
+  "缺点_工匠": [
+    "1. 我会为了获得某些珍贵无价之物做任何事。（工匠）",
+    "2. 我常常很急躁地认定某人正在骗我。（工匠）",
+    "3. 应当没人知道我曾经从公会金库里偷过钱。（工匠）",
+    "4. 我从未知足于自己所有之物，而总是欲壑难填。（工匠）",
+    "5. 我极度渴望贵族头衔。（工匠）",
+    "6. 我妒忌任何手艺胜我一筹的人。而我无论走到哪里却都是对手环绕。（工匠）"
+  ],
+  "个性_隐士": [
+    "1. 由于在隐居生活中鲜少说话，现在的我更偏好用肢体语言交流，或者偶尔咕哝几声。（隐士）",
+    "2. 即使泰山崩于眼前，我依然心如止水。（隐士）",
+    "3. 修会的主持无论何时都能说出至理哲言，而我也想分享得此等睿智。（隐士）",
+    "4. 我对受难者抱有强烈的同情心。（隐士）",
+    "5. 我对于礼仪和社会常识一无所知。（隐士）",
+    "6. 我将周遭发生的一切视作冥冥天意的一部分。（隐士）",
+    "7. 我时常陷入自我冥思中无法自拔，丝毫不顾周围的事物。（隐士）",
+    "8. 我正致力完成一套哲学理论，且乐于与人分享其理念。（隐士）"
+  ],
+  "理念_隐士": [
+    "1. 大义Greater Good。我的天赋注定要为所有人谋利，而非为一己之私。（隐士；善良）",
+    "2. 逻辑Logic。绝对不能让情绪干扰我们对正确、真实和理智的思考。（隐士；守序）",
+    "3. 解放思想Free Thinking。探究精神和好奇心是学术进步的支柱。（隐士；混乱）",
+    "4. 力量Power。清修和冥想是通往神秘力量或魔法之力的道途。（隐士；邪恶）",
+    "5. 自持自重Live and Let LIve。胡乱插手他人事务只会造成麻烦。（隐士；中立）",
+    "6. 自知Self-Knowledge。如果你能自知，那么就无所不知。（隐士；任意）"
+  ],
+  "牵绊_隐士": [
+    "1. 任何事物不比我的修行同伴、修行戒律或修会本身那么重要。（隐士）",
+    "2. 我隐居是为了躲避那些仍在搜捕我的人。而我早晚必须直接面对他们。（隐士）",
+    "3. 我一直在隐居生活中寻找启迪，然而至今仍然一无所获。（隐士）",
+    "4. 我隐居是因为无法得到所爱之人。（隐士）",
+    "5. 倘若我的发现公诸于众，世界必将天翻地覆。（隐士）",
+    "6. 我的苦修向我揭示了只有我能摧毁的可怖邪恶。（隐士）",
+    "7. 我因不白之冤而被流放。（隐士）",
+    "8. 某件事情改变我人生的大事使我弃世而去。（隐士）",
+    "9. 我是一座古代遗迹或一件古代遗物的看守人。（隐士）",
+    "10. 我要与自然沟通而远离文明世界。（隐士）",
+    "11. 我是一名追寻圣人，圣地或圣遗物的朝圣者。（隐士）",
+    "12. 我正在寻求灵魂的启迪。（隐士）"
+  ],
+  "缺点_隐士": [
+    "1. 我现在重返文明世界，却有点过度沉溺于享乐。（隐士）",
+    "2. 我怀有即使是苦修和冥想也无法抹消的阴暗、嗜血之心。（隐士）",
+    "3. 我的想法和哲学观非常死板。（隐士）",
+    "4. 我对争论的求胜之心胜过了友谊与和睦之心。（隐士）",
+    "5. 我为了追求失落的知识而不顾任何风险。（隐士）",
+    "6. 我喜欢对一切保密，不爱与他人分享所知。（隐士）"
+  ],
+  "个性_贵族": [
+    "1. 我的阿谀奉承能让其他人觉得自己举世无双。（贵族）",
+    "2. 平民们因我的仁慈和慷慨而喜爱我。（贵族）",
+    "3. 众所周知只要看一眼我威严的仪态，就能明白我和下层民众截然不同。（贵族）",
+    "4. 我为了时尚和美貌忍受了很大痛苦。（贵族）",
+    "5. 我不喜欢干脏活，更不会因不舒适的食宿勉强自己。（贵族）",
+    "6. 我拥有贵族的血统，但并不认为自己比平民百姓更高贵。我们流的血是相同的。（贵族）",
+    "7. 一旦辜负我的期待，就将永远失去我的青睐。（贵族）",
+    "8. 我一受到伤害就要碾碎对方，乃至辱其名声毁其土地。（贵族）"
+  ],
+  "理念_贵族": [
+    "1. 尊重Respect。人们尊敬我是因为我的地位，但任何人无论地位高低，都应该被体面地对待。（贵族；善良）",
+    "2. 责任Responsibility。我将服从上级视为责任，正如我的下属也必须要服从我一样。（贵族；守序）",
+    "3. 独立Independence。我必须证明自己即使不借助家族的力量也仍可以自食其力。（贵族；混乱）",
+    "4. 权力Power。只要我掌握了更大的权力，就没人能对我指手画脚了。（贵族；邪恶）",
+    "5. 家族Family。血浓于水。（贵族；任意）",
+    "6. 贵族义务Noble Obligation。保护依附我的人们，是我的责任。（贵族；善良）"
+  ],
+  "牵绊_贵族": [
+    "1. 为了获得家族的认可，我可以面对任何挑战。（贵族）",
+    "2. 我必须不惜代价的维持住两个家族之间的联姻关系。（贵族）",
+    "3. 任何事物都不如家族血亲更重要。（贵族）",
+    "4. 我爱上了家族所不齿的另一个家族的子嗣。（贵族）",
+    "5. 我对主君的忠诚固若泰山。（贵族）",
+    "6. 平民们将我视作人民的英雄。（贵族）"
+  ],
+  "缺点_贵族": [
+    "1. 我暗自认为自己比所有人都高贵。（贵族）",
+    "2. 我努力遮掩一个会永远摧毁家族的可耻秘密。（贵族）",
+    "3. 我总会听到针对我的隐晦侮辱与威胁，且轻易就会因此而发怒。（贵族）",
+    "4. 我总是放纵自己的肉体欲望。（贵族）",
+    "5. 事实上，世界就是围着我转的。（贵族）",
+    "6. 我的言行总会为家族带来耻辱。（贵族）"
+  ],
+  "个性_智者": [
+    "1. 我会用一些让人觉得非常博学的长词。（智者）",
+    "2. 我读过世上最大图书馆中的每一本书——或者我喜欢自夸我读过。（智者）",
+    "3. 我习惯帮助那些不像我这么聪明的人，而我有耐心对其他人解释任何事和每件事。（智者）",
+    "4. 没有什么能比一个有趣的谜团更令我欢心。（智者）",
+    "5. 我作出自己的判断前，总会乐意倾听争论双方的论点。（智者）",
+    "6. 我~跟~白痴们~讲话~时~会~放慢~语速，别~误会~我~是指~所有人~都是~白痴。（智者）",
+    "7. 我在社交场合尴尬得特别特别厉害。（智者）",
+    "8. 我确信人们始终在试着偷取我的秘密。（智者）"
+  ],
+  "理念_智者": [
+    "1. 知识Knowledge。知识是通往力量和自我发展的必经之路。（智者；中立）",
+    "2. 美丽Beauty。美丽的事物指引我们想着其所在的方向继续向前即是真实。（智者；善良）",
+    "3. 逻辑Logic。情绪绝不能蒙蔽逻辑思考。（智者；守序）",
+    "4. 无拘无束No Limits。任何东西都不该束缚所有存在中潜在的无限可能。（智者；混乱）",
+    "5. 权力Power。知识是通往权力与统治的捷径。（智者；邪恶）",
+    "6. 提升自我Self-Improvement。终生学习为的正是让人变得更好。（智者；任意）"
+  ],
+  "牵绊_智者": [
+    "1. 保护我的学生是我的责任。（智者）",
+    "2. 我有一份载有可怕秘密的远古文献，而它绝不能落入错误的人手中。（智者）",
+    "3. 我为保护一个图书馆，学院，抄写室或修道院而工作。（智者）",
+    "4. 我一生的作品就是关于某项特定学识领域的一系列书典。（智者）",
+    "5. 我终生寻求某个特定问题的解答。（智者）",
+    "6. 我出卖了自己的灵魂以获得知识。并希望做一些大事将其赢回来。（智者）"
+  ],
+  "缺点_智者": [
+    "1. 以知识或情报许诺很容易打动我。（智者）",
+    "2. 看到恶魔时，一般人可能会尖叫着逃跑，而我会停在原地记下它的身体结构。（智者）",
+    "3. 揭示一项远古奥秘值得以一整个文明作代价。（智者）",
+    "4. 我总是拿出极度复杂的解决方案，却忽视了那些简单易行的方法。（智者）",
+    "5. 我说话时未真正考虑过自己的措辞，因而老是冒犯到他人。（智者）",
+    "6. 我无法为了保自己的命（或别人的命）而保守某个秘密。（智者）"
+  ],
+  "个性_流浪者": [
+    "1. 我把食物碎屑和饰品深深地藏在口袋里。（流浪者）",
+    "2. 我会常常发问。（流浪者）",
+    "3. 我喜欢钻进别人找不到我的地方。（流浪者）",
+    "4. 我习惯靠着墙或树睡觉，睡时把自己的东西都捆成一捆抱在怀里。（流浪者）",
+    "5. 我的吃相像猪一样，十分没有礼数。（流浪者）",
+    "6. 我认为任何对我假仁假义的人都不安好心。（流浪者）",
+    "7. 我不喜欢洗澡。（流浪者）",
+    "8. 我总是直接说出其他人暗示或者想遮掩的事情。（流浪者）"
+  ],
+  "理念_流浪者": [
+    "1. 尊重Respect。所有人，不论贫富都应受到尊重。（流浪者；善良）",
+    "2. 团结Community。外人不会帮我们，因此我们必须同舟共济。（流浪者；守序）",
+    "3. 改变Change。下等人可能发迹，上等人可能落马，变化才是万物的本质。（流浪者；混乱）",
+    "4. 报应Retribution。富人们应该被按在水沟里尝尝濒死的感觉。（流浪者；邪恶）",
+    "5. 人民People。我帮助那些帮了我的人——这正是我们生存的根本。（流浪者；中立）",
+    "6. 抱负Aspiration。我会证明我值得拥有更好的生活。（流浪者；任意）"
+  ],
+  "牵绊_流浪者": [
+    "1. 这城镇就是我的家，而我必须保卫它。（流浪者）",
+    "2. 我资助了一所孤儿院，以免其他人再遭受我的厄运。（流浪者）",
+    "3. 我的幸存应归功于那位曾教会我如何在街头生存的另一位流浪儿。（流浪者）",
+    "4. 我欠某位同情我的绅士一笔我还不起的债。（流浪者）",
+    "5. 我通过抢劫一位大人物而脱贫致富，但是也因此而遭到通缉。（流浪者）",
+    "6. 不该再有人遭受我曾经的苦难了。（流浪者）"
+  ],
+  "缺点_流浪者": [
+    "1. 如果敌人人多势众，我就会在打斗时溜走。（流浪者）",
+    "2. 我觉得金子很值钱，因此我会不择手段赚很多金子。（流浪者）",
+    "3. 我从不会完全信任别人，而只相信我自己。（流浪者）",
+    "4. 与其公平决斗，我更喜欢趁人之危偷袭。（流浪者）",
+    "5. 如果我比原主人更需要某物，那我拿走就不算偷。（流浪者）",
+    "6. 自己顾不好自己的家伙，只能算活该。（流浪者）"
+  ],
+  "个性_水手": [
+    "1. 朋友们知道无论出现什么困难，我都值得依赖。（水手）",
+    "2. 我努力工作，然后休闲时就可以尽情玩乐。（水手）",
+    "3. 我喜欢航行到新港口，然后在那里以酒会友。（水手）",
+    "4. 我常常会为了讲述一个好故事而夸大其词。（水手）",
+    "5. 我就觉得酒馆斗殴是了解一座陌生城市的好地方。（水手）",
+    "6. 我从不会放弃友好的赌局。（水手）",
+    "7. 我的言辞脏污得好比食腐兽的窝。（水手）",
+    "8. 我喜欢工作都好好完成的样子，如果整个过程都让别人来干就更好了。（水手）"
+  ],
+  "理念_水手": [
+    "1. 尊重Respect。只有船长和船员相互尊重，船才能乘风破浪。（水手；善良）",
+    "2. 公正Fairness。一起干的活工钱一起分。（水手；守序）",
+    "3. 自由Freedom。大海即是自由——随你去哪儿，随你干什么。（水手；混乱）",
+    "4. 统治Mastery。我是个掠夺者，海上其他船都是我的猎物。（水手；邪恶）",
+    "5. 人民People。我只为同伴们出力，而不是为了什么理想。（水手；中立）",
+    "6. 抱负Aspiration。早晚有一天，我会拥有自己的船，掌握自己的命运。（水手；任意）"
+  ],
+  "牵绊_水手": [
+    "1. 我首先忠于我的船长，任何事物都要排在后头。（水手）",
+    "2. 船才是最重要的，无论船员还是船长都是过客。（水手）",
+    "3. 我总是会怀念我上过的第一艘船。（水手）",
+    "4. 在一个港口里住着我的情人，她的魅力几乎能让我抛弃海上生活和她在一起。（水手）",
+    "5. 我平分财宝时见到有人作弊，而我要夺回我应得的那份。（水手）",
+    "6. 残忍的海盗杀了我的船长和兄弟，抢走了我的船，只留下濒死的我。而我一定要复仇。（水手）"
+  ],
+  "缺点_水手": [
+    "1. 我遵守命令，哪怕是那些并不正确的命令。（水手）",
+    "2. 我会绞尽脑汁避免额外劳动。（水手）",
+    "3. 一旦有人质疑我的勇气，我就什么都敢干。（水手）",
+    "4. 我一旦开始喝酒，就根本停不下来。（水手）",
+    "5. 我会忍不住收集遇到的各种硬币或小饰品等玩意儿。（水手）",
+    "6. 我的骄傲可能会毁了自己。（水手）"
+  ],
+  "个性_士兵": [
+    "1. 我总是表现的恭敬有礼。（士兵）",
+    "2. 我的心中总是萦绕着战争时的记忆，那些残暴的画面总是挥之不去。（士兵）",
+    "3. 我曾失去太多的朋友，而现在已经很难交个新的朋友了。（士兵）",
+    "4. 我的军事生涯曾经历过各种情况，所以我能以此讲出许多鼓舞人心而又发人深省的故事。（士兵）",
+    "5. 我能盯着一只地狱犬看而毫不畏缩。（士兵）",
+    "6. 我喜欢强壮的感觉并且乐于打坏东西。（士兵）",
+    "7. 我有着粗俗的幽默感。（士兵）",
+    "8. 我迎难而上直面问题。一个简单直接的解决方案是通往成功的最佳路径。（士兵）"
+  ],
+  "理念_士兵": [
+    "1. 大义Greater Good。我们的使命即是为保卫他人而献出自己的生命。（士兵；善良）",
+    "2. 责任Responsibility。我服从权力，并且只做必须做的事。（士兵；守序）",
+    "3. 独立Independence。盲目的服从命令，某种意义上就相当于接受暴君统治。（士兵；混乱）",
+    "4. 力量Might。生活与战争一样，只有更强大的一方才能获胜。（士兵；邪恶）",
+    "5. 自持自重Live and Let Live。不该以理想之名行杀戮之事，或是以其名义发动战争。（士兵；中立）",
+    "6. 国家Nation。我的城市、国家和人民是最重要的事。（士兵；任意）"
+  ],
+  "牵绊_士兵": [
+    "1. 我依然会以性命保护曾一起共事之人。（士兵）",
+    "2. 有人在战场上救过我的命。因而现在我也不会丢下任何一个朋友。（士兵）",
+    "3. 荣誉即吾命。（士兵）",
+    "4. 我永远不会忘记队伍曾遭受到的惨败，以及当时的敌人。（士兵）",
+    "5. 那些与我同袍的人值得为之豁出性命。（士兵）",
+    "6. 我为那些无法为他们自己战斗的人而战。（士兵）"
+  ],
+  "缺点_士兵": [
+    "1. 我们曾在战场上面对的凶暴的敌人依然会令我恐惧的发抖。（士兵）",
+    "2. 除那些久经沙场的武士外，任何人都不值得我尊重。（士兵）",
+    "3. 我曾在战场上犯了一个严重的错并为此伤害了许多生命——而我为了能守住这个秘密愿意做任何事。（士兵）",
+    "4. 我对敌人的仇恨盲目而缺乏理性。（士兵）",
+    "5. 我遵从法律，而不管其律条是否会招致不幸。（士兵）",
+    "6. 我在犯错时宁可吞掉自己的护甲也不愿承认。（士兵）"
+  ],
+  "特点_向导": [
+    "1. 我因旅行欲望的驱使而背井离乡。（向导）",
+    "2. 我像照顾新生儿般照顾同伴。（向导）",
+    "3. 我曾马不停蹄地跑了二十五里以警告氏族有兽人来袭。如果有必要，我还会这么干。（向导）",
+    "4. 我善于观察自然，并从中获得应对任何境况的经验。（向导）",
+    "5. 财富和礼貌无法帮你对抗一头饥饿枭熊，而我对看重这些东西的家伙不屑一顾。（向导）",
+    "6. 我习惯偶尔从地上捡起些东西再漫不经心地摆弄，有的时候还会弄坏它们。（向导）",
+    "7. 相对于与人相处，和动物在一起会让我更自在。（向导）",
+    "8. 我实际上是个由狼养大的孩子。（向导）"
+  ],
+  "理念_向导": [
+    "1. 改变Change。生活如四季流转，变化不止，而我们必须与之一道改变。（向导；混乱）",
+    "2. 大义Greater Good。部族整体的幸福，是每个成员的义务。（向导；善良）",
+    "3. 荣誉Honor。我若玷污荣誉，便是给整个氏族蒙羞。（向导；守序）",
+    "4. 力量Might。最强者即是规矩本身。（向导；邪恶）",
+    "5. 自然Nature。大自然比任何文明造物都重要。（向导；中立）",
+    "6. 光荣Glory。我必须在战斗中赢得荣耀，既为自己也为氏族。（向导；任意）"
+  ],
+  "牵绊_向导": [
+    "1. 即使与其异地相隔，我的家族，氏族或部族是我生命中最重要的事物。（向导）",
+    "2. 破坏家园的原始风貌即是对我的伤害。（向导）",
+    "3. 我会让那些摧毁我家乡的恶徒见识什么叫狂怒。（向导）",
+    "4. 我是部族最后的遗孤，因而只剩我可以让部族的威名成为传奇。（向导）",
+    "5. 我眼前时常浮现灾难将至的幻景，我要尽全力阻止其发生。（向导）",
+    "6. 抚养幼童继承部族是我的责任。（向导）"
+  ],
+  "缺陷_向导": [
+    "1. 我过度痴迷于麦酒、葡萄酒等醉人之物。（向导）",
+    "2. 繁忙充实的生活里没有谨慎的余地。（向导）",
+    "3. 我会记住每次侮辱，并对委屈我的人抱以无声的怨恨。（向导）",
+    "4. 我不太容易信任对那些来自其他种族、部族、或社群的人。（向导）",
+    "5. 大多时候我会选择用暴力克服难题。（向导）",
+    "6. 我不会救那些无法自救者。物竞天择，强者生存。（向导）"
+  ]
+};
+
+</script>
+  <script>
 (function () {
     "use strict";
+
+    const adventureTraits = window.AdventureTraits || {};
 
     const CUSTOM_VALUE = "__custom__";
     const raceSelect = document.getElementById("builder-race");
@@ -7665,6 +8881,8 @@
     const builderExportJson = document.getElementById("builder-export-json");
     const builderImportJson = document.getElementById("builder-import-json");
     const builderExportPdf = document.getElementById("builder-export-pdf");
+    const builderExportPng = document.getElementById("builder-export-png");
+    const builderPngMenu = document.getElementById("builder-png-menu");
     const builderExportHtml = document.getElementById("builder-export-html");
     const builderImportFile = document.getElementById("builder-import-file");
     const builderSaveStatus = document.getElementById("builder-save-status");
@@ -7707,7 +8925,7 @@
         !spellPreparedCount || !spellMainClass || !spellCantripGift ||
         !spellAlwaysPrepared || !spellGiftSpells ||
         !builderClearData || !builderExportJson || !builderImportJson || !builderExportPdf ||
-        !builderExportHtml ||
+        !builderExportHtml || !builderExportPng || !builderPngMenu ||
         !builderImportFile || !builderSaveStatus ||
         spellSlotOutputs.some((output) => !output) ||
         !backpackGearBody || !backpackToolBody || !backpackMagicBody ||
@@ -8782,6 +10000,124 @@
 <b>装备：</b>${data.equipment}<br><br>
 ${data.description}`;
       highlightTerms(backgroundTraitsBox);
+    }
+
+    function getAlignmentAxes(alignment) {
+      if (!alignment) return [];
+      const axes = [];
+      if (alignment.includes("守序")) axes.push("守序");
+      else if (alignment.includes("混乱")) axes.push("混乱");
+      else axes.push("中立");
+
+      if (alignment.includes("善良")) axes.push("善良");
+      else if (alignment.includes("邪恶")) axes.push("邪恶");
+      else axes.push("中立");
+
+      return [...new Set(axes)];
+    }
+
+    function getStandardTraitTables(background, trait) {
+      const candidates = trait === "personality"
+        ? [`个性_${background}`, `特点_${background}`]
+        : trait === "ideal"
+          ? [`理念_${background}`]
+          : trait === "bond"
+            ? [`牵绊_${background}`]
+            : [`缺点_${background}`, `缺陷_${background}`];
+      return candidates.filter((key) => Array.isArray(adventureTraits[key]));
+    }
+
+    function getAllTraitTables(trait) {
+      return Object.keys(adventureTraits)
+        .filter((key) => {
+          if (trait === "personality") {
+            return key.startsWith("自定义背景_个性特点_") ||
+              key.startsWith("个性_") || key.startsWith("特点_");
+          }
+          if (trait === "ideal") {
+            return key.startsWith("自定义背景_理念_") || key.startsWith("理念_");
+          }
+          if (trait === "bond") {
+            return key === "自定义背景_牵绊" || key.startsWith("牵绊_");
+          }
+          return key === "自定义背景_缺陷" ||
+            key.startsWith("缺点_") || key.startsWith("缺陷_");
+        })
+        .flatMap((key) => adventureTraits[key]);
+    }
+
+    function getCustomTraitTables(trait, alignment) {
+      const axes = alignment ? getAlignmentAxes(alignment) : [];
+      const customKeys = [];
+      if (trait === "personality") {
+        customKeys.push("自定义背景_个性特点_任意阵营");
+        for (const axis of axes) customKeys.push(`自定义背景_个性特点_仅${axis}阵营`);
+      } else if (trait === "ideal") {
+        customKeys.push("自定义背景_理念_任意阵营");
+        for (const axis of axes) customKeys.push(`自定义背景_理念_仅${axis}阵营`);
+      } else if (trait === "bond") {
+        customKeys.push("自定义背景_牵绊");
+      } else {
+        customKeys.push("自定义背景_缺陷");
+      }
+
+      return [...new Set(
+        customKeys
+          .filter((key) => Array.isArray(adventureTraits[key]))
+          .flatMap((key) => adventureTraits[key])
+      )];
+    }
+
+    function getTraitTables(trait) {
+      const background = backgroundSelect.value;
+      const alignment = alignmentSelect.value;
+      if (!background) {
+        return [...new Set(getAllTraitTables(trait))];
+      }
+
+      if (background !== "自定义背景") {
+        const standardTables = getStandardTraitTables(background, trait);
+        if (standardTables.length) {
+          return [...new Set(standardTables.flatMap((key) => adventureTraits[key]))];
+        }
+      }
+
+      return getCustomTraitTables(trait, alignment);
+    }
+
+    function updateTraitRandomState() {
+      for (const button of document.querySelectorAll(".trait-random")) {
+        button.disabled = false;
+        button.title = button.dataset.trait === "personality" ? "随机个性"
+          : button.dataset.trait === "ideal" ? "随机理念"
+            : button.dataset.trait === "bond" ? "随机牵绊" : "随机缺陷";
+      }
+    }
+
+    function randomTraitForButton(button) {
+      const trait = button.dataset.trait;
+      const target = document.getElementById(button.dataset.target);
+      if (!trait || !target) return;
+
+      const pool = getTraitTables(trait).map((text) =>
+        String(text).replace(/^\s*\d+\.\s*/, "").trim()
+      ).filter(Boolean);
+      if (!pool.length) return;
+
+      let candidates = pool;
+      if (trait === "personality") {
+        const otherId = target.id === "builder-personality-1"
+          ? "builder-personality-2"
+          : "builder-personality-1";
+        const otherValue = document.getElementById(otherId)?.value.trim();
+        if (otherValue) {
+          const filtered = candidates.filter((text) => text !== otherValue);
+          if (filtered.length) candidates = filtered;
+        }
+      }
+
+      target.value = candidates[Math.floor(Math.random() * candidates.length)];
+      target.dispatchEvent(new Event("input", { bubbles: true }));
     }
 
     function updateRaceCombatDefaults() {
@@ -12405,6 +13741,244 @@ ${data.description}`;
       }
     }
 
+    function collectExportCss() {
+      const chunks = [];
+      for (const sheet of document.styleSheets) {
+        try {
+          for (const rule of sheet.cssRules) chunks.push(rule.cssText);
+        } catch (error) {
+          // 外部样式表不可读取时使用离线模板中的内联样式。
+        }
+      }
+      if (!chunks.length && window.__DND_OFFLINE_TEMPLATE__) {
+        const match = window.__DND_OFFLINE_TEMPLATE__.match(/<style>([\s\S]*?)<\/style>/);
+        if (match) chunks.push(match[1]);
+      }
+      return chunks.join("\n");
+    }
+
+    function preparePanelForPng(panel) {
+      const clone = panel.cloneNode(true);
+      const originalControls = [...panel.querySelectorAll("input, select, textarea")];
+      const cloneControls = [...clone.querySelectorAll("input, select, textarea")];
+
+      const panelTitle = clone.querySelector(":scope > .panel-title");
+      if (panelTitle && panelTitle.textContent.trim() === "角色卡构筑") panelTitle.remove();
+
+      const appearanceImage = clone.querySelector("#appearance-image");
+      const appearanceTextValue = panel.querySelector("#builder-appearance")?.value.trim() || "";
+      if (!appearanceTextValue && !appearanceImage?.getAttribute("src")) {
+        clone.querySelector(".appearance-block")?.remove();
+      } else if (appearanceImage && !appearanceImage.getAttribute("src")) {
+        appearanceImage.closest(".appearance-image-frame")?.remove();
+      }
+
+      const backgroundStoryValue = panel.querySelector("#builder-background-story")?.value.trim() || "";
+      if (!backgroundStoryValue) {
+        clone.querySelector(".background-story-table")?.remove();
+      }
+
+      const characterNotes = clone.querySelector("#character-notes");
+      const characterNotesText = panel.querySelector("#character-notes")?.textContent.trim() || "";
+      if (characterNotes && !characterNotesText) {
+        characterNotes.closest(".character-notes-editor")?.remove();
+      }
+
+      originalControls.forEach((original, index) => {
+        const target = cloneControls[index];
+        if (!target) return;
+
+        if (original instanceof HTMLInputElement) {
+          if (original.type === "checkbox" || original.type === "radio") {
+            if (original.checked) target.setAttribute("checked", "checked");
+            else target.removeAttribute("checked");
+          } else if (original.type !== "file") {
+            target.setAttribute("value", original.value);
+          }
+        } else if (original instanceof HTMLTextAreaElement) {
+          target.textContent = original.value;
+          if (!original.value.trim()) target.classList.add("png-export-empty");
+        } else if (original instanceof HTMLSelectElement) {
+          [...target.options].forEach((option, optionIndex) => {
+            if (optionIndex === original.selectedIndex) option.setAttribute("selected", "selected");
+            else option.removeAttribute("selected");
+          });
+        }
+      });
+
+      for (const modifier of clone.querySelectorAll(".spell-modifier")) {
+        if (!modifier.querySelector("input")?.value) modifier.classList.add("png-export-empty");
+      }
+
+      return clone;
+    }
+
+    function createPngExportWrapper(panels) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "png-export-mode png-export-stack";
+      wrapper.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+      wrapper.style.cssText = 'color:#111;background:#f8f8f6;font-family:"Microsoft YaHei",Arial,sans-serif;';
+      const width = Math.ceil(Math.max(...panels.map((panel) => panel.getBoundingClientRect().width)));
+      wrapper.style.width = `${width}px`;
+      for (const panel of panels) wrapper.append(preparePanelForPng(panel));
+      return wrapper;
+    }
+
+    function loadBlobImage(url) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("PNG 渲染失败。"));
+        image.src = url;
+      });
+    }
+
+    function canvasToBlob(canvas) {
+      return new Promise((resolve, reject) => {
+        if (canvas.toBlob) {
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error("PNG 生成失败。"));
+          }, "image/png");
+          return;
+        }
+        try {
+          const data = atob(canvas.toDataURL("image/png").split(",")[1]);
+          const bytes = new Uint8Array(data.length);
+          for (let index = 0; index < data.length; index += 1) {
+            bytes[index] = data.charCodeAt(index);
+          }
+          resolve(new Blob([bytes], { type: "image/png" }));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }
+
+    async function rasterizePngPanels(panels, filename) {
+      if (!panels.length) throw new Error("没有可导出的卡片。");
+
+      const previousTheme = document.documentElement.dataset.theme;
+      const holder = document.createElement("div");
+      holder.style.cssText = "position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;z-index:-1;";
+      document.body.append(holder);
+
+      try {
+        document.documentElement.dataset.theme = "light";
+        setBuilderSaveStatus("正在准备 PNG…");
+        const wrapper = createPngExportWrapper(panels);
+        holder.append(wrapper);
+        setBuilderSaveStatus("正在排版 PNG…");
+
+        if (document.fonts && document.fonts.ready) await document.fonts.ready;
+        await Promise.all([...wrapper.querySelectorAll("img")].map((image) => {
+          const source = image.currentSrc || image.getAttribute("src");
+          if (!source) return Promise.resolve();
+          return image.complete
+            ? Promise.resolve()
+            : new Promise((resolve) => {
+                image.addEventListener("load", resolve, { once: true });
+                image.addEventListener("error", resolve, { once: true });
+              });
+        }));
+
+        for (const textarea of wrapper.querySelectorAll("textarea")) {
+          textarea.style.setProperty("height", "auto", "important");
+          textarea.style.setProperty("height", `${Math.max(textarea.scrollHeight, 28)}px`, "important");
+        }
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const width = Math.ceil(wrapperRect.width);
+        let contentBottom = wrapperRect.top;
+        for (const node of wrapper.querySelectorAll("*")) {
+          if (node.classList.contains("panel")) continue;
+          const style = window.getComputedStyle(node);
+          if (style.display === "none") continue;
+          const rect = node.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) contentBottom = Math.max(contentBottom, rect.bottom);
+        }
+        const height = Math.ceil(contentBottom - wrapperRect.top + 12);
+        if (!width || !height) throw new Error("卡片尺寸读取失败。");
+
+        setBuilderSaveStatus("正在生成 PNG…");
+        const styleElement = document.createElement("style");
+        styleElement.textContent = collectExportCss();
+        const styleMarkup = new XMLSerializer().serializeToString(styleElement);
+        const wrapperMarkup = new XMLSerializer().serializeToString(wrapper);
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><foreignObject x="0" y="0" width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
+        // file:// 页面中 Blob URL 的 SVG 会被 Chrome 视为跨源并污染 Canvas；
+        // data URL 可以避免该问题，同时不引入外部图片依赖。
+        setBuilderSaveStatus("正在渲染 PNG…");
+        const image = await loadBlobImage(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`);
+        setBuilderSaveStatus("正在写入 PNG…");
+        const maxDimension = 8192;
+        const maxArea = 16000000;
+        const scale = Math.min(
+          2,
+          maxDimension / width,
+          maxDimension / height,
+          Math.sqrt(maxArea / Math.max(1, width * height))
+        );
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(width * scale));
+        canvas.height = Math.max(1, Math.round(height * scale));
+        const context = canvas.getContext("2d");
+        context.fillStyle = "#f8f8f6";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        const blob = await canvasToBlob(canvas);
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = filename;
+        document.body.append(anchor);
+        anchor.click();
+        anchor.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setBuilderSaveStatus("已导出 PNG。");
+      } finally {
+        holder.remove();
+        if (previousTheme) document.documentElement.dataset.theme = previousTheme;
+        else delete document.documentElement.dataset.theme;
+      }
+    }
+
+    async function exportBuilderPng(cardKey) {
+      const panels = [...builderPanel.children].filter((node) => node.classList.contains("panel"));
+      let selected = [];
+      let label = "";
+
+      if (cardKey === "info") {
+        selected = panels.slice(0, 1);
+        label = "角色信息";
+      } else if (cardKey === "class") {
+        selected = panels.slice(1, 2);
+        label = "职业信息";
+      } else {
+        selected = panels.slice(2);
+        label = "法术背包";
+      }
+
+      if (!selected.length) {
+        window.alert("没有可导出的卡片。");
+        return;
+      }
+
+      try {
+        const name = sanitizeExportName(characterName.value.trim());
+        await rasterizePngPanels(selected, `${name}_${label}.png`);
+      } catch (error) {
+        window.alert(error.message || "PNG 导出失败。");
+        setBuilderSaveStatus("PNG 导出失败。", true);
+      }
+    }
+
+    function setPngMenuOpen(open) {
+      builderPngMenu.hidden = !open;
+      builderExportPng.setAttribute("aria-expanded", String(open));
+    }
+
     function downloadBuilderJson() {
       saveBuilderData();
       const data = captureBuilderData();
@@ -12459,6 +14033,27 @@ ${data.description}`;
       builderClearData.addEventListener("click", clearBuilderData);
       builderExportJson.addEventListener("click", downloadBuilderJson);
       builderExportHtml.addEventListener("click", exportOfflineHtml);
+      builderExportPng.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setPngMenuOpen(builderPngMenu.hidden);
+      });
+      builderPngMenu.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-png-card]");
+        if (!button) return;
+        setPngMenuOpen(false);
+        exportBuilderPng(button.dataset.pngCard);
+      });
+      document.addEventListener("pointerdown", (event) => {
+        if (builderPngMenu.hidden) return;
+        if (builderPngMenu.contains(event.target) || builderExportPng.contains(event.target)) return;
+        setPngMenuOpen(false);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !builderPngMenu.hidden) {
+          setPngMenuOpen(false);
+          builderExportPng.focus();
+        }
+      });
       builderImportJson.addEventListener("click", () => builderImportFile.click());
       builderExportPdf.addEventListener("click", () => window.print());
 
@@ -13251,7 +14846,15 @@ ${data.description}`;
       updateRaceCombatDefaults();
       updateSummary();
     });
-    backgroundSelect.addEventListener("change", renderBackgroundTraits);
+    backgroundSelect.addEventListener("change", () => {
+      renderBackgroundTraits();
+      updateTraitRandomState();
+    });
+    alignmentSelect.addEventListener("change", updateTraitRandomState);
+    for (const button of document.querySelectorAll(".trait-random")) {
+      button.addEventListener("click", () => randomTraitForButton(button));
+    }
+    updateTraitRandomState();
     customRaceInput.addEventListener("input", updateSummary);
     raceReset.addEventListener("click", () => {
       raceSelect.value = "人类";
@@ -13266,6 +14869,7 @@ ${data.description}`;
     characterName.addEventListener("input", updateSummary);
     alignmentSelect.addEventListener("change", () => {
       alignmentSelect.classList.toggle("is-empty", !alignmentSelect.value);
+      updateTraitRandomState();
     });
 
     classSelect.addEventListener("change", handleMainClassChange);
@@ -14085,6 +15689,125 @@ ${data.description}`;
   })();
 
   
+</script>
+  <script>
+(function () {
+  "use strict";
+
+  const root = document.documentElement;
+  const button = document.getElementById("settings-button");
+  const panel = document.getElementById("settings-panel");
+  const themeSelect = document.getElementById("theme-select");
+  const fontRange = document.getElementById("settings-font-range");
+  const fontOutput = document.getElementById("settings-font-output");
+  if (!button || !panel || !themeSelect || !fontRange || !fontOutput) return;
+
+  const THEME_KEY = "dnd5e2024.theme";
+  const FONT_KEY = "dnd5e2024.fontSize";
+  const colorScheme = window.matchMedia
+    ? window.matchMedia("(prefers-color-scheme: dark)")
+    : null;
+
+  function readPreference() {
+    try {
+      const value = localStorage.getItem(THEME_KEY);
+      return /^(system|light|dark)$/.test(value || "") ? value : "system";
+    } catch (error) {
+      return "system";
+    }
+  }
+
+  function readFontSize() {
+    try {
+      const value = parseInt(localStorage.getItem(FONT_KEY), 10);
+      return Number.isFinite(value) && value >= 14 && value <= 24 ? value : 16;
+    } catch (error) {
+      return 16;
+    }
+  }
+
+  function resolveTheme(preference) {
+    if (preference === "system") {
+      return colorScheme && colorScheme.matches ? "dark" : "light";
+    }
+    return preference;
+  }
+
+  function updateThemeColor(resolved) {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", resolved === "dark" ? "#1a1a1a" : "#800000");
+  }
+
+  function applyTheme(preference, persist = true) {
+    const resolved = resolveTheme(preference);
+    root.dataset.themePreference = preference;
+    root.dataset.theme = resolved;
+    themeSelect.value = preference;
+    updateThemeColor(resolved);
+    if (persist) {
+      try {
+        localStorage.setItem(THEME_KEY, preference);
+      } catch (error) {
+        // 设置仍会应用到当前页面。
+      }
+    }
+  }
+
+  function applyFontSize(size, persist = true) {
+    const value = Math.min(24, Math.max(14, Number(size) || 16));
+    root.style.setProperty("--content-zoom", (value / 16).toFixed(3));
+    fontRange.value = String(value);
+    fontOutput.textContent = `${value}px`;
+    if (persist) {
+      try {
+        localStorage.setItem(FONT_KEY, String(value));
+      } catch (error) {
+        // 设置仍会应用到当前页面。
+      }
+    }
+  }
+
+  function setPanelOpen(open) {
+    panel.hidden = !open;
+    button.setAttribute("aria-expanded", String(open));
+    if (open) themeSelect.focus();
+  }
+
+  applyTheme(readPreference(), false);
+  applyFontSize(readFontSize(), false);
+
+  themeSelect.addEventListener("change", () => applyTheme(themeSelect.value));
+  fontRange.addEventListener("input", () => applyFontSize(fontRange.value));
+
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setPanelOpen(panel.hidden);
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (panel.hidden) return;
+    if (panel.contains(event.target) || button.contains(event.target)) return;
+    setPanelOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !panel.hidden) {
+      setPanelOpen(false);
+      button.focus();
+    }
+  });
+
+  if (colorScheme) {
+    const handleSchemeChange = () => {
+      if (root.dataset.themePreference === "system") {
+        applyTheme("system", false);
+      }
+    };
+    if (colorScheme.addEventListener) colorScheme.addEventListener("change", handleSchemeChange);
+    else if (colorScheme.addListener) colorScheme.addListener(handleSchemeChange);
+  }
+})();
+
 </script>
 
 </body>
