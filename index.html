@@ -4561,6 +4561,8 @@ main.page-width {
 .png-export-mode .ledger-actions,
 .png-export-mode .settings-button,
 .png-export-mode .settings-panel,
+.png-export-mode .dst-toggle,
+.png-export-mode .dst-box,
 .png-export-mode button {
   display: none !important;
 }
@@ -4667,6 +4669,234 @@ html[data-theme="dark"] .panel .subclass-under-level input {
   color: #999999 !important;
   -webkit-text-fill-color: #999999 !important;
 }
+
+.combat-hp-vital {
+  flex: 1 1 430px;
+}
+
+.hp-value-group {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+}
+
+.hp-value-group > #combat-hp {
+  flex: 1 1 120px;
+  min-width: 0;
+}
+
+.hp-growth-control {
+  display: flex;
+  align-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  min-width: 0;
+  margin-left: -1px;
+  color: #173f5f;
+  background: #eaf3fa;
+  border: 1px solid #a9c7dd;
+}
+
+.hp-growth-plus {
+  flex: 0 0 auto;
+  padding-left: 4px;
+  color: #777;
+  font-size: 0.8rem;
+}
+
+.hp-growth-input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  padding: 5px 4px;
+  color: #173f5f !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.hp-growth-input::placeholder {
+  color: #6b8ea8;
+  font-size: 0.68rem;
+}
+
+.hp-growth-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  margin: 0 0 0 4px;
+  padding: 0;
+  color: #2b5b84;
+  background: transparent;
+  border: 1px solid #2b5b84;
+  border-radius: 50%;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.hp-growth-help:hover { background: #eaf3fa; }
+
+@media screen {
+  html[data-theme="dark"] .panel .hp-growth-control {
+    color: #cfe6ff !important;
+    background: #1d3040 !important;
+    border-color: #4d6b82 !important;
+  }
+
+  html[data-theme="dark"] .panel .hp-growth-input {
+    color: #cfe6ff !important;
+    -webkit-text-fill-color: #cfe6ff !important;
+  }
+
+  html[data-theme="dark"] .panel .hp-growth-input::placeholder {
+    color: #8eb2cc !important;
+  }
+
+  html[data-theme="dark"] .panel .hp-growth-help {
+    color: #9dc7e8 !important;
+    border-color: #6e9bbd !important;
+  }
+}
+
+@media print {
+  .hp-growth-help { display: none !important; }
+}
+
+@media (max-width: 620px) {
+  .combat-vitals .combat-hp-vital {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+.builder-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.builder-summary-row .builder-summary {
+  margin-bottom: 0;
+}
+
+.dst-toggle {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  color: #111;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.76rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dst-toggle:hover { border-color: #800000; }
+
+.dst-box {
+  position: relative;
+  margin-top: 8px;
+  padding: 10px 11px;
+  color: #222;
+  background: #f8f8f6;
+  border: 1px solid #aaa;
+}
+
+.dst-copy {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 7px;
+  color: #111;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.dst-copy:hover { border-color: #800000; }
+
+.dst-command-wrap {
+  margin: 0 34px 8px 0;
+  padding: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: Consolas, "Courier New", "Microsoft YaHei", monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.dst-command { font: inherit; }
+
+.dst-help {
+  padding-top: 7px;
+  color: #777;
+  border-top: 1px solid #ddd;
+  white-space: pre-line;
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+@media screen {
+  html[data-theme="dark"] .panel .dst-toggle,
+  html[data-theme="dark"] .panel .dst-copy {
+    color: #fff !important;
+    background: #2b2b2b !important;
+    border-color: #666 !important;
+  }
+
+  html[data-theme="dark"] .panel .dst-box {
+    color: #e6e6e6 !important;
+    background: #222 !important;
+    border-color: #666 !important;
+  }
+
+  html[data-theme="dark"] .panel .dst-help {
+    color: #aaa !important;
+    border-color: #555 !important;
+  }
+}
+
+@media print {
+  .builder-summary-row .dst-toggle,
+  .dst-box { display: none !important; }
+}
+
+.ability-plus { left: 3px; }
+.ability-input-wrap.has-value input { padding-left: 9px; }
+
+.combat-correction-cell .correction-plus { left: 3px; }
+.combat-correction-cell.has-value input { padding-left: 9px; }
+
+.skill-correction-plus { left: 3px; }
+.skill-correction-cell.has-value input { padding-left: 9px; }
+
+.equipment-shield-plus { left: 3px; }
+.equipment-shield-ac-cell .equipment-input { padding-left: 10px; }
+
+.equipment-bonus-plus { left: 3px; }
+.equipment-bonus-cell.has-value input { padding-left: 9px; }
+
+.equipment-attack-input { font-weight: normal !important; }
 
 </style>
 </head>
@@ -4878,7 +5108,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
             </select>
           </label>
           <label class="builder-field">
-            <span class="faith-label">信仰<button class="faith-help reference-tooltip-trigger" type="button" data-reference-tooltip="faith" aria-label="查看费伦神系" title="查看费伦神系">?</button></span>
+            <span class="faith-label">信仰<button class="faith-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="faith" aria-label="查看费伦神系" title="查看费伦神系">?</button></span>
             <input id="builder-faith" type="text" placeholder="任意填写" autocomplete="off">
           </label>
         </div>
@@ -5257,10 +5487,17 @@ html[data-theme="dark"] .panel .subclass-under-level input {
 
         <h3 class="builder-section-title">战斗属性 Combat Stats</h3>
         <div class="combat-vitals">
-          <label class="combat-vital">
+          <div class="combat-vital combat-hp-vital">
             <span>生命值</span>
-            <input id="combat-hp" class="is-default" type="text" inputmode="numeric" value="—" autocomplete="off">
-          </label>
+            <div class="hp-value-group">
+              <input id="combat-hp" class="is-default" type="text" inputmode="numeric" value="—" autocomplete="off">
+              <div class="hp-growth-control">
+                <span id="combat-hp-growth-plus" class="hp-growth-plus" aria-hidden="true" hidden>+</span>
+                <input id="combat-hp-growth" class="hp-growth-input" type="text" inputmode="numeric" placeholder="成长" title="额外生命值成长" autocomplete="off" aria-label="额外生命值成长">
+              </div>
+              <button id="combat-hp-growth-help" class="hp-growth-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="hp-growth" aria-label="查看额外生命值成长说明" title="查看额外生命值成长说明">?</button>
+            </div>
+          </div>
           <div class="combat-vital">
             <span>生命骰</span>
             <output id="combat-hit-dice" class="combat-readout">—</output>
@@ -5611,7 +5848,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
                   <td class="magic-attunement-cell"><select class="magic-attunement-select" aria-label="同调"><option value="X" selected>X</option><option value="O">O</option></select></td>
                   <td class="magic-gap" aria-hidden="true"></td>
                   <td><select class="magic-rarity-select" aria-label="稀有度"><option value="">—</option><option value="普通">普通</option><option value="非普通">非普通</option><option value="珍稀">珍稀</option><option value="极珍稀">极珍稀</option><option value="传说">传说</option><option value="神器">神器</option></select></td>
-                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option></select></td>
+                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option><option value="右手">右手</option></select></td>
                   <td><input class="equipment-input magic-feature-input" type="text" autocomplete="off" aria-label="装备特性"></td>
                 </tr>
                 <tr>
@@ -5619,7 +5856,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
                   <td class="magic-attunement-cell"><select class="magic-attunement-select" aria-label="同调"><option value="X" selected>X</option><option value="O">O</option></select></td>
                   <td class="magic-gap" aria-hidden="true"></td>
                   <td><select class="magic-rarity-select" aria-label="稀有度"><option value="">—</option><option value="普通">普通</option><option value="非普通">非普通</option><option value="珍稀">珍稀</option><option value="极珍稀">极珍稀</option><option value="传说">传说</option><option value="神器">神器</option></select></td>
-                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option></select></td>
+                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option><option value="右手">右手</select></td>
                   <td><input class="equipment-input magic-feature-input" type="text" autocomplete="off" aria-label="装备特性"></td>
                 </tr>
                 <tr>
@@ -5627,7 +5864,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
                   <td class="magic-attunement-cell"><select class="magic-attunement-select" aria-label="同调"><option value="X" selected>X</option><option value="O">O</option></select></td>
                   <td class="magic-gap" aria-hidden="true"></td>
                   <td><select class="magic-rarity-select" aria-label="稀有度"><option value="">—</option><option value="普通">普通</option><option value="非普通">非普通</option><option value="珍稀">珍稀</option><option value="极珍稀">极珍稀</option><option value="传说">传说</option><option value="神器">神器</option></select></td>
-                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option></select></td>
+                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option><option value="右手">右手</option></select></td>
                   <td><input class="equipment-input magic-feature-input" type="text" autocomplete="off" aria-label="装备特性"></td>
                 </tr>
                 <tr>
@@ -5635,7 +5872,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
                   <td class="magic-attunement-cell"><select class="magic-attunement-select" aria-label="同调"><option value="X" selected>X</option><option value="O">O</option></select></td>
                   <td class="magic-gap" aria-hidden="true"></td>
                   <td><select class="magic-rarity-select" aria-label="稀有度"><option value="">—</option><option value="普通">普通</option><option value="非普通">非普通</option><option value="珍稀">珍稀</option><option value="极珍稀">极珍稀</option><option value="传说">传说</option><option value="神器">神器</option></select></td>
-                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option></select></td>
+                  <td><select class="magic-part-select" aria-label="部位"><option value="">—</option><option value="全头">全头</option><option value="头部">头部</option><option value="头发">头发</option><option value="面部">面部</option><option value="颈部">颈部</option><option value="身体">身体</option><option value="肩膀">肩膀</option><option value="胸前">胸前</option><option value="背后">背后</option><option value="腰部">腰部</option><option value="胯间">胯间</option><option value="左脚">左脚</option><option value="右脚">右脚</option><option value="双脚">双脚</option><option value="左腿">左腿</option><option value="右腿">右腿</option><option value="双腿">双腿</option><option value="左手">左手</option><option value="右手">右手</option></select></td>
                   <td><input class="equipment-input magic-feature-input" type="text" autocomplete="off" aria-label="装备特性"></td>
                 </tr>
               </tbody>
@@ -5643,7 +5880,15 @@ html[data-theme="dark"] .panel .subclass-under-level input {
           </div>
         </div>
 
-        <p id="builder-summary" class="builder-summary" aria-live="polite">人类</p>
+        <div class="builder-summary-row">
+          <p id="builder-summary" class="builder-summary" aria-live="polite">人类</p>
+          <button id="dst-toggle" class="dst-toggle" type="button" aria-controls="dst-box" aria-expanded="false">显示豹骰导入指令</button>
+        </div>
+        <div id="dst-box" class="dst-box" hidden>
+          <button id="dst-copy" class="dst-copy" type="button">复制</button>
+          <pre class="dst-command-wrap"><code id="dst-command" class="dst-command"></code></pre>
+          <div id="dst-help" class="dst-help"></div>
+        </div>
       </div>
 
       <div class="panel spell-panel">
@@ -8835,12 +9080,20 @@ window.AdventureTraits = {
     const backgroundTraitsBox = document.getElementById("builder-background-traits");
     const customBackgroundEditor = document.getElementById("builder-custom-background-editor");
     const summary = document.getElementById("builder-summary");
+    const dstToggle = document.getElementById("dst-toggle");
+    const dstBox = document.getElementById("dst-box");
+    const dstCommand = document.getElementById("dst-command");
+    const dstCopy = document.getElementById("dst-copy");
+    const dstHelp = document.getElementById("dst-help");
     const totalLevelOutput = document.getElementById("builder-total-level");
     const pbOutput = document.getElementById("builder-pb");
     const saveProfOutput = document.getElementById("builder-save-prof");
     const abilityTooltip = document.getElementById("ability-tooltip");
     const referenceTooltip = document.getElementById("reference-tooltip");
     const combatHp = document.getElementById("combat-hp");
+    const combatHpGrowth = document.getElementById("combat-hp-growth");
+    const combatHpGrowthPlus = document.getElementById("combat-hp-growth-plus");
+    let hpGrowthAutoValue = null;
     const combatInitiative = document.getElementById("combat-initiative");
     const combatSpellAbility = document.getElementById("combat-spell-ability");
     const combatSpellDc = document.getElementById("combat-spell-dc");
@@ -8953,8 +9206,9 @@ window.AdventureTraits = {
         !multiSubclassSelect || !customMultiClassInput || !customMultiSubclassInput ||
         !multiClassReset || !customSavePanel || !builderPanel || !raceTraitsBox || !backgroundSelect ||
         !backgroundTraitsBox || !customBackgroundEditor ||
-        !summary || !totalLevelOutput ||
-        !pbOutput || !saveProfOutput || !abilityTooltip || !referenceTooltip || !combatHp || !combatInitiative ||
+        !summary || !totalLevelOutput || !dstToggle || !dstBox || !dstCommand || !dstCopy || !dstHelp ||
+        !pbOutput || !saveProfOutput || !abilityTooltip || !referenceTooltip || !combatHp ||
+        !combatHpGrowth || !combatHpGrowthPlus || !combatInitiative ||
         !combatSpellAbility || !combatSpellDc || !combatSpellAttack || !combatAc ||
         !combatPassive || !combatHitDice || !combatInitiativeCorrection || !combatAcCorrection ||
         !combatPassiveCorrection || !combatSpellDcCorrection || !combatSpellAttackCorrection ||
@@ -10723,6 +10977,8 @@ ${data.description}`;
       description.classList.toggle("is-default", Boolean(text));
       description.classList.remove("expanded");
       description.scrollTop = 0;
+      applyHpGrowthDefault();
+      updateCombatStats();
     }
 
     const combatStyleCatalog = [
@@ -10936,6 +11192,10 @@ ${data.description}`;
       customNameInput.autocomplete = "off";
       customNameInput.setAttribute("aria-label", "自定义专长名称");
       customNameInput.hidden = true;
+      customNameInput.addEventListener("input", () => {
+        applyHpGrowthDefault();
+        updateCombatStats();
+      });
 
       const customReset = document.createElement("button");
       customReset.type = "button";
@@ -11068,6 +11328,8 @@ ${data.description}`;
       const count = featTableBody.children.length;
       featAdd.disabled = count >= 10;
       featAdd.title = count >= 10 ? "最多10行" : "添加一行（最多10行）";
+      applyHpGrowthDefault();
+      updateCombatStats();
     }
 
     function addFeatRow() {
@@ -13877,7 +14139,7 @@ ${data.description}`;
       const wrapper = document.createElement("div");
       wrapper.className = "png-export-mode png-export-stack";
       wrapper.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-      wrapper.style.cssText = 'color:#111;background:#f8f8f6;font-family:"Microsoft YaHei",Arial,sans-serif;';
+      wrapper.style.cssText = 'color:#111;background:#f8f8f6;font-family:"Microsoft YaHei",Arial,sans-serif;font-size:10px;';
       const width = Math.ceil(Math.max(...panels.map((panel) => panel.getBoundingClientRect().width)));
       wrapper.style.width = `${width}px`;
       for (const panel of panels) wrapper.append(preparePanelForPng(panel));
@@ -13919,6 +14181,12 @@ ${data.description}`;
       if (!panels.length) throw new Error("没有可导出的卡片。");
 
       const previousTheme = document.documentElement.dataset.theme;
+      const previousRootFontSize = document.documentElement.style.fontSize;
+      const mainPage = document.querySelector("main.page-width");
+      const previousMainZoom = mainPage?.style.zoom || "";
+      // 导出图片使用独立的统一缩放：文字和框体一起缩放到 62.5%。
+      if (mainPage) mainPage.style.zoom = "1";
+      document.documentElement.style.fontSize = "16px";
       const holder = document.createElement("div");
       holder.style.cssText = "position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;z-index:-1;";
       document.body.append(holder);
@@ -13947,25 +14215,25 @@ ${data.description}`;
           textarea.style.setProperty("height", `${Math.max(textarea.scrollHeight, 28)}px`, "important");
         }
 
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const width = Math.ceil(wrapperRect.width);
-        let contentBottom = wrapperRect.top;
-        for (const node of wrapper.querySelectorAll("*")) {
-          if (node.classList.contains("panel")) continue;
-          const style = window.getComputedStyle(node);
-          if (style.display === "none") continue;
-          const rect = node.getBoundingClientRect();
-          if (rect.width > 0 && rect.height > 0) contentBottom = Math.max(contentBottom, rect.bottom);
+        const exportScale = 0.625;
+        wrapper.style.transform = `scale(${exportScale})`;
+        wrapper.style.transformOrigin = "top left";
+
+        const layoutWidth = wrapper.offsetWidth;
+        const layoutHeight = Math.max(wrapper.scrollHeight, wrapper.offsetHeight) + 4;
+        const visualWidth = Math.ceil(layoutWidth * exportScale);
+        const visualHeight = Math.ceil(layoutHeight * exportScale);
+        if (!layoutWidth || !layoutHeight || !visualWidth || !visualHeight) {
+          throw new Error("卡片尺寸读取失败。");
         }
-        const height = Math.ceil(contentBottom - wrapperRect.top + 12);
-        if (!width || !height) throw new Error("卡片尺寸读取失败。");
 
         setBuilderSaveStatus("正在生成 PNG…");
         const styleElement = document.createElement("style");
         styleElement.textContent = collectExportCss();
         const styleMarkup = new XMLSerializer().serializeToString(styleElement);
         const wrapperMarkup = new XMLSerializer().serializeToString(wrapper);
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><foreignObject x="0" y="0" width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
+        // 保留原始布局宽度，再缩放 wrapper；只在 Canvas 中裁切缩放后的可视区域。
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${layoutWidth}" height="${layoutHeight}" style="font-size:16px"><foreignObject x="0" y="0" width="${layoutWidth}" height="${layoutHeight}"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
         // file:// 页面中 Blob URL 的 SVG 会被 Chrome 视为跨源并污染 Canvas；
         // data URL 可以避免该问题，同时不引入外部图片依赖。
         setBuilderSaveStatus("正在渲染 PNG…");
@@ -13975,17 +14243,27 @@ ${data.description}`;
         const maxArea = 16000000;
         const scale = Math.min(
           2,
-          maxDimension / width,
-          maxDimension / height,
-          Math.sqrt(maxArea / Math.max(1, width * height))
+          maxDimension / visualWidth,
+          maxDimension / visualHeight,
+          Math.sqrt(maxArea / Math.max(1, visualWidth * visualHeight))
         );
         const canvas = document.createElement("canvas");
-        canvas.width = Math.max(1, Math.round(width * scale));
-        canvas.height = Math.max(1, Math.round(height * scale));
+        canvas.width = Math.max(1, Math.round(visualWidth * scale));
+        canvas.height = Math.max(1, Math.round(visualHeight * scale));
         const context = canvas.getContext("2d");
         context.fillStyle = "#f8f8f6";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        context.drawImage(
+          image,
+          0,
+          0,
+          visualWidth,
+          visualHeight,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
 
         const blob = await canvasToBlob(canvas);
         const url = URL.createObjectURL(blob);
@@ -14001,6 +14279,10 @@ ${data.description}`;
         holder.remove();
         if (previousTheme) document.documentElement.dataset.theme = previousTheme;
         else delete document.documentElement.dataset.theme;
+        if (previousRootFontSize) document.documentElement.style.fontSize = previousRootFontSize;
+        else document.documentElement.style.removeProperty("font-size");
+        if (previousMainZoom) mainPage.style.zoom = previousMainZoom;
+        else mainPage?.style.removeProperty("zoom");
       }
     }
 
@@ -14336,6 +14618,48 @@ ${data.description}`;
       input.classList.toggle("is-default", auto && correction === 0);
     }
 
+    function hasFeat(name) {
+      for (const row of featTableBody.children) {
+        const select = row.querySelector(".feat-name-select");
+        const customInput = row.querySelector(".feat-custom-name-input");
+        const value = select?.value === CUSTOM_VALUE
+          ? customInput?.value.trim()
+          : select?.value.trim();
+        if (value === name) return true;
+      }
+      return false;
+    }
+
+    function hasToughFeat() {
+      return hasFeat("健壮");
+    }
+
+    function getHpGrowthDefault() {
+      const isDwarf = raceSelect.value === "矮人" || currentRaceName() === "矮人";
+      return (isDwarf ? 1 : 0) + (hasToughFeat() ? 2 : 0);
+    }
+
+    function updateHpGrowthPlus() {
+      combatHpGrowthPlus.hidden = combatHpGrowth.value.trim() === "";
+    }
+
+    function applyHpGrowthDefault() {
+      const defaultValue = getHpGrowthDefault();
+      const current = combatHpGrowth.value.trim();
+      if (current === "" || current === hpGrowthAutoValue) {
+        const next = defaultValue ? String(defaultValue) : "";
+        combatHpGrowth.value = next;
+        hpGrowthAutoValue = next;
+      }
+      updateHpGrowthPlus();
+    }
+
+    combatHpGrowth.addEventListener("input", () => {
+      hpGrowthAutoValue = null;
+      updateHpGrowthPlus();
+      updateCombatStats();
+    });
+
     function updateCombatStats() {
       for (const input of [
         combatInitiativeCorrection,
@@ -14380,6 +14704,9 @@ ${data.description}`;
         }
       }
 
+      const hpGrowth = parseFloat(combatHpGrowth.value.trim());
+      if (Number.isFinite(hpGrowth)) hp += hpGrowth * total;
+
       const hasLevels = mainLevel + getExtraMultiLevelSum() > 0;
       combatHitDice.textContent = diceParts.length ? diceParts.join(" + ") : "—";
 
@@ -14390,7 +14717,11 @@ ${data.description}`;
         combatHp.classList.add("is-default");
       }
 
-      setCombatTotal(combatInitiative, "initiative", 10 + dexMod);
+      setCombatTotal(
+        combatInitiative,
+        "initiative",
+        dexMod + (hasFeat("警戒") && pb !== null ? pb : 0)
+      );
       const armorAcRaw = equipmentArmorAc.value.trim();
       const armorAc = armorAcRaw === "" ? null : Number(armorAcRaw);
       const shieldAc = equipmentShieldEquipped.value === "是"
@@ -14481,6 +14812,7 @@ ${data.description}`;
 
     function updateSummary() {
       updateSubclassLevelColor();
+      applyHpGrowthDefault();
       const parts = [];
       const name = characterName.value.trim();
       if (name) parts.push(name);
@@ -14505,7 +14837,132 @@ ${data.description}`;
 
       summary.textContent = parts.join(" · ");
       updateDerivedStats();
+      updateDstCommand();
     }
+
+    function dstText(value, fallback = "0") {
+      const text = String(value ?? "").trim();
+      return text && text !== "—" ? text.replace(/^\+/, "") : fallback;
+    }
+
+    function getDstWeapons() {
+      const weapons = [];
+      for (const row of equipmentWeaponBody.querySelectorAll("tr")) {
+        const select = row.querySelector(".equipment-weapon-name-select");
+        const custom = row.querySelector(".weapon-custom-name");
+        const name = select?.value === CUSTOM_VALUE
+          ? custom?.value.trim()
+          : select?.value.trim();
+        if (!name) continue;
+        const attack = row.querySelector(".equipment-attack-input")?.value.trim() || "0";
+        weapons.push({ name, attack: dstText(attack, "0") });
+      }
+      return weapons;
+    }
+
+    function updateDstCommand() {
+      if (!dstCommand) return;
+      const attributes = ["str", "dex", "con", "int", "wis", "cha"];
+      const attributeLabels = {
+        str: "力量", dex: "敏捷", con: "体质", int: "智力", wis: "感知", cha: "魅力"
+      };
+      const parts = [".dst"];
+
+      for (const key of attributes) {
+        parts.push(`${attributeLabels[key]}:${dstText(document.getElementById(`ability-${key}-value`)?.textContent, "10")}`);
+      }
+
+      const hp = dstText(combatHp.value, "0");
+      parts.push(`hp:${hp}`, `hpmax:${hp}`);
+      parts.push(`先攻:${dstText(combatInitiative.value, "0")}`);
+      parts.push(`ac:${dstText(combatAc.value, "10")}`);
+      parts.push(`dc:${dstText(combatSpellDc.value, "0")}`);
+      parts.push(`pp:${dstText(combatPassive.value, "10")}`);
+      parts.push(`熟练:${dstText(pbOutput.textContent, "0")}`);
+
+      for (const row of document.querySelectorAll(".skill-table tbody tr")) {
+        const nameCell = row.querySelector(".skill-name-cell");
+        if (!nameCell) continue;
+        const proficiency = row.querySelector(".skill-prof-select")?.value;
+        const marker = proficiency === "2" ? "*2" : proficiency === "1" ? "*" : "";
+        const correction = dstText(row.querySelector(".skill-correction-input")?.value, "0");
+        parts.push(`${nameCell.textContent.trim()}${marker}:${correction}`);
+      }
+
+      const weapons = getDstWeapons();
+      for (const weapon of weapons) parts.push(`${weapon.name}:${weapon.attack}`);
+
+      if (combatSpellAbility.value) {
+        parts.push(`法术攻击:${dstText(combatSpellAttack.value, "0")}`);
+      }
+
+      dstCommand.textContent = parts.join(" ");
+
+      const character = characterName.value.trim() || "角色名";
+      const helpLines = [
+        "使用例子：",
+        "【.setdnd】确保骰子为dnd模式",
+        `【.nn ${character}】设置角色卡名字`,
+        "【.dst ...】设置技能加值",
+        "【.sndnd】自动设置群名片（需要骰子有管理员权限）",
+        "【.rc 运动】进行检定",
+        "【.rc 优势 特技】进行优势检定"
+      ];
+      for (const weapon of weapons) {
+        helpLines.push(`【.rc+${weapon.name}】进行武器攻击`);
+      }
+      if (combatSpellAbility.value) {
+        helpLines.push("【.rc+法术攻击】进行法术攻击");
+      }
+      helpLines.push(
+        "【.show 运动】检查加值",
+        "【.hp-10】减少血量",
+        "【.buff hp+10】添加临时生命值"
+      );
+      dstHelp.textContent = helpLines.join("\n");
+    }
+
+    function copyDstCommand() {
+      updateDstCommand();
+      const text = dstCommand.textContent;
+      const fallbackCopy = () => {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.cssText = "position:fixed;left:-100000px;top:0;";
+        document.body.append(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+        } catch (error) {
+          // 复制失败时保留文本供手动选择。
+        }
+        textarea.remove();
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          dstCopy.textContent = "已复制";
+          window.setTimeout(() => { dstCopy.textContent = "复制"; }, 1500);
+        }).catch(() => {
+          fallbackCopy();
+          dstCopy.textContent = "已复制";
+          window.setTimeout(() => { dstCopy.textContent = "复制"; }, 1500);
+        });
+      } else {
+        fallbackCopy();
+        dstCopy.textContent = "已复制";
+        window.setTimeout(() => { dstCopy.textContent = "复制"; }, 1500);
+      }
+    }
+
+    dstToggle.addEventListener("click", () => {
+      const willOpen = dstBox.hidden;
+      dstBox.hidden = !willOpen;
+      dstToggle.setAttribute("aria-expanded", String(willOpen));
+      dstToggle.textContent = willOpen ? "隐藏豹骰导入指令" : "显示豹骰导入指令";
+      if (willOpen) updateDstCommand();
+    });
+    dstCopy.addEventListener("click", copyDstCommand);
 
     const abilityTooltipTexts = {
       attr: "六项属性：力量、敏捷、体质、智力、感知、魅力。点击属性格可切换该属性的豁免熟练。",
@@ -14629,6 +15086,8 @@ ${data.description}`;
       tool: `<span class="reference-title">工具熟练 Tool Proficiency</span>
 <p>如果你具有某个工具的熟练，则你可以在使用这个工具进行任意属性检定时加入你的熟练加值。如果你同时拥有该次属性检定中所使用到的技能的熟练，你在这次检定中还会具有<b class="term-green">优势</b>。</p>
 <p>你的特性或许会给予你某个工具的熟练。</p>`,
+      "hp-growth": `<span class="reference-title">额外生命值成长</span>
+<p>额外生命值成长，例如专长、种族、职业特性带来的每级生命值。</p>`,
       faith: `<span class="reference-title">费伦神系</span>
 <table class="tooltip-deity-table">
   <thead><tr><th>神祇</th><th>典型崇拜者</th></tr></thead>
@@ -14866,7 +15325,14 @@ ${data.description}`;
       target.addEventListener("mouseleave", cancelAbilityTooltip);
       target.addEventListener("focusin", () => scheduleAbilityTooltip(target));
       target.addEventListener("focusout", cancelAbilityTooltip);
+      target.addEventListener("click", () => showAbilityTooltip(target));
     }
+
+    document.addEventListener("pointerdown", (event) => {
+      if (abilityTooltip.hidden) return;
+      if (abilityTooltip.contains(event.target) || event.target.closest("[data-tooltip-key]")) return;
+      cancelAbilityTooltip();
+    });
 
     window.addEventListener("scroll", cancelAbilityTooltip, true);
     window.addEventListener("resize", cancelAbilityTooltip);
@@ -14878,14 +15344,13 @@ ${data.description}`;
       target.addEventListener("focusout", cancelReferenceTooltip);
     }
 
-    const faithHelp = document.querySelector(".faith-help");
-    if (faithHelp) {
-      faithHelp.addEventListener("pointerdown", (event) => event.stopPropagation());
-      faithHelp.addEventListener("contextmenu", (event) => event.preventDefault());
-      faithHelp.addEventListener("click", (event) => {
+    for (const helpButton of document.querySelectorAll(".reference-click-help")) {
+      helpButton.addEventListener("pointerdown", (event) => event.stopPropagation());
+      helpButton.addEventListener("contextmenu", (event) => event.preventDefault());
+      helpButton.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        showReferenceTooltip(faithHelp);
+        showReferenceTooltip(helpButton);
       });
     }
 
@@ -15757,6 +16222,10 @@ ${data.description}`;
     }
 
     setupAppearanceImageInteraction();
+
+    builderPanel.addEventListener("input", updateDstCommand);
+    builderPanel.addEventListener("change", updateDstCommand);
+    updateDstCommand();
 
     initializeBuilderPersistence();
 
