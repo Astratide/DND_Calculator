@@ -4898,6 +4898,38 @@ html[data-theme="dark"] .panel .subclass-under-level input {
 
 .equipment-attack-input { font-weight: normal !important; }
 
+.table-head-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.table-head-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.65rem;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.table-head-help:hover { background: rgba(255, 255, 255, 0.2); }
+
+.backpack-gear-select option:disabled { color: #999; }
+
 </style>
 </head>
 <body>
@@ -5212,7 +5244,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
               <tr>
                 <th scope="row">属性值</th>
                 <td><div id="custom-background-abilities" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="你的背景列出了角色的三项属性值。将其中一项提升2，另一项提升1；或者将三项都分别增加1。这些提升都不能使得属性值超过20。"></div></td>
-                <th scope="row">专长</th>
+                <th scope="row">起源专长</th>
                 <td><div id="custom-background-feat" class="custom-background-value" contenteditable="true" role="textbox" data-placeholder="背景为你的角色提供一项特定的起源专长。"></div></td>
               </tr>
               <tr>
@@ -5241,7 +5273,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
         <div class="language-tools-grid">
           <table class="language-table" aria-label="语言">
             <colgroup><col><col><col class="language-action-col"></colgroup>
-            <thead><tr><th colspan="3" class="reference-tooltip-trigger" data-reference-tooltip="language" tabindex="0">语言<button id="language-add" class="table-head-add" type="button" title="添加一行语言" aria-label="添加一行语言">＋</button></th></tr></thead>
+            <thead><tr><th colspan="3"><span class="table-head-title">语言<button class="table-head-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="language" aria-label="查看语言说明" title="查看语言说明">?</button></span><button id="language-add" class="table-head-add" type="button" title="添加一行语言" aria-label="添加一行语言">＋</button></th></tr></thead>
             <tbody id="language-body">
               <tr><td><input class="language-tool-input is-default" type="text" value="通用语" autocomplete="off" aria-label="语言1"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言2"></td><td class="language-action-cell"></td></tr>
               <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言3"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="语言4"></td><td class="language-action-cell"></td></tr>
@@ -5251,7 +5283,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
 
           <table class="tool-table" aria-label="熟练工具">
             <colgroup><col><col><col class="language-action-col"></colgroup>
-            <thead><tr><th colspan="3" class="reference-tooltip-trigger" data-reference-tooltip="tool" tabindex="0">熟练工具<button id="tool-add" class="table-head-add" type="button" title="添加一行工具" aria-label="添加一行工具">＋</button></th></tr></thead>
+            <thead><tr><th colspan="3"><span class="table-head-title">熟练工具<button class="table-head-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="tool" aria-label="查看工具熟练说明" title="查看工具熟练说明">?</button></span><button id="tool-add" class="table-head-add" type="button" title="添加一行工具" aria-label="添加一行工具">＋</button></th></tr></thead>
             <tbody id="tool-body">
               <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具1"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具2"></td><td class="language-action-cell"></td></tr>
               <tr><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具3"></td><td><input class="language-tool-input" type="text" autocomplete="off" aria-label="工具4"></td><td class="language-action-cell"></td></tr>
@@ -8399,7 +8431,7 @@ window.AdventureTraits = {
     "74. 为国效力。我相信国家利益高于个人安稳，因此接受远行任务。",
     "75. 指令之意。我为了宗主、导师、神明或领主的指令或任务而踏上旅途。",
     "76. 热爱自然。我为保护森林、河流、野兽或自然平衡而离开家园。",
-    "77. 不再受伤。我曾被欺凌或背叛，如今冒险只为变强到无人能再伤害自己。",
+    "77. 曾遭背叛。我曾被欺凌或背叛，如今冒险只为变强到无人能再伤害自己。",
     "78. 我的家人。我的父母亲或亲人曾对我有过深远影响……或许她们不需要我也能过得很好。",
     "79. 渴望认可。我想让某个重要之人看见自己、承认自己，于是追求功绩。",
     "80. 非为革命。我加入正义事业并非为了理想，而是为了私利、人情或机会。",
@@ -8435,7 +8467,7 @@ window.AdventureTraits = {
     "110. 怒火难平。某件事激起我无法压制的愤怒，使我离家追查或讨伐元凶。",
     "111. 极端理想。我有高尚目标，却愿意采取危险甚至残酷的手段达成。",
     "112. 借人成愿。我自己无法实现梦想，于是帮助另一个人成功，仿佛替自己圆梦。",
-    "113. 讨子认可。我是父母或导师，却渴望晚辈认可，只好用行动证明自己。",
+    "113. 团圆渴望。我迫切地需要回到某个地方或者某人身边，但我在纷乱中与之失散了。",
     "114. 讨父认可。我渴望父母、导师或族长一句称赞，于是出外建立功绩。",
     "115. 强化之路。我寻找魔法师、工匠或神秘势力，想修复或强化自己的身体。",
     "116. 追求希望。灾难将临，但我相信世界仍有希望，于是离开安稳之地去寻找能改变局势的火种。",
@@ -8533,15 +8565,16 @@ window.AdventureTraits = {
     "37. 孤独。我给许多小物件取了名字，时不时与之倾诉。它们是我唯一的伙伴。"
   ],
   "自定义背景_理念_仅善良阵营": [
-    "1. 美好。我追求世界的美好与和谐。",
-    "2. 慈善。我关心他人的福祉，乐于施予帮助。",
-    "3. 大义。我坚持正义与道德原则。",
-    "4. 生命。我尊重生命，珍视每一个生命个体。",
-    "5. 尊重。我尊重他人的权利和尊严。",
-    "6. 救死扶伤。我发誓要保护并救治那些需要帮助的人。",
-    "7. 仁爱。我关心他人的幸福，愿意为他人付出。",
-    "8. 号召。我积极号召他人参与善行，推动社会正义。",
-    "9. 好奇与理解。表达重视谁的最好方式就是去了解他们。"
+    "1. 美好。我追求世界的美好与和谐。（善良）",
+    "2. 慈善。我关心他人的福祉，乐于施予帮助。（善良）",
+    "3. 大义。我坚持正义与道德原则。（善良）",
+    "4. 生命。我尊重生命，珍视每一个生命个体。（善良）",
+    "5. 尊重。我尊重他人的权利和尊严。（善良）",
+    "6. 救死扶伤。我发誓要保护并救治那些需要帮助的人。（善良）",
+    "7. 仁爱。我关心他人的幸福，愿意为他人付出。（善良） ",
+    "8. 号召。我积极号召他人参与善行，推动社会正义。（善良）",
+    "9. 好奇与理解。表达重视谁的最好方式就是去了解他们。（善良）",
+    "10. 音乐与故事。我喜欢听歌和听故事，还喜欢分享给他人，让大家都能感受到舒适和平静。（善良）",
   ],
   "自定义背景_理念_仅邪恶阵营": [
     "1. 支配。我渴望掌控他人和局势。（邪恶）",
@@ -8573,15 +8606,15 @@ window.AdventureTraits = {
     "6. 人民。我关心民众的福祉，注重社会整体利益。（中立）"
   ],
   "自定义背景_理念_仅混乱阵营": [
-    "1. 转变。我追求变化和革新，喜欢打破常规。",
-    "2. 创造性。我善于创造和创新，喜欢独特的解决方案。",
-    "3. 自由。我追求自由，不愿被任何人或事束缚。",
-    "4. 自主。我重视自主权，喜欢独立做决定。",
-    "5. 无下限。我不受约束，行为不受限制。",
-    "6. 稀奇古怪。我喜欢与众不同，追求奇特和独特。",
-    "7. 混乱之美。我欣赏混乱中的美感，认为秩序并非唯一的价值。",
-    "8. 自决。所有生物都有权决定自己的生活与结局。",
-    "9. 同情。我分担彼此的痛苦，使我们更接近和平与团结。"
+    "1. 转变。我追求变化和革新，喜欢打破常规。（混乱）",
+    "2. 创造性。我善于创造和创新，喜欢独特的解决方案。（混乱）",
+    "3. 自由。我追求自由，不愿被任何人或事束缚。（混乱）",
+    "4. 自主。我重视自主权，喜欢独立做决定。（混乱）",
+    "5. 无下限。我不受约束，行为不受限制。（混乱）",
+    "6. 稀奇古怪。我喜欢与众不同，追求奇特和独特。（混乱）",
+    "7. 混乱之美。我欣赏混乱中的美感，认为秩序并非唯一的价值。（混乱）",
+    "8. 自决。所有生物都有权决定自己的生活与结局。（混乱）",
+    "9. 同情。我分担彼此的痛苦，使我们更接近和平与团结。（混乱）"
   ],
   "自定义背景_理念_任意阵营": [
     "1. 好奇与探索。我对世界充满好奇，喜欢探索未知。（任意）",
@@ -8624,7 +8657,21 @@ window.AdventureTraits = {
     "23. 不择手段。我认为为了实现目标需要不择手段，哪怕是牺牲无辜者。",
     "24. 自私。自己顾不好自己的家伙，只能算活该。",
     "25. 摒弃弱者。除那些久经沙场的战士外，任何人都不值得我尊重。",
-    "26. 偷窃癖。如果我比原主人更需要某物，那我拿走就不算偷。"
+    "26. 偷窃癖。如果我比原主人更需要某物，那我拿走就不算偷。",
+    "27. 欺骗。我习惯通过谎言和欺骗来达到目的。",
+    "28. 虚荣。我渴望他人的赞美和认可，即使不值得也要追求。",
+    "29. 冲动。我常常凭一时的冲动行事，而不考虑后果。",
+    "30. 复仇心。我难以原谅那些伤害过我的人，总想着报复。",
+    "31. 冷漠。我对他人的痛苦漠不关心，缺乏同情心。",
+    "32. 虚弱。我身体或精神上有某种弱点，限制了我的能力。",
+    "33. 偏执。我对周围的人和事持怀疑态度，常常过度防备。",
+    "34. 自负。我对自己的能力过于自信，容易低估风险。",
+    "35. 懒惰。我缺乏动力，常常拖延或逃避责任。",
+    "36. 不择手段。我认为为了实现目标需要不择手段，我也会很快就做出牺牲来实现我的目标。",
+    "37. 宿命。我知道我的未来已经注定了，我所做的一切都会通往那个被预言的结局。",
+    "38. 被害妄想。我确信有什么东西在追着我，它会出现在镜子里，梦里，和没有人能去到的地方。",
+    "39. 厄运缠身。我相信厄运会跟着我，任何接近我的人都会面临悲惨的结局。",
+    "40. 被诅咒。我被诅咒了。因此，我永远无法得到安宁。"
   ],
   "个性_侍僧": [
     "1. 我崇拜某个英雄，并时刻以其事迹作为榜样。（侍僧）",
@@ -10308,7 +10355,7 @@ window.AdventureTraits = {
       backgroundTraitsBox.hidden = false;
       backgroundTraitsBox.innerHTML = `<b class="maroon">${value} ${data.english}</b><br>
 <b>属性值：</b>${abilities}<br>
-<b>专长：</b>${data.feat}<br>
+<b>起源专长：</b>${data.feat}<br>
 <b>技能熟练：</b>${skills}<br>
 <b>工具熟练：</b>${data.tool}<br>
 <b>装备：</b>${data.equipment}<br><br>
@@ -11580,6 +11627,63 @@ ${data.description}`;
       "水袋": { weight: "5磅（满）", price: "2SP" }
     };
 
+    const backpackWeaponData = {
+      "短棒": { weight: "2磅", price: "1SP" },
+      "匕首": { weight: "1磅", price: "2GP" },
+      "巨棒": { weight: "10磅", price: "2SP" },
+      "手斧": { weight: "2磅", price: "5GP" },
+      "标枪": { weight: "2磅", price: "5SP" },
+      "轻锤": { weight: "2磅", price: "2GP" },
+      "硬头锤": { weight: "4磅", price: "5GP" },
+      "长棍": { weight: "4磅", price: "2SP" },
+      "镰刀": { weight: "2磅", price: "1GP" },
+      "矛": { weight: "3磅", price: "1GP" },
+      "飞镖": { weight: "0.25磅", price: "5CP" },
+      "轻弩": { weight: "5磅", price: "25GP" },
+      "短弓": { weight: "2磅", price: "25GP" },
+      "投石索": { weight: "—", price: "1SP" },
+      "战斧": { weight: "4磅", price: "10GP" },
+      "链枷": { weight: "2磅", price: "10GP" },
+      "长柄刀": { weight: "6磅", price: "20GP" },
+      "巨斧": { weight: "7磅", price: "30GP" },
+      "巨剑": { weight: "6磅", price: "50GP" },
+      "戟": { weight: "6磅", price: "20GP" },
+      "骑枪": { weight: "6磅", price: "10GP" },
+      "长剑": { weight: "3磅", price: "15GP" },
+      "巨锤": { weight: "10磅", price: "10GP" },
+      "钉头锤": { weight: "4磅", price: "15GP" },
+      "长矛": { weight: "18磅", price: "5GP" },
+      "刺剑": { weight: "2磅", price: "25GP" },
+      "弯刀": { weight: "3磅", price: "25GP" },
+      "短剑": { weight: "2磅", price: "10GP" },
+      "三叉戟": { weight: "4磅", price: "5GP" },
+      "战镐": { weight: "2磅", price: "5GP" },
+      "战锤": { weight: "5磅", price: "15GP" },
+      "鞭": { weight: "2磅", price: "2GP" },
+      "吹箭筒": { weight: "1磅", price: "10GP" },
+      "手弩": { weight: "3磅", price: "75GP" },
+      "重弩": { weight: "18磅", price: "50GP" },
+      "长弓": { weight: "2磅", price: "50GP" },
+      "火铳": { weight: "10磅", price: "500GP" },
+      "手铳": { weight: "3磅", price: "250GP" }
+    };
+
+    const backpackArmorData = {
+      "布甲": { weight: "8磅", price: "5GP" },
+      "皮甲": { weight: "10磅", price: "10GP" },
+      "镶钉皮甲": { weight: "13磅", price: "45GP" },
+      "兽皮甲": { weight: "12磅", price: "10GP" },
+      "链甲衫": { weight: "20磅", price: "50GP" },
+      "鳞甲": { weight: "45磅", price: "50GP" },
+      "胸甲": { weight: "20磅", price: "400GP" },
+      "半身板甲": { weight: "40磅", price: "750GP" },
+      "环甲": { weight: "40磅", price: "30GP" },
+      "链甲": { weight: "55磅", price: "75GP" },
+      "板条甲": { weight: "60磅", price: "200GP" },
+      "板甲": { weight: "65磅", price: "1500GP" },
+      "盾牌": { weight: "6磅", price: "10GP" }
+    };
+
     const adventuringGearDescriptions = {
       "强酸": "当你执行攻击动作时，你可以将你的一次攻击替换为丢出一小瓶强酸。你可以选择位于你20尺内可见的一个生物或物件作为目标。该目标必须通过一次敏捷豁免（DC等于8+你的敏捷调整值+你的熟练加值），否则承受2d6点强酸伤害。",
       "炽火胶": "当你执行攻击动作时，你可以将你的一次攻击替换为丢出一扁瓶炽火胶。你可以选择位于你20尺内可见的一个生物或物件作为目标。该目标必须通过一次敏捷豁免（DC等于8+你的敏捷调整值+你的熟练加值），否则承受1d4点火焰伤害并开始燃烧（见术语汇编）。",
@@ -11886,7 +11990,7 @@ ${data.description}`;
 
     function updateSkillTotals() {
       const { total } = getCombatTotalLevel();
-      const pb = total >= 1 ? Math.floor((total - 1) / 4) + 2 : 0;
+      const pb = Math.max(2, Math.floor((total - 1) / 4) + 2);
       const bardLevel = getBardLevel();
       let proficientCount = 0;
       let expertiseCount = 0;
@@ -12233,7 +12337,7 @@ ${data.description}`;
 
     function getCurrentPB() {
       const { total } = getCombatTotalLevel();
-      return total >= 1 ? Math.floor((total - 1) / 4) + 2 : 0;
+      return Math.max(2, Math.floor((total - 1) / 4) + 2);
     }
 
     function updateWeaponRowDefaults(row, force = false) {
@@ -14672,7 +14776,7 @@ ${data.description}`;
       }
 
       const { total, mainLevel } = getCombatTotalLevel();
-      const pb = total >= 1 ? Math.floor((total - 1) / 4) + 2 : null;
+      const pb = Math.max(2, Math.floor((total - 1) / 4) + 2);
       const conMod = getModifierValue("con") ?? 0;
       const dexMod = getModifierValue("dex") ?? 0;
       const wisMod = getModifierValue("wis") ?? 0;
@@ -14750,10 +14854,10 @@ ${data.description}`;
       const mainLevel = classSelect.value ? (getLevel(levelInput) ?? 0) : 0;
       const multiLevel = getExtraMultiLevelSum();
       const totalLevel = mainLevel + multiLevel;
-      const pb = totalLevel >= 1 ? Math.floor((totalLevel - 1) / 4) + 2 : null;
+      const pb = Math.max(2, Math.floor((totalLevel - 1) / 4) + 2);
 
       totalLevelOutput.textContent = totalLevel >= 1 ? String(totalLevel) : "—";
-      pbOutput.textContent = pb === null ? "—" : `+${pb}`;
+      pbOutput.textContent = `+${pb}`;
 
       const saveNames = activeSaveNames();
       saveProfOutput.textContent = saveNames.length ? saveNames.join("、") : "—";
@@ -14869,7 +14973,9 @@ ${data.description}`;
       const parts = [".dst"];
 
       for (const key of attributes) {
-        parts.push(`${attributeLabels[key]}:${dstText(document.getElementById(`ability-${key}-value`)?.textContent, "10")}`);
+        const saveProficient = document.querySelector(`.save-prof-toggle[data-ability="${key}"]`)?.checked;
+        const marker = saveProficient ? "*" : "";
+        parts.push(`${attributeLabels[key]}${marker}:${dstText(document.getElementById(`ability-${key}-value`)?.textContent, "10")}`);
       }
 
       const hp = dstText(combatHp.value, "0");
@@ -15880,7 +15986,9 @@ ${data.description}`;
       const weight = row.querySelector(".backpack-gear-weight");
       const price = row.querySelector(".backpack-gear-price");
       syncGearCustomUI(row);
-      const data = adventuringGearData[select.value];
+      const data = adventuringGearData[select.value] ||
+        backpackWeaponData[select.value] ||
+        backpackArmorData[select.value];
 
       if (!data) {
         description.value = "";
@@ -15920,6 +16028,22 @@ ${data.description}`;
         option.textContent = name;
         select.appendChild(option);
       }
+
+      const appendGearGroup = (label, data) => {
+        const separator = document.createElement("option");
+        separator.value = "";
+        separator.textContent = label;
+        separator.disabled = true;
+        select.appendChild(separator);
+        for (const name of Object.keys(data)) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        }
+      };
+      appendGearGroup("——武器——", backpackWeaponData);
+      appendGearGroup("——护甲——", backpackArmorData);
 
       const customOption = document.createElement("option");
       customOption.value = CUSTOM_VALUE;
@@ -16235,7 +16359,7 @@ ${data.description}`;
     undoManager.lastState = captureUndoState();
   })();
 
-  
+
 </script>
   <script>
 (function () {
