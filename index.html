@@ -2714,7 +2714,9 @@
 
     .class-feature-text {
       width: 100%;
-      min-height: 180px;
+      height: 62px;
+      min-height: 62px;
+      overflow: auto;
       padding: 8px 10px;
       color: #111;
       background: #fff;
@@ -2733,8 +2735,10 @@
     }
 
     .class-feature-editor .custom-editor {
-      min-height: 180px;
+      height: 62px;
+      min-height: 62px;
       max-height: none;
+      overflow: auto;
       white-space: pre-wrap;
     }
 
@@ -3802,7 +3806,8 @@
       .class-feature-title { font-size: 0.84rem; }
 
       .class-feature-text {
-        min-height: 150px;
+        height: 62px;
+        min-height: 62px;
         font-size: 0.8rem;
       }
 
@@ -4930,6 +4935,211 @@ html[data-theme="dark"] .panel .subclass-under-level input {
 
 .backpack-gear-select option:disabled { color: #999; }
 
+@media print {
+  .feat-description:not(.expanded) {
+    height: 30px !important;
+    min-height: 30px !important;
+    overflow: hidden !important;
+    field-sizing: auto !important;
+  }
+
+  .backpack-description:not(.is-expanded),
+  .backpack-tool-operation:not(.is-expanded) {
+    height: 28px !important;
+    min-height: 28px !important;
+    overflow: hidden !important;
+    field-sizing: auto !important;
+  }
+}
+
+.class-feature-editor {
+  background: #f8f8f6;
+}
+
+.class-feature-editor .class-feature-text {
+  background: #f8f8f6;
+}
+
+.class-feature-table-stack {
+  margin-top: 8px;
+}
+
+.class-feature-paste-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid #f8f8f6;
+  background: transparent;
+}
+
+.class-feature-paste-table td {
+  padding: 0;
+  border: 1px solid #f8f8f6;
+  background: transparent;
+}
+
+.class-feature-paste-table .feature-name-row td {
+  position: relative;
+}
+
+.class-feature-paste-table .feature-details-row td {
+  background: #fff;
+}
+
+.class-feature-paste-table .feature-name-cell,
+.class-feature-paste-table .feature-details-cell {
+  padding: 4px 6px;
+  color: #111;
+  outline: none;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.class-feature-paste-table .feature-name-cell {
+  min-height: 28px;
+  padding-left: 27px;
+  padding-right: 58px;
+  white-space: normal;
+}
+
+.class-feature-paste-table .feature-details-cell {
+  min-height: 32px;
+  white-space: pre-wrap;
+}
+
+.class-feature-paste-table .feature-details-row {
+  display: none;
+}
+
+.class-feature-paste-table .feature-details-row.is-expanded {
+  display: table-row;
+}
+
+.class-feature-paste-table .feature-drag-handle {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: #888;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+}
+
+.class-feature-paste-table .feature-drag-handle:active {
+  cursor: grabbing;
+  color: #800000;
+}
+
+.class-feature-paste-table .feature-row-actions {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  gap: 2px;
+}
+
+.class-feature-paste-table .feature-table-toggle,
+.class-feature-paste-table .feature-table-delete {
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  color: #800000;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.72rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.class-feature-paste-table .feature-table-toggle:hover,
+.class-feature-paste-table .feature-table-delete:hover {
+  border-color: #800000;
+}
+
+.class-feature-paste-table .feature-name-row.is-dragging {
+  opacity: 0.55;
+}
+
+.class-feature-paste-table .feature-name-row.is-drop-target td {
+  outline: 1px solid #800000;
+  outline-offset: -1px;
+}
+
+body.feature-dragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.class-feature-paste-table .feature-details-cell table {
+  width: 100%;
+  margin: 5px 0;
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.class-feature-paste-table .feature-details-cell th,
+.class-feature-paste-table .feature-details-cell td {
+  padding: 2px 4px;
+  color: #111;
+  background: transparent;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
+
+.class-feature-paste-table .feature-details-cell th {
+  background: #f1f1ef;
+  font-weight: bold;
+}
+
+.class-feature-paste-table .feature-details-cell table.feature-auto-table-wide th,
+.class-feature-paste-table .feature-details-cell table.feature-auto-table-wide td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+@media print {
+  .class-feature-paste-table .feature-table-toggle,
+  .class-feature-paste-table .feature-table-delete,
+  .class-feature-paste-table .feature-drag-handle {
+    display: none !important;
+  }
+}
+
+@media screen {
+  html[data-theme="dark"] .class-feature-paste-table,
+  html[data-theme="dark"] .class-feature-paste-table td {
+    border-color: #444 !important;
+  }
+
+  html[data-theme="dark"] .class-feature-paste-table .feature-details-row td {
+    background: #2c2c2c !important;
+  }
+
+  html[data-theme="dark"] .class-feature-paste-table .feature-name-cell,
+  html[data-theme="dark"] .class-feature-paste-table .feature-details-cell {
+    color: #e6e6e6 !important;
+  }
+
+  html[data-theme="dark"] .class-feature-paste-table .feature-table-toggle,
+  html[data-theme="dark"] .class-feature-paste-table .feature-table-delete {
+    color: #f0a0a0 !important;
+    background: #2b2b2b !important;
+    border-color: #666 !important;
+  }
+
+  html[data-theme="dark"] .class-feature-paste-table .feature-drag-handle {
+    color: #aaa !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -5329,7 +5539,7 @@ html[data-theme="dark"] .panel .subclass-under-level input {
             <button type="button" class="custom-format" data-format="spell">法术</button>
             <button type="button" class="custom-format" data-format="list">• 列表</button>
           </div>
-          <div id="builder-custom-race-traits" class="custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此填写自定义种族特质，可换行。选中文字后可使用上方按钮标记标题、术语、法术或列表。"></div>
+          <div id="builder-custom-race-traits" class="custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此填写自定义种族特质。选中文字后可使用上方按钮标记标题、术语、法术或列表。"></div>
         </div>
       </div>
 
@@ -5727,7 +5937,22 @@ html[data-theme="dark"] .panel .subclass-under-level input {
                 <button type="button" class="custom-format" data-format="spell">法术</button>
                 <button type="button" class="custom-format" data-format="list">• 列表</button>
               </div>
-              <div id="main-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职的职业特性，可换行。" aria-label="主职职业特性"></div>
+              <div id="main-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职的职业特性。" aria-label="主职职业特性"></div>
+            </div>
+          </div>
+
+          <div id="main-subclass-feature-block" class="class-feature-block" hidden>
+            <div id="main-subclass-feature-title" class="class-feature-title"></div>
+            <div class="class-feature-editor">
+              <div class="custom-editor-toolbar" role="toolbar" aria-label="主职子职特性格式">
+                <button type="button" class="custom-format" data-format="plain">正文</button>
+                <button type="button" class="custom-format" data-format="bold">粗体</button>
+                <button type="button" class="custom-format" data-format="title">标题</button>
+                <button type="button" class="custom-format" data-format="term">术语</button>
+                <button type="button" class="custom-format" data-format="spell">法术</button>
+                <button type="button" class="custom-format" data-format="list">• 列表</button>
+              </div>
+              <div id="main-subclass-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职子职特性。" aria-label="主职子职特性"></div>
             </div>
           </div>
 
@@ -5742,7 +5967,22 @@ html[data-theme="dark"] .panel .subclass-under-level input {
                 <button type="button" class="custom-format" data-format="spell">法术</button>
                 <button type="button" class="custom-format" data-format="list">• 列表</button>
               </div>
-              <div id="multi-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职的职业特性，可换行。" aria-label="兼职职业特性"></div>
+              <div id="multi-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职的职业特性。" aria-label="兼职职业特性"></div>
+            </div>
+          </div>
+
+          <div id="multi-subclass-feature-block" class="class-feature-block" hidden>
+            <div id="multi-subclass-feature-title" class="class-feature-title"></div>
+            <div class="class-feature-editor">
+              <div class="custom-editor-toolbar" role="toolbar" aria-label="兼职子职特性格式">
+                <button type="button" class="custom-format" data-format="plain">正文</button>
+                <button type="button" class="custom-format" data-format="bold">粗体</button>
+                <button type="button" class="custom-format" data-format="title">标题</button>
+                <button type="button" class="custom-format" data-format="term">术语</button>
+                <button type="button" class="custom-format" data-format="spell">法术</button>
+                <button type="button" class="custom-format" data-format="list">• 列表</button>
+              </div>
+              <div id="multi-subclass-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职子职特性。" aria-label="兼职子职特性"></div>
             </div>
           </div>
         </div>
@@ -9169,7 +9409,13 @@ window.AdventureTraits = {
     const mainClassFeatureBlock = document.getElementById("main-class-feature-block");
     const mainClassFeatureTitle = document.getElementById("main-class-feature-title");
     const mainClassFeatureText = document.getElementById("main-class-feature-text");
+    const mainSubclassFeatureBlock = document.getElementById("main-subclass-feature-block");
+    const mainSubclassFeatureTitle = document.getElementById("main-subclass-feature-title");
+    const mainSubclassFeatureText = document.getElementById("main-subclass-feature-text");
     const multiClassFeatureBlock = document.getElementById("multi-class-feature-block");
+    const multiSubclassFeatureBlock = document.getElementById("multi-subclass-feature-block");
+    const multiSubclassFeatureTitle = document.getElementById("multi-subclass-feature-title");
+    const multiSubclassFeatureText = document.getElementById("multi-subclass-feature-text");
     const multiClassFeatureTitle = document.getElementById("multi-class-feature-title");
     const multiClassFeatureText = document.getElementById("multi-class-feature-text");
     const equipmentArmorType = document.getElementById("equipment-armor-type");
@@ -9277,7 +9523,9 @@ window.AdventureTraits = {
         !backpackGearTotalWeight || !backpackGearTotalPrice ||
         !skillTables || !skillSummary || !coreTraitBody ||
         !mainClassFeatureBlock || !mainClassFeatureTitle || !mainClassFeatureText ||
+        !mainSubclassFeatureBlock || !mainSubclassFeatureTitle || !mainSubclassFeatureText ||
         !multiClassFeatureBlock || !multiClassFeatureTitle || !multiClassFeatureText ||
+        !multiSubclassFeatureBlock || !multiSubclassFeatureTitle || !multiSubclassFeatureText ||
         !equipmentArmorType || !equipmentArmorName || !equipmentArmorCustomName ||
         !equipmentArmorReset || !equipmentArmorAc ||
         !equipmentArmorStealth || !equipmentShieldAc || !equipmentShieldEquipped ||
@@ -11798,6 +12046,87 @@ ${data.description}`;
       "盗贼工具": { ability: "敏捷", weight: "1磅", price: "25GP", operation: "撬锁（DC15），或解除陷阱（DC15）", craft: "" }
     };
 
+    Object.assign(toolData, {
+      "赌具（骰子）": {
+        ability: "感知", weight: "—", price: "1SP",
+        operation: "判断某人是否作弊（DC10），或赢取游戏（DC20）", craft: ""
+      },
+      "赌具（龙棋）": {
+        ability: "感知", weight: "—", price: "1GP",
+        operation: "判断某人是否作弊（DC10），或赢取游戏（DC20）", craft: ""
+      },
+      "赌具（纸牌）": {
+        ability: "感知", weight: "—", price: "5SP",
+        operation: "判断某人是否作弊（DC10），或赢取游戏（DC20）", craft: ""
+      },
+      "赌具（龙牌）": {
+        ability: "感知", weight: "—", price: "1GP",
+        operation: "判断某人是否作弊（DC10），或赢取游戏（DC20）", craft: ""
+      },
+      "乐器（风笛）": {
+        ability: "魅力", weight: "6磅", price: "30GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（鼓）": {
+        ability: "魅力", weight: "3磅", price: "6GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（扬琴）": {
+        ability: "魅力", weight: "10磅", price: "25GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（长笛）": {
+        ability: "魅力", weight: "1磅", price: "2GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（号角）": {
+        ability: "魅力", weight: "2磅", price: "3GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（鲁特琴）": {
+        ability: "魅力", weight: "2磅", price: "35GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（里拉琴）": {
+        ability: "魅力", weight: "2磅", price: "30GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（排箫）": {
+        ability: "魅力", weight: "2磅", price: "12GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（芦笛）": {
+        ability: "魅力", weight: "1磅", price: "2GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      },
+      "乐器（提琴）": {
+        ability: "魅力", weight: "1磅", price: "30GP",
+        operation: "演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）", craft: ""
+      }
+    });
+
+    const artisanToolNames = [
+      "炼金工具", "酿酒工具", "书法工具", "木匠工具", "制图工具",
+      "鞋匠工具", "厨师工具", "玻璃匠工具", "珠宝匠工具", "石匠工具",
+      "画家工具", "陶匠工具", "铁匠工具", "修补工具", "织布工具", "木雕工具"
+    ];
+    const otherToolNames = [
+      "易容工具", "文书伪造工具", "赌具（骰子）", "赌具（龙棋）",
+      "赌具（纸牌）", "赌具（龙牌）", "草药工具",
+      "乐器（风笛）", "乐器（鼓）", "乐器（扬琴）", "乐器（长笛）",
+      "乐器（号角）", "乐器（鲁特琴）", "乐器（里拉琴）", "乐器（排箫）",
+      "乐器（芦笛）", "乐器（提琴）", "领航工具", "毒药工具", "盗贼工具"
+    ];
+
+    const standardLanguages = [
+      "通用语", "通用手语", "龙语", "矮人语", "精灵语", "巨人语",
+      "侏儒语", "地精语", "半身人语", "兽人语"
+    ];
+    const rareLanguages = [
+      "深渊语", "天界语", "深潜语", "德鲁伊语", "炼狱语",
+      "原初语", "木族语", "盗贼黑话", "地底通用语"
+    ];
+
     const spellSlotsByCasterLevel = {
       0: [],
       1: [2],
@@ -12088,23 +12417,67 @@ ${data.description}`;
       return `${className}职业特性 ${english} Class Features`;
     }
 
+    function buildClassSubclassFeatureTitle(className, customName, subclassName) {
+      const baseName = className === CUSTOM_VALUE
+        ? (customName.trim() || "职业")
+        : className;
+      const english = classEnglishNames[className] || "Class";
+      const subclass = subclassName ? `（${subclassName}）` : "";
+      return `${baseName}${subclass}子职特性 ${english} Subclass Features`;
+    }
+
+    function getPrimaryMultiFeatureInfo() {
+      const extra = getExtraMultiEntries()[0];
+      if (extra) {
+        return {
+          className: extra.classSelect.value,
+          level: getLevel(extra.levelInput),
+          subclass: extra.subclassSelect.value,
+          customName: ""
+        };
+      }
+      return {
+        className: multiClassSelect.value,
+        level: getLevel(multiLevelInput),
+        subclass: multiSubclassSelect.value,
+        customName: customMultiClassInput.value
+      };
+    }
+
     function syncClassFeatureEditors() {
       const mainClass = classSelect.value;
+      const mainLevel = getLevel(levelInput);
       if (mainClass) {
         mainClassFeatureBlock.hidden = false;
         mainClassFeatureTitle.textContent = buildClassFeatureTitle(mainClass, customClassInput.value);
+
+        const showMainSubclass = mainLevel !== null && mainLevel >= 3;
+        mainSubclassFeatureBlock.hidden = !showMainSubclass;
+        mainSubclassFeatureTitle.textContent = showMainSubclass
+          ? buildClassSubclassFeatureTitle(mainClass, customClassInput.value, currentMainSubclass())
+          : "";
       } else {
         mainClassFeatureBlock.hidden = true;
         mainClassFeatureTitle.textContent = "";
+        mainSubclassFeatureBlock.hidden = true;
+        mainSubclassFeatureTitle.textContent = "";
       }
 
-      const multiClass = multiClassSelect.value;
-      if (multiClass) {
+      const multi = getPrimaryMultiFeatureInfo();
+      if (multi.className) {
         multiClassFeatureBlock.hidden = false;
-        multiClassFeatureTitle.textContent = buildClassFeatureTitle(multiClass, customMultiClassInput.value);
+        multiClassFeatureTitle.textContent = buildClassFeatureTitle(multi.className, multi.customName);
+
+        const showMultiSubclass = multi.level !== null && multi.level >= 3;
+        multiSubclassFeatureBlock.hidden = !showMultiSubclass;
+        multiSubclassFeatureTitle.textContent = showMultiSubclass
+          ? buildClassSubclassFeatureTitle(multi.className, multi.customName, multi.subclass)
+          : "";
       } else {
         multiClassFeatureBlock.hidden = true;
         multiClassFeatureTitle.textContent = "";
+        multiSubclassFeatureBlock.hidden = true;
+        multiSubclassFeatureTitle.textContent = "";
       }
     }
 
@@ -12995,7 +13368,7 @@ ${data.description}`;
       const skipTags = new Set([
         "SCRIPT", "STYLE", "NOSCRIPT", "TEMPLATE", "IFRAME", "OBJECT",
         "EMBED", "IMG", "SVG", "MATH", "VIDEO", "AUDIO", "SOURCE",
-        "TRACK", "CANVAS", "HEAD", "META", "LINK"
+        "TRACK", "CANVAS", "HEAD", "TITLE", "META", "LINK"
       ]);
 
       if (skipTags.has(tag)) return null;
@@ -13040,6 +13413,17 @@ ${data.description}`;
         if (title.childNodes.length) heading.append(title);
         heading.append(document.createElement("br"));
         return heading;
+      }
+
+      if (["P", "DIV", "SECTION", "ARTICLE", "BLOCKQUOTE", "LI", "PRE"].includes(tag)) {
+        const block = document.createDocumentFragment();
+        if (tag === "LI") block.append(document.createTextNode("• "));
+        appendConvertedChildren(block, node);
+        while (block.lastChild && block.lastChild.nodeName === "BR") {
+          block.removeChild(block.lastChild);
+        }
+        if (block.childNodes.length) block.append(document.createElement("br"));
+        return block.childNodes.length ? block : null;
       }
 
       const classes = (node.getAttribute("class") || "")
@@ -13152,10 +13536,458 @@ ${data.description}`;
       editor.focus();
     }
 
+    const CLASS_FEATURE_EDITOR_IDS = new Set([
+      "main-class-feature-text",
+      "main-subclass-feature-text",
+      "multi-class-feature-text",
+      "multi-subclass-feature-text"
+    ]);
+
+    function convertClassFeatureHtml(rawHtml) {
+      const fragment = convertPastedHtml(rawHtml);
+      const container = document.createElement("div");
+      container.append(fragment);
+
+      for (const bold of [...container.querySelectorAll(".custom-bold")]) {
+        const replacement = document.createElement("b");
+        while (bold.firstChild) replacement.append(bold.firstChild);
+        bold.replaceWith(replacement);
+      }
+      return container.innerHTML;
+    }
+
+    function extractClassFeatureHeading(node) {
+      if (!node || node.nodeType !== Node.ELEMENT_NODE) return null;
+      if (!/^(P|DIV|H[1-6])$/.test(node.tagName)) return null;
+      const text = (node.textContent || "").replace(/\s+/g, " ").trim();
+      if (!/^\d+\s*级\s*[:：]/.test(text)) return null;
+
+      const heading = node.querySelector("strong, b");
+      let nameHtml = "";
+      let descHtml = "";
+      if (heading && /^\d+\s*级\s*[:：]/.test((heading.textContent || "").replace(/\s+/g, " ").trim())) {
+        nameHtml = heading.outerHTML;
+        const descriptionNode = node.cloneNode(true);
+        descriptionNode.querySelector("strong, b")?.remove();
+        descHtml = descriptionNode.innerHTML;
+      } else {
+        nameHtml = node.innerHTML;
+      }
+
+      const nameContainer = document.createElement("div");
+      nameContainer.innerHTML = nameHtml;
+      while (nameContainer.lastChild &&
+        (nameContainer.lastChild.nodeName === "BR" ||
+          (nameContainer.lastChild.nodeType === Node.TEXT_NODE && !nameContainer.lastChild.nodeValue.trim()))) {
+        nameContainer.lastChild.remove();
+      }
+      nameHtml = nameContainer.innerHTML;
+      return { nameHtml, descHtml };
+    }
+
+    function escapePlainText(text) {
+      const span = document.createElement("span");
+      span.textContent = text;
+      return span.innerHTML;
+    }
+
+    function splitPlainTableLine(line) {
+      const trimmed = line.trim();
+      if (!trimmed) return [];
+      if (trimmed.includes("\t")) {
+        return trimmed.split(/\t+/).map((cell) => cell.trim()).filter(Boolean);
+      }
+      const wide = trimmed.split(/\s{2,}/).map((cell) => cell.trim()).filter(Boolean);
+      if (wide.length >= 2) return wide;
+
+      const spaced = trimmed.split(/\s+/).filter(Boolean);
+      const numeric = spaced.filter((cell) => /^[—\-–0-9]+$/.test(cell));
+      const looksLikeHeader = /(等级|法术|一环|二环|三环|四环|五环|六环|七环|八环|九环|法术位)/.test(trimmed);
+      if (spaced.length >= 3 && (numeric.length >= 2 || looksLikeHeader)) return spaced;
+      return [trimmed];
+    }
+
+    function isPlainTableDataLine(line) {
+      const cells = splitPlainTableLine(line);
+      if (!cells.length) return false;
+      if (cells.length === 1) return /^\d+$/.test(cells[0]);
+      return cells.filter((cell) => /^[—\-–0-9]+$/.test(cell)).length >= 2;
+    }
+
+    function isPlainTableStart(line) {
+      if (/[。！？；]\s*$/.test(line)) return false;
+      const keywordCount = (
+        line.match(/等级|法术位|法术|一环|二环|三环|四环|五环|六环|七环|八环|九环/g) || []
+      ).length;
+      return /——/.test(line) ||
+        keywordCount >= 2 ||
+        /魔契师等级|战士等级/.test(line);
+    }
+
+    function plainTextTableBlock(lines, start) {
+      let end = start;
+      while (end < lines.length && lines[end].trim()) {
+        if (end > start && /^\s*\d+\s*级\s*[:：]/.test(lines[end])) break;
+        end += 1;
+      }
+      const segment = lines.slice(start, end);
+      if (segment.filter(isPlainTableDataLine).length < 2) return null;
+
+      const headerLine = segment[0].trim();
+      const levelRows = segment.filter((line) => /^\d+$/.test(line.trim()));
+      const levelHeader = headerLine.match(/^(.*?)(魔契师等级|战士等级|等级)(?:\s|$)/);
+      if (levelHeader && levelRows.length >= 2) {
+        const prefix = levelHeader[1].trim();
+        const rows = [[levelHeader[2], "法术"]];
+        let current = null;
+        for (let index = 1; index < segment.length; index += 1) {
+          const line = segment[index].trim();
+          if (!line) continue;
+          if (/^\d+$/.test(line)) {
+            current = [line, ""];
+            rows.push(current);
+          } else if (line === "法术" && rows.length === 1) {
+            continue;
+          } else if (current) {
+            current[1] = current[1] ? `${current[1]} ${line}` : line;
+          }
+        }
+        if (rows.length >= 3) return { end, rows, preText: prefix };
+      }
+
+      const rows = [];
+      for (let index = 0; index < segment.length; index += 1) {
+        const line = segment[index].trim();
+        if (!line) continue;
+        let cells = splitPlainTableLine(line);
+        if (cells.length === 1 && /^\d+$/.test(cells[0])) {
+          const next = segment[index + 1]?.trim() || "";
+          if (next && !isPlainTableDataLine(next) && !/^\s*\d+\s*级\s*[:：]/.test(next)) {
+            cells = [cells[0], next];
+            index += 1;
+          }
+        }
+        rows.push(cells);
+      }
+      if (rows.length < 3) return null;
+      const maxColumns = Math.max(...rows.map((row) => row.length));
+      return { end, rows: rows.map((row) => [...row, ...Array(maxColumns - row.length).fill("")]) };
+    }
+
+    function plainTextToFeatureHtml(lines) {
+      const chunks = [];
+      let index = 0;
+      let textLines = [];
+
+      const flushText = () => {
+        if (!textLines.length) return;
+        const text = textLines.join("\n").replace(/^\n+|\n+$/g, "");
+        if (text) chunks.push(escapePlainText(text).replace(/\n/g, "<br>"));
+        textLines = [];
+      };
+
+      while (index < lines.length) {
+        const line = lines[index];
+        const table = isPlainTableStart(line) ? plainTextTableBlock(lines, index) : null;
+        if (table) {
+          if (table.preText) textLines.push(table.preText);
+          flushText();
+          const tableElement = document.createElement("table");
+          const tbody = document.createElement("tbody");
+          const maxColumns = Math.max(...table.rows.map((row) => row.length));
+          if (maxColumns > 2) tableElement.className = "feature-auto-table-wide";
+          table.rows.forEach((row, rowIndex) => {
+            const tr = document.createElement("tr");
+            row.forEach((cell) => {
+              const cellElement = document.createElement(rowIndex === 0 ? "th" : "td");
+              cellElement.textContent = cell;
+              tr.append(cellElement);
+            });
+            tbody.append(tr);
+          });
+          tableElement.append(tbody);
+          chunks.push(tableElement.outerHTML);
+          index = table.end;
+          continue;
+        }
+        textLines.push(line);
+        index += 1;
+      }
+      flushText();
+      return chunks.join("");
+    }
+
+    function parseClassFeaturePlainText(text) {
+      const lines = String(text || "").replace(/\r\n?/g, "\n").split("\n");
+      const features = [];
+      let current = null;
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (/^\d+\s*级\s*[:：]/.test(trimmed)) {
+          current = { name: trimmed, descLines: [] };
+          features.push(current);
+          continue;
+        }
+        if (!current) continue;
+        current.descLines.push(line);
+      }
+
+      return features
+        .map((feature) => {
+          const descLines = feature.descLines.slice();
+          while (descLines.length && !descLines[0].trim()) descLines.shift();
+          while (descLines.length && !descLines[descLines.length - 1].trim()) descLines.pop();
+          return {
+            nameHtml: escapePlainText(feature.name),
+            descHtml: plainTextToFeatureHtml(descLines)
+          };
+        })
+        .filter((feature) => feature.nameHtml || feature.descHtml);
+    }
+
+    function parseClassFeaturePaste(html) {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const features = [];
+      let current = null;
+
+      for (const node of doc.body.childNodes) {
+        if (node.nodeType === Node.TEXT_NODE && !node.nodeValue.trim()) continue;
+        const heading = extractClassFeatureHeading(node);
+        if (heading) {
+          current = {
+            nameHtml: convertClassFeatureHtml(heading.nameHtml),
+            descParts: heading.descHtml ? [heading.descHtml] : []
+          };
+          features.push(current);
+          continue;
+        }
+        if (!current) continue;
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (!node.textContent.trim() && !node.querySelector("table")) continue;
+          current.descParts.push(node.outerHTML);
+        }
+      }
+
+      return features
+        .map((feature) => ({
+          nameHtml: sanitizeBuilderHtml(feature.nameHtml),
+          descHtml: sanitizeBuilderHtml(convertClassFeatureHtml(feature.descParts.join("")))
+        }))
+        .filter((feature) => feature.nameHtml || feature.descHtml);
+    }
+
+    function setFeatureRowExpanded(nameRow, expanded) {
+      const detailRow = nameRow.nextElementSibling;
+      if (!detailRow) return;
+      detailRow.classList.toggle("is-expanded", expanded);
+      const button = nameRow.querySelector(".feature-table-toggle");
+      if (button) {
+        button.textContent = expanded ? "▾" : "▸";
+        button.title = expanded ? "收起特性详述" : "展开特性详述";
+        button.setAttribute("aria-expanded", String(expanded));
+      }
+    }
+
+    function toggleFeatureRow(nameRow) {
+      const detailRow = nameRow.nextElementSibling;
+      if (!detailRow) return;
+      setFeatureRowExpanded(nameRow, !detailRow.classList.contains("is-expanded"));
+      nameRow.closest(".class-feature-paste-table")?.dispatchEvent(
+        new Event("input", { bubbles: true })
+      );
+    }
+
+    function deleteFeatureRow(nameRow) {
+      const detailRow = nameRow.nextElementSibling;
+      const table = nameRow.closest(".class-feature-paste-table");
+      nameRow.remove();
+      detailRow?.remove();
+      if (table && !table.querySelector(".feature-name-row")) table.remove();
+      table?.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    let featureDragState = null;
+
+    function beginFeatureDrag(event, handle) {
+      if (event.button !== undefined && event.button !== 0) return;
+      const nameRow = handle.closest(".feature-name-row");
+      if (!nameRow) return;
+
+      event.preventDefault();
+      const detailRow = nameRow.nextElementSibling;
+      featureDragState = { nameRow, detailRow, handle, lastTarget: null };
+      nameRow.classList.add("is-dragging");
+      document.body.classList.add("feature-dragging");
+      try {
+        handle.setPointerCapture(event.pointerId);
+      } catch (error) {}
+
+      const clearTarget = () => {
+        featureDragState?.lastTarget?.classList.remove("is-drop-target");
+        if (featureDragState) featureDragState.lastTarget = null;
+      };
+
+      const onMove = (moveEvent) => {
+        const state = featureDragState;
+        if (!state) return;
+        const targetNode = document.elementFromPoint(
+          moveEvent.clientX,
+          moveEvent.clientY
+        )?.closest(".feature-name-row, .feature-details-row");
+        const target = targetNode?.classList.contains("feature-details-row")
+          ? targetNode.previousElementSibling
+          : targetNode;
+        if (!target || target === state.nameRow || target === state.detailRow) return;
+        if (state.lastTarget && state.lastTarget !== target) {
+          state.lastTarget.classList.remove("is-drop-target");
+        }
+        state.lastTarget = target;
+        target.classList.add("is-drop-target");
+
+        const targetDetail = target.nextElementSibling;
+        const rect = target.getBoundingClientRect();
+        if (moveEvent.clientY > rect.top + rect.height / 2) {
+          targetDetail?.after(state.nameRow);
+          state.nameRow.after(state.detailRow);
+        } else {
+          target.before(state.nameRow);
+          state.nameRow.after(state.detailRow);
+        }
+      };
+
+      const finish = () => {
+        clearTarget();
+        nameRow.classList.remove("is-dragging");
+        document.body.classList.remove("feature-dragging");
+        try {
+          handle.releasePointerCapture(event.pointerId);
+        } catch (error) {}
+        featureDragState = null;
+        nameRow.closest(".class-feature-paste-table")?.dispatchEvent(
+          new Event("input", { bubbles: true })
+        );
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", finish);
+        window.removeEventListener("pointercancel", finish);
+      };
+
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", finish, { once: true });
+      window.addEventListener("pointercancel", finish, { once: true });
+    }
+
+    function markWideFeatureTables(container) {
+      for (const table of container.querySelectorAll("table")) {
+        const rows = [...table.querySelectorAll("tr")];
+        const columns = rows.reduce((maximum, row) => {
+          const count = [...row.children].reduce(
+            (sum, cell) => sum + (Number(cell.getAttribute("colspan")) || 1),
+            0
+          );
+          return Math.max(maximum, count);
+        }, 0);
+        if (columns > 2) table.classList.add("feature-auto-table-wide");
+      }
+    }
+
+    function buildClassFeatureTable(features, defaultExpanded = false) {
+      const table = document.createElement("table");
+      table.className = "class-feature-paste-table";
+      const tbody = document.createElement("tbody");
+
+      for (const feature of features) {
+        const nameRow = document.createElement("tr");
+        nameRow.className = "feature-name-row";
+        const nameCell = document.createElement("td");
+        const handle = document.createElement("span");
+        handle.className = "feature-drag-handle";
+        handle.textContent = "⠿";
+        handle.title = "拖拽排序";
+        handle.setAttribute("aria-hidden", "true");
+        handle.addEventListener("pointerdown", (event) => beginFeatureDrag(event, handle));
+
+        const nameEditor = document.createElement("div");
+        nameEditor.className = "feature-name-cell";
+        nameEditor.contentEditable = "true";
+        nameEditor.spellcheck = false;
+        nameEditor.innerHTML = sanitizeBuilderHtml(feature.nameHtml || "")
+          .replace(/<br\s*\/?>/gi, " ");
+
+        const actions = document.createElement("div");
+        actions.className = "feature-row-actions";
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "feature-table-toggle";
+        toggle.setAttribute("aria-label", "展开或收起特性详述");
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "feature-table-delete";
+        remove.textContent = "×";
+        remove.title = "删除此特性和描述";
+        remove.setAttribute("aria-label", "删除此特性和描述");
+        actions.append(toggle, remove);
+        nameCell.append(handle, nameEditor, actions);
+
+        const detailRow = document.createElement("tr");
+        detailRow.className = "feature-details-row";
+        const detailCell = document.createElement("td");
+        const detailEditor = document.createElement("div");
+        detailEditor.className = "feature-details-cell";
+        detailEditor.contentEditable = "true";
+        detailEditor.spellcheck = false;
+        detailEditor.innerHTML = sanitizeBuilderHtml(feature.descHtml || "");
+        markWideFeatureTables(detailEditor);
+        detailCell.append(detailEditor);
+
+        nameRow.append(nameCell);
+        detailRow.append(detailCell);
+        tbody.append(nameRow, detailRow);
+        setFeatureRowExpanded(
+          nameRow,
+          feature.expanded !== undefined ? Boolean(feature.expanded) : defaultExpanded
+        );
+      }
+
+      table.append(tbody);
+      return table;
+    }
+
+    function getClassFeatureTableStack(editor) {
+      const container = editor.closest(".class-feature-editor") || editor;
+      let stack = container.nextElementSibling;
+      if (stack &&
+          stack.classList.contains("class-feature-table-stack") &&
+          stack.dataset.classFeatureStack === editor.id) {
+        return stack;
+      }
+      stack = document.createElement("div");
+      stack.className = "class-feature-table-stack";
+      stack.dataset.classFeatureStack = editor.id;
+      container.after(stack);
+      return stack;
+    }
+
     function handleRichPaste(event) {
       const editor = event.currentTarget;
       const clipboard = event.clipboardData;
       if (!editor || !clipboard) return;
+
+      if (CLASS_FEATURE_EDITOR_IDS.has(editor.id)) {
+        const html = clipboard.getData("text/html");
+        let features = html ? parseClassFeaturePaste(html) : [];
+        if (!features.length) {
+          features = parseClassFeaturePlainText(clipboard.getData("text/plain") || "");
+        }
+        if (features.length) {
+          event.preventDefault();
+          editor.innerHTML = "";
+          const stack = getClassFeatureTableStack(editor);
+          stack.append(buildClassFeatureTable(features));
+          editor.dispatchEvent(new Event("input", { bubbles: true }));
+          return;
+        }
+      }
 
       event.preventDefault();
       const html = clipboard.getData("text/html");
@@ -13479,7 +14311,9 @@ ${data.description}`;
       return [...builderPanel.querySelectorAll(
         "input, select, textarea, [contenteditable='true']"
       )]
-        .filter((element) => element.type !== "file" && !isInDynamicBuilderRow(element))
+        .filter((element) => element.type !== "file" &&
+          !isInDynamicBuilderRow(element) &&
+          !element.closest(".class-feature-table-stack"))
         .map((element) => ({
           key: getUndoControlKey(element),
           value: element.isContentEditable ? "" : element.value,
@@ -13530,6 +14364,47 @@ ${data.description}`;
       }));
     }
 
+    function captureClassFeatureTables() {
+      const result = {};
+      for (const id of CLASS_FEATURE_EDITOR_IDS) {
+        const editor = document.getElementById(id);
+        if (!editor) continue;
+        const stack = getClassFeatureTableStack(editor);
+        result[id] = [...stack.querySelectorAll(".class-feature-paste-table")].map((table) => ({
+          features: [...table.querySelectorAll(".feature-name-row")].map((nameRow) => {
+            const detailRow = nameRow.nextElementSibling;
+            return {
+              nameHtml: nameRow.querySelector(".feature-name-cell")?.innerHTML || "",
+              descHtml: detailRow?.querySelector(".feature-details-cell")?.innerHTML || "",
+              expanded: Boolean(detailRow?.classList.contains("is-expanded"))
+            };
+          })
+        }));
+      }
+      return result;
+    }
+
+    function restoreClassFeatureTables(data = {}) {
+      for (const id of CLASS_FEATURE_EDITOR_IDS) {
+        const editor = document.getElementById(id);
+        if (!editor) continue;
+        const stack = getClassFeatureTableStack(editor);
+        stack.replaceChildren();
+        for (const tableData of data[id] || []) {
+          const features = (tableData.features || [])
+            .filter((feature) => feature && (feature.nameHtml || feature.descHtml))
+            .map((feature) => ({
+              ...feature,
+              expanded: feature.expanded !== undefined
+                ? Boolean(feature.expanded)
+                : Boolean(tableData.expanded)
+            }));
+          if (!features.length) continue;
+          stack.append(buildClassFeatureTable(features));
+        }
+      }
+    }
+
     function captureBuilderData() {
       return {
         schema: "dnd5e2024.character",
@@ -13570,7 +14445,8 @@ ${data.description}`;
           scale: appearanceImageState.scale,
           offsetX: appearanceImageState.offsetX,
           offsetY: appearanceImageState.offsetY
-        }
+        },
+        classFeatureTables: captureClassFeatureTables()
       };
     }
 
@@ -13611,23 +14487,115 @@ ${data.description}`;
       });
     }
 
+    function appendToolGroups(select) {
+      const appendGroup = (label, names) => {
+        const separator = document.createElement("option");
+        separator.value = "";
+        separator.textContent = label;
+        separator.disabled = true;
+        select.appendChild(separator);
+        for (const name of names) {
+          if (!toolData[name]) continue;
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        }
+      };
+      appendGroup("—工匠工具—", artisanToolNames);
+      appendGroup("—其他工具—", otherToolNames);
+    }
+
     function populateLanguageToolSelect(select) {
       const blank = document.createElement("option");
       blank.value = "";
       blank.textContent = "—";
       select.appendChild(blank);
 
-      for (const name of Object.keys(toolData)) {
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        select.appendChild(option);
-      }
+      const custom = document.createElement("option");
+      custom.value = CUSTOM_VALUE;
+      custom.textContent = "自定义";
+      select.appendChild(custom);
+
+      appendToolGroups(select);
+    }
+
+    function populateLanguageSelect(select) {
+      const blank = document.createElement("option");
+      blank.value = "";
+      blank.textContent = "—";
+      select.appendChild(blank);
 
       const custom = document.createElement("option");
       custom.value = CUSTOM_VALUE;
       custom.textContent = "自定义";
       select.appendChild(custom);
+
+      const appendLanguageGroup = (label, names) => {
+        const separator = document.createElement("option");
+        separator.value = "";
+        separator.textContent = label;
+        separator.disabled = true;
+        select.appendChild(separator);
+        for (const name of names) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        }
+      };
+      appendLanguageGroup("—标准语言—", standardLanguages);
+      appendLanguageGroup("—稀有语言—", rareLanguages);
+    }
+
+    function createLanguageControl(initialValue = "") {
+      const control = document.createElement("div");
+      control.className = "language-tool-control";
+
+      const select = document.createElement("select");
+      select.className = "language-tool-select";
+      select.setAttribute("aria-label", "语言");
+      populateLanguageSelect(select);
+
+      const customInput = document.createElement("input");
+      customInput.type = "text";
+      customInput.className = "language-tool-custom-input";
+      customInput.placeholder = "自定义语言";
+      customInput.autocomplete = "off";
+      customInput.setAttribute("aria-label", "自定义语言名称");
+      customInput.hidden = true;
+
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "custom-reset language-tool-custom-reset";
+      reset.textContent = "×";
+      reset.title = "返回语言选择";
+      reset.setAttribute("aria-label", "返回语言选择");
+      reset.hidden = true;
+
+      const knownLanguage = [...select.options].some(
+        (option) => !option.disabled && option.value === initialValue
+      );
+      if (initialValue && knownLanguage) {
+        select.value = initialValue;
+      } else if (initialValue) {
+        select.value = CUSTOM_VALUE;
+        customInput.value = initialValue;
+      }
+
+      control.append(select, customInput, reset);
+      select.addEventListener("change", () => {
+        syncLanguageToolCustomUI(control);
+        if (select.value === CUSTOM_VALUE) customInput.focus();
+      });
+      reset.addEventListener("click", () => {
+        select.value = "";
+        customInput.value = "";
+        syncLanguageToolCustomUI(control);
+        select.focus();
+      });
+      syncLanguageToolCustomUI(control);
+      return control;
     }
 
     function syncLanguageToolCustomUI(control) {
@@ -13693,13 +14661,7 @@ ${data.description}`;
         if (kind === "tool") {
           cell.append(createLanguageToolControl());
         } else {
-          const input = document.createElement("input");
-          input.type = "text";
-          input.className = "language-tool-input";
-          input.autocomplete = "off";
-          input.setAttribute("aria-label", "语言");
-          input.addEventListener("input", () => input.classList.remove("is-default"));
-          cell.append(input);
+          cell.append(createLanguageControl());
         }
         row.append(cell);
       }
@@ -13867,7 +14829,9 @@ ${data.description}`;
       for (const element of builderPanel.querySelectorAll(
         "input, select, textarea, [contenteditable='true']"
       )) {
-        if (element.type === "file" || isInDynamicBuilderRow(element)) continue;
+        if (element.type === "file" ||
+            isInDynamicBuilderRow(element) ||
+            element.closest(".class-feature-table-stack")) continue;
         staticElements.set(getUndoControlKey(element), element);
       }
 
@@ -13879,6 +14843,7 @@ ${data.description}`;
 
       applyStatic();
       restoreDynamicBuilderRows(data);
+      restoreClassFeatureTables(data.classFeatureTables || {});
 
       const syncIds = [
         "builder-class", "builder-multi-class", "builder-race", "builder-background",
@@ -14320,9 +15285,6 @@ ${data.description}`;
         }
 
         const exportScale = 0.625;
-        wrapper.style.transform = `scale(${exportScale})`;
-        wrapper.style.transformOrigin = "top left";
-
         const layoutWidth = wrapper.offsetWidth;
         const layoutHeight = Math.max(wrapper.scrollHeight, wrapper.offsetHeight) + 4;
         const visualWidth = Math.ceil(layoutWidth * exportScale);
@@ -14336,7 +15298,6 @@ ${data.description}`;
         styleElement.textContent = collectExportCss();
         const styleMarkup = new XMLSerializer().serializeToString(styleElement);
         const wrapperMarkup = new XMLSerializer().serializeToString(wrapper);
-        // 保留原始布局宽度，再缩放 wrapper；只在 Canvas 中裁切缩放后的可视区域。
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${layoutWidth}" height="${layoutHeight}" style="font-size:16px"><foreignObject x="0" y="0" width="${layoutWidth}" height="${layoutHeight}"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
         // file:// 页面中 Blob URL 的 SVG 会被 Chrome 视为跨源并污染 Canvas；
         // data URL 可以避免该问题，同时不引入外部图片依赖。
@@ -14357,17 +15318,7 @@ ${data.description}`;
         const context = canvas.getContext("2d");
         context.fillStyle = "#f8f8f6";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(
-          image,
-          0,
-          0,
-          visualWidth,
-          visualHeight,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
         const blob = await canvasToBlob(canvas);
         const url = URL.createObjectURL(blob);
@@ -14851,6 +15802,7 @@ ${data.description}`;
     }
 
     function updateDerivedStats() {
+      syncClassFeatureEditors();
       const mainLevel = classSelect.value ? (getLevel(levelInput) ?? 0) : 0;
       const multiLevel = getExtraMultiLevelSum();
       const totalLevel = mainLevel + multiLevel;
@@ -16022,12 +16974,10 @@ ${data.description}`;
       blank.textContent = "—";
       select.appendChild(blank);
 
-      for (const name of Object.keys(adventuringGearData)) {
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        select.appendChild(option);
-      }
+      const customOption = document.createElement("option");
+      customOption.value = CUSTOM_VALUE;
+      customOption.textContent = "自定义";
+      select.appendChild(customOption);
 
       const appendGearGroup = (label, data) => {
         const separator = document.createElement("option");
@@ -16042,13 +16992,9 @@ ${data.description}`;
           select.appendChild(option);
         }
       };
+      appendGearGroup("——冒险装备——", adventuringGearData);
       appendGearGroup("——武器——", backpackWeaponData);
       appendGearGroup("——护甲——", backpackArmorData);
-
-      const customOption = document.createElement("option");
-      customOption.value = CUSTOM_VALUE;
-      customOption.textContent = "自定义";
-      select.appendChild(customOption);
 
       const nameControl = document.createElement("div");
       nameControl.className = "backpack-name-control";
@@ -16161,17 +17107,13 @@ ${data.description}`;
       blank.value = "";
       blank.textContent = "—";
       select.appendChild(blank);
-      for (const name of Object.keys(toolData)) {
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        select.appendChild(option);
-      }
 
       const customOption = document.createElement("option");
       customOption.value = CUSTOM_VALUE;
       customOption.textContent = "自定义";
       select.appendChild(customOption);
+
+      appendToolGroups(select);
 
       const nameControl = document.createElement("div");
       nameControl.className = "backpack-name-control";
@@ -16339,6 +17281,13 @@ ${data.description}`;
     addLedgerRow(false);
     addLedgerRow(false);
 
+    for (const cell of languageBody.querySelectorAll("td:not(.language-action-cell)")) {
+      const input = cell.querySelector("input.language-tool-input");
+      if (input) {
+        cell.replaceChildren(createLanguageControl(input.value));
+      }
+    }
+
     for (const cell of toolBody.querySelectorAll("td:not(.language-action-cell)")) {
       if (cell.querySelector("input.language-tool-input")) {
         cell.replaceChildren(createLanguageToolControl());
@@ -16349,6 +17298,26 @@ ${data.description}`;
 
     builderPanel.addEventListener("input", updateDstCommand);
     builderPanel.addEventListener("change", updateDstCommand);
+    builderPanel.addEventListener("click", (event) => {
+      const toggle = event.target.closest(".feature-table-toggle");
+      if (toggle) {
+        const nameRow = toggle.closest(".feature-name-row");
+        if (nameRow) toggleFeatureRow(nameRow);
+        return;
+      }
+      const remove = event.target.closest(".feature-table-delete");
+      if (remove) {
+        const nameRow = remove.closest(".feature-name-row");
+        if (nameRow) deleteFeatureRow(nameRow);
+      }
+    });
+    builderPanel.addEventListener("dblclick", (event) => {
+      const cell = event.target.closest(".feature-name-cell, .feature-details-cell");
+      if (!cell) return;
+      const nameRow = cell.closest(".feature-name-row") ||
+        cell.closest(".feature-details-row")?.previousElementSibling;
+      if (nameRow) toggleFeatureRow(nameRow);
+    });
     updateDstCommand();
 
     initializeBuilderPersistence();
