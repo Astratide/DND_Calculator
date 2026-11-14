@@ -2886,7 +2886,15 @@
 
     .reference-tooltip.spell-lookup-tooltip {
       width: min(720px, calc(100vw - 24px));
+      max-width: calc(100vw - 16px);
       padding: 8px;
+      overflow-x: hidden;
+      cursor: move;
+    }
+
+    .reference-tooltip.spell-lookup-tooltip .spell-lookup-note,
+    .reference-tooltip.spell-lookup-tooltip .spell-lookup-frame {
+      cursor: auto;
     }
 
     .spell-lookup-head {
@@ -2894,13 +2902,49 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      min-width: 0;
       margin-bottom: 6px;
+      cursor: move;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
     }
 
-    .spell-lookup-head a {
+    .spell-lookup-head .reference-title {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .spell-lookup-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 0 0 auto;
+    }
+
+    .spell-lookup-actions button {
+      width: 24px;
+      height: 24px;
+      padding: 0;
       color: #800000;
-      font-size: 0.78rem;
-      white-space: nowrap;
+      background: #fff;
+      border: 1px solid #999;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .spell-lookup-actions button:hover {
+      border-color: #800000;
+      background: #f8f8f6;
+    }
+
+    .spell-lookup-note a {
+      color: #800000;
+      font-weight: bold;
     }
 
     .spell-lookup-frame {
@@ -4587,13 +4631,29 @@ main.page-width {
   .header-right {
     width: 100%;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 6px;
   }
 
-  .tabs { flex-wrap: wrap; }
-  .settings-button { margin-bottom: 0; }
+  .tabs {
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: 0 0 auto; white-space: nowrap; }
+  .settings-button { flex: 0 0 auto; margin-bottom: 0; }
   .settings-panel { top: 76px; right: 12px; }
+
+  .reference-tooltip.spell-lookup-tooltip {
+    width: calc(100vw - 8px);
+    max-height: calc(100dvh - 8px);
+  }
 }
 
 @media screen {
@@ -12466,17 +12526,26 @@ ${data.description}`;
       const page = allSpells ? SPELL_LOOKUP_ALL_PAGE : SPELL_LOOKUP_PAGES[className];
 
       if (!allSpells && (!className || !page)) {
-        return `<span class="reference-title">法术速查 Spell Lookup</span>
+        return `<div class="spell-lookup-head">
+<span class="reference-title">法术速查 Spell Lookup</span>
+<span class="spell-lookup-actions">
+<button class="spell-lookup-back" type="button" title="回退" aria-label="回退">←</button>
+<button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
+</span>
+</div>
 <p>${escapePlainText(label)} 暂无对应的法术速查页面。请先选择包含速查数据的职业。</p>`;
       }
 
       const url = encodeURI(`${SPELL_LOOKUP_BASE}${page}`);
       return `<div class="spell-lookup-head">
 <span class="reference-title">${escapePlainText(label)} · 法术速查 Spell Lookup</span>
-<a href="${url}" target="_blank" rel="noopener noreferrer">在新窗口打开</a>
+<span class="spell-lookup-actions">
+<button class="spell-lookup-back" type="button" title="回退" aria-label="回退">←</button>
+<button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
+</span>
 </div>
 <iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(label)}法术速查" loading="eager" referrerpolicy="no-referrer"></iframe>
-<div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击上方“在新窗口打开”。</div>`;
+<div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>`;
     }
 
     function updateSpellcasting() {
@@ -16409,6 +16478,9 @@ ${data.description}`;
     let referenceTooltipTarget = null;
     let referenceTooltipTimer = null;
     let referenceTooltipHideTimer = null;
+    let referenceTooltipSticky = false;
+    let referenceTooltipDragState = null;
+    const REFERENCE_TOOLTIP_MARGIN = 8;
 
     function scheduleReferenceTooltip(target) {
       if (referenceTooltipTimer !== null) window.clearTimeout(referenceTooltipTimer);
@@ -16419,6 +16491,7 @@ ${data.description}`;
     }
 
     function cancelReferenceTooltip() {
+      if (referenceTooltipSticky) return;
       if (referenceTooltipTimer !== null) {
         window.clearTimeout(referenceTooltipTimer);
         referenceTooltipTimer = null;
@@ -16431,6 +16504,7 @@ ${data.description}`;
     }
 
     function scheduleReferenceTooltipHide() {
+      if (referenceTooltipSticky) return;
       if (referenceTooltipHideTimer !== null) {
         window.clearTimeout(referenceTooltipHideTimer);
       }
@@ -16440,20 +16514,130 @@ ${data.description}`;
       }, 160);
     }
 
+    function getReferenceTooltipRightMargin() {
+      const scrollbarWidth = Math.max(
+        0,
+        window.innerWidth - document.documentElement.clientWidth
+      );
+      return REFERENCE_TOOLTIP_MARGIN + Math.max(12, scrollbarWidth);
+    }
+
+    function constrainReferenceTooltipToViewport() {
+      if (referenceTooltip.hidden) return;
+
+      const rightMargin = getReferenceTooltipRightMargin();
+      const maximumWidth = Math.max(
+        160,
+        window.innerWidth - REFERENCE_TOOLTIP_MARGIN - rightMargin
+      );
+      referenceTooltip.style.width = "";
+      if (referenceTooltip.offsetWidth > maximumWidth) {
+        referenceTooltip.style.width = `${maximumWidth}px`;
+      }
+
+      const rect = referenceTooltip.getBoundingClientRect();
+      const currentLeft = Number.parseFloat(referenceTooltip.style.left) || rect.left;
+      const currentTop = Number.parseFloat(referenceTooltip.style.top) || rect.top;
+      const maximumLeft = Math.max(
+        REFERENCE_TOOLTIP_MARGIN,
+        window.innerWidth - rect.width - rightMargin
+      );
+      const maximumTop = Math.max(
+        REFERENCE_TOOLTIP_MARGIN,
+        window.innerHeight - rect.height - REFERENCE_TOOLTIP_MARGIN
+      );
+
+      referenceTooltip.style.left = `${Math.min(
+        Math.max(REFERENCE_TOOLTIP_MARGIN, currentLeft),
+        maximumLeft
+      )}px`;
+      referenceTooltip.style.top = `${Math.min(
+        Math.max(REFERENCE_TOOLTIP_MARGIN, currentTop),
+        maximumTop
+      )}px`;
+    }
+
     function positionReferenceTooltip(target) {
       const rect = target.getBoundingClientRect();
       const tip = referenceTooltip.getBoundingClientRect();
+      const rightMargin = getReferenceTooltipRightMargin();
       let left = rect.left + rect.width / 2 - tip.width / 2;
       let top = rect.bottom + 8;
 
-      left = Math.max(8, Math.min(left, window.innerWidth - tip.width - 8));
-      if (top + tip.height > window.innerHeight - 8) {
+      left = Math.max(
+        REFERENCE_TOOLTIP_MARGIN,
+        Math.min(left, window.innerWidth - tip.width - rightMargin)
+      );
+      if (top + tip.height > window.innerHeight - REFERENCE_TOOLTIP_MARGIN) {
         top = rect.top - tip.height - 8;
       }
-      top = Math.max(8, Math.min(top, window.innerHeight - tip.height - 8));
+      top = Math.max(
+        REFERENCE_TOOLTIP_MARGIN,
+        Math.min(top, window.innerHeight - tip.height - REFERENCE_TOOLTIP_MARGIN)
+      );
 
       referenceTooltip.style.left = `${left}px`;
       referenceTooltip.style.top = `${top}px`;
+      constrainReferenceTooltipToViewport();
+    }
+
+    function beginReferenceTooltipDrag(event) {
+      if (!referenceTooltipSticky || event.button !== 0) return;
+      const target = event.target;
+      if (target.closest(".spell-lookup-actions, .spell-lookup-note")) return;
+      if (target !== referenceTooltip && !target.closest(".spell-lookup-head")) return;
+
+      event.preventDefault();
+      const rect = referenceTooltip.getBoundingClientRect();
+      const pointerId = event.pointerId;
+      referenceTooltipDragState = {
+        pointerId,
+        offsetX: event.clientX - rect.left,
+        offsetY: event.clientY - rect.top,
+        width: rect.width,
+        height: rect.height
+      };
+
+      try {
+        referenceTooltip.setPointerCapture(pointerId);
+      } catch (error) {}
+
+      const onMove = (moveEvent) => {
+        const state = referenceTooltipDragState;
+        if (!state || moveEvent.pointerId !== state.pointerId) return;
+        const maximumLeft = Math.max(
+          REFERENCE_TOOLTIP_MARGIN,
+          window.innerWidth - state.width - getReferenceTooltipRightMargin()
+        );
+        const maximumTop = Math.max(
+          REFERENCE_TOOLTIP_MARGIN,
+          window.innerHeight - state.height - REFERENCE_TOOLTIP_MARGIN
+        );
+        const left = Math.min(
+          Math.max(REFERENCE_TOOLTIP_MARGIN, moveEvent.clientX - state.offsetX),
+          maximumLeft
+        );
+        const top = Math.min(
+          Math.max(REFERENCE_TOOLTIP_MARGIN, moveEvent.clientY - state.offsetY),
+          maximumTop
+        );
+        referenceTooltip.style.left = `${left}px`;
+        referenceTooltip.style.top = `${top}px`;
+      };
+
+      const finish = () => {
+        referenceTooltipDragState = null;
+        try {
+          referenceTooltip.releasePointerCapture(pointerId);
+        } catch (error) {}
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", finish);
+        window.removeEventListener("pointercancel", finish);
+      };
+
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", finish, { once: true });
+      window.addEventListener("pointercancel", finish, { once: true });
     }
 
     function showReferenceTooltip(target) {
@@ -16469,16 +16653,20 @@ ${data.description}`;
         window.clearTimeout(referenceTooltipHideTimer);
         referenceTooltipHideTimer = null;
       }
-      referenceTooltip.classList.toggle("spell-lookup-tooltip", key.startsWith("spell-lookup"));
+      referenceTooltipSticky = key.startsWith("spell-lookup");
+      referenceTooltip.classList.toggle("spell-lookup-tooltip", referenceTooltipSticky);
+      referenceTooltip.style.width = "";
       referenceTooltip.innerHTML = content;
       referenceTooltip.hidden = false;
       referenceTooltipTarget = target;
       positionReferenceTooltip(target);
+      window.requestAnimationFrame(constrainReferenceTooltipToViewport);
     }
 
     function hideReferenceTooltip() {
       referenceTooltip.hidden = true;
       referenceTooltipTarget = null;
+      referenceTooltipSticky = false;
     }
 
     function handleMainClassChange() {
@@ -16616,7 +16804,10 @@ ${data.description}`;
       target.addEventListener("focusin", () => scheduleReferenceTooltip(target));
       target.addEventListener("focusout", (event) => {
         if (target.dataset.referenceTooltip.startsWith("spell-lookup")) {
-          if (referenceTooltip.contains(event.relatedTarget)) return;
+          if (event.relatedTarget instanceof Node &&
+              referenceTooltip.contains(event.relatedTarget)) {
+            return;
+          }
           return;
         }
         cancelReferenceTooltip();
@@ -16639,6 +16830,7 @@ ${data.description}`;
       cancelReferenceTooltip();
     });
 
+    referenceTooltip.addEventListener("pointerdown", beginReferenceTooltipDrag);
     referenceTooltip.addEventListener("mouseenter", () => {
       if (referenceTooltipHideTimer !== null) {
         window.clearTimeout(referenceTooltipHideTimer);
@@ -16646,12 +16838,31 @@ ${data.description}`;
       }
     });
     referenceTooltip.addEventListener("mouseleave", scheduleReferenceTooltipHide);
+    referenceTooltip.addEventListener("click", (event) => {
+      if (event.target.closest(".spell-lookup-close")) {
+        event.preventDefault();
+        event.stopPropagation();
+        hideReferenceTooltip();
+        return;
+      }
+      if (event.target.closest(".spell-lookup-back")) {
+        event.preventDefault();
+        event.stopPropagation();
+        const frame = referenceTooltip.querySelector(".spell-lookup-frame");
+        if (!frame) return;
+        const source = frame.getAttribute("src");
+        if (source) frame.src = source;
+      }
+    });
 
     window.addEventListener("scroll", (event) => {
-      if (referenceTooltip.contains(event.target)) return;
+      if (event.target instanceof Node && referenceTooltip.contains(event.target)) return;
       cancelReferenceTooltip();
     }, true);
-    window.addEventListener("resize", cancelReferenceTooltip);
+    window.addEventListener("resize", () => {
+      if (!referenceTooltip.hidden) constrainReferenceTooltipToViewport();
+      cancelReferenceTooltip();
+    });
 
     updateDerivedStats();
 
