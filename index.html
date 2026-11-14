@@ -64,6 +64,9 @@
     }
 
     .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
       margin-bottom: 32px;
       padding-top: 24px;
       color: #fff;
@@ -2820,6 +2823,102 @@
       overflow-wrap: anywhere;
     }
 
+    .spell-main-class-select {
+      min-width: 0;
+      max-width: 100%;
+      padding: 0;
+      color: #800000;
+      background: transparent;
+      border: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.86rem;
+      font-weight: bold;
+      line-height: 1.35;
+      text-align: right;
+      cursor: pointer;
+    }
+
+    .spell-main-class-select:focus {
+      outline: 1px solid #800000;
+      outline-offset: 1px;
+    }
+
+    .spell-main-class-select option {
+      color: #222;
+      background: #fff;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    .spell-table-head-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      vertical-align: middle;
+    }
+
+    .spell-table-head-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .spell-all-help {
+      flex: 0 0 auto;
+      padding: 1px 5px;
+      color: #fff;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.68rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      cursor: help;
+    }
+
+    .spell-all-help:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .reference-tooltip.spell-lookup-tooltip {
+      width: min(720px, calc(100vw - 24px));
+      padding: 8px;
+    }
+
+    .spell-lookup-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .spell-lookup-head a {
+      color: #800000;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .spell-lookup-frame {
+      display: block;
+      width: 100%;
+      height: min(480px, calc(100vh - 150px));
+      min-height: 240px;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+
+    .spell-lookup-note {
+      margin-top: 6px;
+      color: #777;
+      font-size: 0.72rem;
+      line-height: 1.5;
+    }
+
     .spell-modifier {
       display: flex;
       flex: 0 0 64px;
@@ -4606,6 +4705,14 @@ main.page-width {
 
 .png-export-mode .png-export-empty { display: none !important; }
 
+.png-export-mode .skill-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.png-export-mode .language-tools-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
 .png-export-mode .panel {
   margin-bottom: 0 !important;
 }
@@ -6184,7 +6291,7 @@ body.feature-dragging {
 
           <div class="spell-summary-item spell-main-class-item">
             <span>主职业</span>
-            <output id="spell-main-class">—</output>
+            <select id="spell-main-class" class="spell-main-class-select" aria-label="法术速查职业"></select>
           </div>
 
           <div class="spell-count-group spell-prepared-group">
@@ -6212,7 +6319,7 @@ body.feature-dragging {
             <col class="spell-list-col">
           </colgroup>
           <thead>
-            <tr><th>环阶</th><th>法术位</th><th>已准备法术；赠礼法术</th></tr>
+            <tr><th>环阶</th><th>法术位</th><th><span class="spell-table-head-flex"><span class="spell-table-head-title">已准备法术；赠礼法术<button class="table-head-help reference-tooltip-trigger reference-click-help spell-lookup-help" type="button" data-reference-tooltip="spell-lookup" aria-label="查看法术速查" title="查看法术速查">?</button></span><button class="spell-all-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-all" aria-label="查看万法大全" title="查看万法大全">万法大全</button></span></th></tr>
           </thead>
           <tbody>
             <tr><th scope="row">戏法</th><td class="spell-slot-cell"><span id="spell-slot-0" class="spell-slot-count is-empty">—</span></td><td><input id="spell-list-0" class="spell-list-input" type="text" autocomplete="off" aria-label="戏法"></td></tr>
@@ -12270,6 +12377,108 @@ ${data.description}`;
       };
     }
 
+    const SPELL_LOOKUP_BASE = "https://5echm.kagangtuya.top/topics/速查/法术速查/";
+    const SPELL_LOOKUP_PAGES = {
+      "吟游诗人": "吟游诗人法术速查.html",
+      "法师": "法师法术速查.html",
+      "魔契师": "魔契师法术速查.html",
+      "奇械师": "奇械师法术速查.html",
+      "德鲁伊": "德鲁伊法术速查.html",
+      "牧师": "牧师法术速查.html",
+      "圣武士": "圣武士法术速查.html",
+      "游侠": "游侠法术速查.html",
+      "术士": "术士法术速查.html"
+    };
+    const SPELL_LOOKUP_ALL_PAGE = "5E万法大全.html";
+
+    function isSpellcastingClassEntry(name, subclass) {
+      const spellcastingClasses = new Set([
+        "吟游诗人", "牧师", "德鲁伊", "术士", "法师",
+        "圣武士", "游侠", "奇械师", "魔契师"
+      ]);
+      const thirdCasterSubclasses = {
+        "战士": "奥法骑士",
+        "游荡者": "诡术师",
+        "武僧": "秘术武者"
+      };
+      return spellcastingClasses.has(name) ||
+        thirdCasterSubclasses[name] === subclass;
+    }
+
+    function getSpellMainClassChoices() {
+      const choices = [];
+      if (!classSelect.value) return choices;
+
+      const mainValue = classSelect.value;
+      choices.push({
+        value: mainValue,
+        name: currentMainClassName(),
+        level: getLevel(levelInput)
+      });
+
+      for (const entry of getExtraMultiEntries()) {
+        const name = entry.classSelect.value;
+        if (!name || name === mainValue) continue;
+        if (!isSpellcastingClassEntry(name, entry.subclassSelect.value)) continue;
+        choices.push({
+          value: name,
+          name,
+          level: getLevel(entry.levelInput)
+        });
+      }
+      return choices;
+    }
+
+    function syncSpellMainClassSelect() {
+      const previous = spellMainClass.value;
+      const choices = getSpellMainClassChoices();
+      spellMainClass.replaceChildren();
+
+      if (!choices.length) {
+        const blank = document.createElement("option");
+        blank.value = "";
+        blank.textContent = "—";
+        spellMainClass.appendChild(blank);
+        spellMainClass.disabled = true;
+        return;
+      }
+
+      for (const choice of choices) {
+        const option = document.createElement("option");
+        option.value = choice.value;
+        option.textContent = `${choice.name} ${choice.level === null ? "?" : choice.level}级`;
+        spellMainClass.appendChild(option);
+      }
+      spellMainClass.disabled = false;
+      const preferred = choices.some((choice) => choice.value === previous)
+        ? previous
+        : choices[0].value;
+      spellMainClass.value = preferred;
+    }
+
+    function buildSpellLookupTooltip(mode) {
+      const allSpells = mode === "all";
+      const option = spellMainClass.selectedOptions[0];
+      const label = allSpells
+        ? "5E 万法大全"
+        : (option ? option.textContent : "—");
+      const className = spellMainClass.value;
+      const page = allSpells ? SPELL_LOOKUP_ALL_PAGE : SPELL_LOOKUP_PAGES[className];
+
+      if (!allSpells && (!className || !page)) {
+        return `<span class="reference-title">法术速查 Spell Lookup</span>
+<p>${escapePlainText(label)} 暂无对应的法术速查页面。请先选择包含速查数据的职业。</p>`;
+      }
+
+      const url = encodeURI(`${SPELL_LOOKUP_BASE}${page}`);
+      return `<div class="spell-lookup-head">
+<span class="reference-title">${escapePlainText(label)} · 法术速查 Spell Lookup</span>
+<a href="${url}" target="_blank" rel="noopener noreferrer">在新窗口打开</a>
+</div>
+<iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(label)}法术速查" loading="eager" referrerpolicy="no-referrer"></iframe>
+<div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击上方“在新窗口打开”。</div>`;
+    }
+
     function updateSpellcasting() {
       const warlock = getWarlockPactData();
       const casterLevel = warlock
@@ -12292,7 +12501,7 @@ ${data.description}`;
         ? (preparedGift !== 0 ? preparedGift : null)
         : preparedBase + preparedGift;
 
-      const mainLevel = getLevel(levelInput);
+      syncSpellMainClassSelect();
 
       spellCasterLabel.textContent = classSelect.value === "魔契师"
         ? "契约魔法等级"
@@ -12300,9 +12509,6 @@ ${data.description}`;
       spellCasterLevel.textContent = casterLevel === null ? "—" : String(casterLevel);
       spellCantripCount.textContent = cantripTotal === null ? "—" : String(cantripTotal);
       spellPreparedCount.textContent = preparedTotal === null ? "—" : String(preparedTotal);
-      spellMainClass.textContent = classSelect.value
-        ? `${currentMainClassName()} ${mainLevel === null ? "?" : mainLevel}级`
-        : "—";
       spellMulticlassNote.hidden = !extraMulticlassHasSpellcasting();
 
       const slots = warlock ? [] : (spellSlotsByCasterLevel[casterLevel] || []);
@@ -15209,7 +15415,10 @@ ${data.description}`;
       wrapper.className = "png-export-mode png-export-stack";
       wrapper.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
       wrapper.style.cssText = 'color:#111;background:#f8f8f6;font-family:"Microsoft YaHei",Arial,sans-serif;font-size:16px;';
-      const width = Math.ceil(Math.max(...panels.map((panel) => panel.getBoundingClientRect().width)));
+      const width = Math.ceil(Math.max(
+        722,
+        ...panels.map((panel) => panel.getBoundingClientRect().width)
+      ));
       wrapper.style.width = `${width}px`;
       for (const panel of panels) wrapper.append(preparePanelForPng(panel));
       return wrapper;
@@ -15288,7 +15497,7 @@ ${data.description}`;
         const layoutWidth = wrapper.offsetWidth;
         const layoutHeight = Math.max(wrapper.scrollHeight, wrapper.offsetHeight) + 4;
         const visualWidth = Math.ceil(layoutWidth * exportScale);
-        const visualHeight = Math.ceil(layoutHeight * exportScale);
+        const visualHeight = Math.ceil((layoutHeight + 32) * exportScale);
         if (!layoutWidth || !layoutHeight || !visualWidth || !visualHeight) {
           throw new Error("卡片尺寸读取失败。");
         }
@@ -15298,7 +15507,7 @@ ${data.description}`;
         styleElement.textContent = collectExportCss();
         const styleMarkup = new XMLSerializer().serializeToString(styleElement);
         const wrapperMarkup = new XMLSerializer().serializeToString(wrapper);
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${visualWidth}" height="${visualHeight}" viewBox="0 0 ${layoutWidth} ${layoutHeight}" style="font-size:16px"><foreignObject x="0" y="0" width="${layoutWidth}" height="${layoutHeight}"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${layoutWidth}" height="${layoutHeight + 32}" style="font-size:16px"><foreignObject x="0" y="0" width="${layoutWidth}" height="${layoutHeight + 32}"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
         // file:// 页面中 Blob URL 的 SVG 会被 Chrome 视为跨源并污染 Canvas；
         // data URL 可以避免该问题，同时不引入外部图片依赖。
         setBuilderSaveStatus("正在渲染 PNG…");
@@ -16248,13 +16457,19 @@ ${data.description}`;
     }
 
     function showReferenceTooltip(target) {
-      const content = referenceTooltipContents[target.dataset.referenceTooltip];
+      const key = target.dataset.referenceTooltip;
+      const content = key === "spell-lookup"
+        ? buildSpellLookupTooltip("main")
+        : key === "spell-lookup-all"
+          ? buildSpellLookupTooltip("all")
+          : referenceTooltipContents[key];
       if (!content) return;
 
       if (referenceTooltipHideTimer !== null) {
         window.clearTimeout(referenceTooltipHideTimer);
         referenceTooltipHideTimer = null;
       }
+      referenceTooltip.classList.toggle("spell-lookup-tooltip", key.startsWith("spell-lookup"));
       referenceTooltip.innerHTML = content;
       referenceTooltip.hidden = false;
       referenceTooltipTarget = target;
@@ -16399,7 +16614,13 @@ ${data.description}`;
       target.addEventListener("mouseenter", () => scheduleReferenceTooltip(target));
       target.addEventListener("mouseleave", scheduleReferenceTooltipHide);
       target.addEventListener("focusin", () => scheduleReferenceTooltip(target));
-      target.addEventListener("focusout", cancelReferenceTooltip);
+      target.addEventListener("focusout", (event) => {
+        if (target.dataset.referenceTooltip.startsWith("spell-lookup")) {
+          if (referenceTooltip.contains(event.relatedTarget)) return;
+          return;
+        }
+        cancelReferenceTooltip();
+      });
     }
 
     for (const helpButton of document.querySelectorAll(".reference-click-help")) {
