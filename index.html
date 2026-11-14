@@ -4602,7 +4602,7 @@ main.page-width {
   }
 
   html[data-theme="dark"] .panel .ability-tooltip,
-  html[data-theme="dark"] .panel .reference-tooltip {
+  html[data-theme="dark"] .reference-tooltip {
     color: #eee !important;
     background: #222 !important;
     border-color: #666 !important;
@@ -9752,6 +9752,10 @@ window.AdventureTraits = {
         !languageBody || !languageAdd || !toolBody || !toolAdd) {
       return;
     }
+
+    // Keep the fixed lookup popover outside the zoomed page container.
+    // Chrome Android otherwise clips fixed descendants to the zoomed block.
+    document.body.append(referenceTooltip);
 
     const classNames = [
       "野蛮人", "吟游诗人", "牧师", "德鲁伊", "战士", "武僧", "圣武士",
@@ -16596,11 +16600,30 @@ ${data.description}`;
       }, 160);
     }
 
+    function getReferenceTooltipViewport() {
+      const viewport = window.visualViewport;
+      const left = viewport?.offsetLeft || 0;
+      const top = viewport?.offsetTop || 0;
+      const width = viewport?.width || window.innerWidth;
+      const height = viewport?.height || window.innerHeight;
+      return {
+        left,
+        top,
+        width,
+        height,
+        right: left + width,
+        bottom: top + height
+      };
+    }
+
+    function isReferenceTooltipTouchLayout() {
+      return window.matchMedia("(max-width: 620px)").matches ||
+        window.matchMedia("(pointer: coarse)").matches ||
+        navigator.maxTouchPoints > 0;
+    }
+
     function getReferenceTooltipRightMargin() {
-      if (
-        window.matchMedia("(max-width: 620px)").matches ||
-        window.matchMedia("(pointer: coarse)").matches
-      ) {
+      if (isReferenceTooltipTouchLayout()) {
         return REFERENCE_TOOLTIP_MARGIN;
       }
       const scrollbarWidth = Math.max(
@@ -16613,17 +16636,19 @@ ${data.description}`;
     function constrainReferenceTooltipToViewport() {
       if (referenceTooltip.hidden) return;
 
+      const viewport = getReferenceTooltipViewport();
       const rightMargin = getReferenceTooltipRightMargin();
+      const minimumLeft = viewport.left + REFERENCE_TOOLTIP_MARGIN;
       const maximumWidth = Math.max(
         160,
-        window.innerWidth - REFERENCE_TOOLTIP_MARGIN - rightMargin
+        viewport.width - REFERENCE_TOOLTIP_MARGIN - rightMargin
       );
       if (referenceTooltip.offsetWidth > maximumWidth) {
         referenceTooltip.style.width = `${maximumWidth}px`;
       }
       const maximumHeight = Math.max(
         160,
-        window.innerHeight - REFERENCE_TOOLTIP_MARGIN * 2
+        viewport.height - REFERENCE_TOOLTIP_MARGIN * 2
       );
       if (referenceTooltip.offsetHeight > maximumHeight) {
         referenceTooltip.style.height = `${maximumHeight}px`;
@@ -16633,20 +16658,20 @@ ${data.description}`;
       const currentLeft = Number.parseFloat(referenceTooltip.style.left) || rect.left;
       const currentTop = Number.parseFloat(referenceTooltip.style.top) || rect.top;
       const maximumLeft = Math.max(
-        REFERENCE_TOOLTIP_MARGIN,
-        window.innerWidth - rect.width - rightMargin
+        minimumLeft,
+        viewport.right - rect.width - rightMargin
       );
       const maximumTop = Math.max(
-        REFERENCE_TOOLTIP_MARGIN,
-        window.innerHeight - rect.height - REFERENCE_TOOLTIP_MARGIN
+        viewport.top + REFERENCE_TOOLTIP_MARGIN,
+        viewport.bottom - rect.height - REFERENCE_TOOLTIP_MARGIN
       );
 
       referenceTooltip.style.left = `${Math.min(
-        Math.max(REFERENCE_TOOLTIP_MARGIN, currentLeft),
+        Math.max(minimumLeft, currentLeft),
         maximumLeft
       )}px`;
       referenceTooltip.style.top = `${Math.min(
-        Math.max(REFERENCE_TOOLTIP_MARGIN, currentTop),
+        Math.max(viewport.top + REFERENCE_TOOLTIP_MARGIN, currentTop),
         maximumTop
       )}px`;
     }
@@ -16654,26 +16679,25 @@ ${data.description}`;
     function positionReferenceTooltip(target) {
       const rect = target.getBoundingClientRect();
       const tip = referenceTooltip.getBoundingClientRect();
+      const viewport = getReferenceTooltipViewport();
       const rightMargin = getReferenceTooltipRightMargin();
+      const minimumLeft = viewport.left + REFERENCE_TOOLTIP_MARGIN;
       let left = rect.left + rect.width / 2 - tip.width / 2;
       let top = rect.bottom + 8;
 
       left = Math.max(
-        REFERENCE_TOOLTIP_MARGIN,
-        Math.min(left, window.innerWidth - tip.width - rightMargin)
+        minimumLeft,
+        Math.min(left, viewport.right - tip.width - rightMargin)
       );
-      if (
-        window.matchMedia("(max-width: 620px)").matches ||
-        window.matchMedia("(pointer: coarse)").matches
-      ) {
-        left = REFERENCE_TOOLTIP_MARGIN;
+      if (isReferenceTooltipTouchLayout()) {
+        left = minimumLeft;
       }
-      if (top + tip.height > window.innerHeight - REFERENCE_TOOLTIP_MARGIN) {
+      if (top + tip.height > viewport.bottom - REFERENCE_TOOLTIP_MARGIN) {
         top = rect.top - tip.height - 8;
       }
       top = Math.max(
-        REFERENCE_TOOLTIP_MARGIN,
-        Math.min(top, window.innerHeight - tip.height - REFERENCE_TOOLTIP_MARGIN)
+        viewport.top + REFERENCE_TOOLTIP_MARGIN,
+        Math.min(top, viewport.bottom - tip.height - REFERENCE_TOOLTIP_MARGIN)
       );
 
       referenceTooltip.style.left = `${left}px`;
@@ -16705,20 +16729,22 @@ ${data.description}`;
       const onMove = (moveEvent) => {
         const state = referenceTooltipDragState;
         if (!state || moveEvent.pointerId !== state.pointerId) return;
+        const viewport = getReferenceTooltipViewport();
+        const minimumLeft = viewport.left + REFERENCE_TOOLTIP_MARGIN;
         const maximumLeft = Math.max(
-          REFERENCE_TOOLTIP_MARGIN,
-          window.innerWidth - state.width - getReferenceTooltipRightMargin()
+          minimumLeft,
+          viewport.right - state.width - getReferenceTooltipRightMargin()
         );
         const maximumTop = Math.max(
-          REFERENCE_TOOLTIP_MARGIN,
-          window.innerHeight - state.height - REFERENCE_TOOLTIP_MARGIN
+          viewport.top + REFERENCE_TOOLTIP_MARGIN,
+          viewport.bottom - state.height - REFERENCE_TOOLTIP_MARGIN
         );
         const left = Math.min(
-          Math.max(REFERENCE_TOOLTIP_MARGIN, moveEvent.clientX - state.offsetX),
+          Math.max(minimumLeft, moveEvent.clientX - state.offsetX),
           maximumLeft
         );
         const top = Math.min(
-          Math.max(REFERENCE_TOOLTIP_MARGIN, moveEvent.clientY - state.offsetY),
+          Math.max(viewport.top + REFERENCE_TOOLTIP_MARGIN, moveEvent.clientY - state.offsetY),
           maximumTop
         );
         referenceTooltip.style.left = `${left}px`;
@@ -16758,20 +16784,22 @@ ${data.description}`;
         const currentTouch = moveEvent.touches[0];
         if (!currentTouch) return;
         moveEvent.preventDefault();
+        const viewport = getReferenceTooltipViewport();
+        const minimumLeft = viewport.left + REFERENCE_TOOLTIP_MARGIN;
         const maximumLeft = Math.max(
-          REFERENCE_TOOLTIP_MARGIN,
-          window.innerWidth - state.width - getReferenceTooltipRightMargin()
+          minimumLeft,
+          viewport.right - state.width - getReferenceTooltipRightMargin()
         );
         const maximumTop = Math.max(
-          REFERENCE_TOOLTIP_MARGIN,
-          window.innerHeight - state.height - REFERENCE_TOOLTIP_MARGIN
+          viewport.top + REFERENCE_TOOLTIP_MARGIN,
+          viewport.bottom - state.height - REFERENCE_TOOLTIP_MARGIN
         );
         referenceTooltip.style.left = `${Math.min(
-          Math.max(REFERENCE_TOOLTIP_MARGIN, currentTouch.clientX - state.offsetX),
+          Math.max(minimumLeft, currentTouch.clientX - state.offsetX),
           maximumLeft
         )}px`;
         referenceTooltip.style.top = `${Math.min(
-          Math.max(REFERENCE_TOOLTIP_MARGIN, currentTouch.clientY - state.offsetY),
+          Math.max(viewport.top + REFERENCE_TOOLTIP_MARGIN, currentTouch.clientY - state.offsetY),
           maximumTop
         )}px`;
       };
@@ -16798,13 +16826,15 @@ ${data.description}`;
       const startY = touch.clientY;
       const startWidth = rect.width;
       const startHeight = rect.height;
+      const viewport = getReferenceTooltipViewport();
       const left = Number.parseFloat(referenceTooltip.style.left) || rect.left;
       const top = Number.parseFloat(referenceTooltip.style.top) || rect.top;
-      const rightLimit = window.innerWidth - getReferenceTooltipRightMargin();
-      const maximumWidth = Math.max(240, rightLimit - REFERENCE_TOOLTIP_MARGIN);
+      const minimumLeft = viewport.left + REFERENCE_TOOLTIP_MARGIN;
+      const rightLimit = viewport.right - getReferenceTooltipRightMargin();
+      const maximumWidth = Math.max(240, rightLimit - minimumLeft);
       const maximumHeight = Math.max(
         220,
-        window.innerHeight - REFERENCE_TOOLTIP_MARGIN - top
+        viewport.bottom - REFERENCE_TOOLTIP_MARGIN - top
       );
       const minimumWidth = Math.min(240, startWidth);
       const minimumHeight = Math.min(220, startHeight);
@@ -16822,7 +16852,7 @@ ${data.description}`;
           maximumHeight
         );
         const nextLeft = Math.max(
-          REFERENCE_TOOLTIP_MARGIN,
+          minimumLeft,
           Math.min(left, rightLimit - width)
         );
         referenceTooltip.style.left = `${nextLeft}px`;
@@ -16853,16 +16883,18 @@ ${data.description}`;
       const startY = event.clientY;
       const startWidth = rect.width;
       const startHeight = rect.height;
+      const viewport = getReferenceTooltipViewport();
       const left = Number.parseFloat(referenceTooltip.style.left) || rect.left;
       const top = Number.parseFloat(referenceTooltip.style.top) || rect.top;
-      const rightLimit = window.innerWidth - getReferenceTooltipRightMargin();
+      const minimumLeft = viewport.left + REFERENCE_TOOLTIP_MARGIN;
+      const rightLimit = viewport.right - getReferenceTooltipRightMargin();
       const maximumWidth = Math.max(
         240,
-        rightLimit - REFERENCE_TOOLTIP_MARGIN
+        rightLimit - minimumLeft
       );
       const maximumHeight = Math.max(
         220,
-        window.innerHeight - REFERENCE_TOOLTIP_MARGIN - top
+        viewport.bottom - REFERENCE_TOOLTIP_MARGIN - top
       );
       const minimumWidth = Math.min(240, startWidth);
       const minimumHeight = Math.min(220, startHeight);
@@ -16882,7 +16914,7 @@ ${data.description}`;
           maximumHeight
         );
         const nextLeft = Math.max(
-          REFERENCE_TOOLTIP_MARGIN,
+          minimumLeft,
           Math.min(left, rightLimit - width)
         );
         referenceTooltip.style.left = `${nextLeft}px`;
