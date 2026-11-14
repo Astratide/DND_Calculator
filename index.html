@@ -2866,6 +2866,14 @@
       gap: 8px;
     }
 
+    .spell-table-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 0 0 auto;
+    }
+
+    .spell-lookup-help,
     .spell-all-help {
       flex: 0 0 auto;
       padding: 1px 5px;
@@ -2874,12 +2882,13 @@
       border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: 0;
       font-family: "Microsoft YaHei", Arial, sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       line-height: 1.2;
       white-space: nowrap;
       cursor: help;
     }
 
+    .spell-lookup-help:hover,
     .spell-all-help:hover {
       background: rgba(255, 255, 255, 0.2);
     }
@@ -4686,7 +4695,7 @@ main.page-width {
   .settings-panel { top: 76px; right: 12px; }
 
   .reference-tooltip.spell-lookup-tooltip {
-    width: calc(100vw - 8px);
+    width: min(90vw, 720px);
     max-height: calc(100dvh - 8px);
   }
 
@@ -6418,7 +6427,7 @@ body.feature-dragging {
             <col class="spell-list-col">
           </colgroup>
           <thead>
-            <tr><th>环阶</th><th>法术位</th><th><span class="spell-table-head-flex"><span class="spell-table-head-title">已准备法术；赠礼法术<button class="table-head-help reference-tooltip-trigger reference-click-help spell-lookup-help" type="button" data-reference-tooltip="spell-lookup" aria-label="查看法术速查" title="查看法术速查">?</button></span><button class="spell-all-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-all" aria-label="查看万法大全" title="查看万法大全">万法大全</button></span></th></tr>
+            <tr><th>环阶</th><th>法术位</th><th><span class="spell-table-head-flex"><span class="spell-table-head-title">已准备法术；赠礼法术</span><span class="spell-table-head-actions"><button class="spell-lookup-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup" aria-label="查看职业法术速查" title="查看职业法术速查">法术速查</button><button class="spell-all-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-all" aria-label="查看万法大全" title="查看万法大全">万法大全</button></span></span></th></tr>
           </thead>
           <tbody>
             <tr><th scope="row">戏法</th><td class="spell-slot-cell"><span id="spell-slot-0" class="spell-slot-count is-empty">—</span></td><td><input id="spell-list-0" class="spell-list-input" type="text" autocomplete="off" aria-label="戏法"></td></tr>
@@ -12541,6 +12550,7 @@ ${data.description}`;
         blank.textContent = "—";
         spellMainClass.appendChild(blank);
         spellMainClass.disabled = true;
+        updateSpellLookupButtonLabel();
         return;
       }
 
@@ -12556,14 +12566,11 @@ ${data.description}`;
         ? previous
         : choices[0].value;
       spellMainClass.value = preferred;
+      updateSpellLookupButtonLabel();
     }
 
-    function buildSpellLookupTooltip(mode) {
-      const allSpells = mode === "all";
+    function getSpellLookupSelection() {
       const option = spellMainClass.selectedOptions[0];
-      const label = allSpells
-        ? "5E 万法大全"
-        : (option ? option.textContent : "—");
       const className = spellMainClass.value;
       const subclass = option?.dataset.subclass || "";
       const thirdCasterLookup = {
@@ -12571,12 +12578,34 @@ ${data.description}`;
         "游荡者": "诡术师",
         "武僧": "秘术武者"
       };
-      const lookupClass = thirdCasterLookup[className] === subclass
-        ? "法师"
-        : className;
+      return {
+        option,
+        className,
+        label: option ? option.textContent : "—",
+        lookupClass: thirdCasterLookup[className] === subclass ? "法师" : className
+      };
+    }
+
+    function updateSpellLookupButtonLabel() {
+      const button = document.querySelector(".spell-lookup-help");
+      if (!button) return;
+      const { lookupClass } = getSpellLookupSelection();
+      const label = SPELL_LOOKUP_PAGES[lookupClass]
+        ? `${lookupClass}法术速查`
+        : "法术速查";
+      button.textContent = label;
+      button.title = label;
+      button.setAttribute("aria-label", `查看${label}`);
+    }
+
+    function buildSpellLookupTooltip(mode) {
+      const allSpells = mode === "all";
+      const selection = getSpellLookupSelection();
+      const label = allSpells ? "5E 万法大全" : selection.label;
+      const lookupClass = selection.lookupClass;
       const page = allSpells ? SPELL_LOOKUP_ALL_PAGE : SPELL_LOOKUP_PAGES[lookupClass];
 
-      if (!allSpells && (!className || !page)) {
+      if (!allSpells && (!selection.className || !page)) {
         return `<div class="spell-lookup-head">
 <span class="reference-title">法术速查 Spell Lookup</span>
 <span class="spell-lookup-actions">
@@ -16568,7 +16597,10 @@ ${data.description}`;
     }
 
     function getReferenceTooltipRightMargin() {
-      if (window.matchMedia("(max-width: 620px)").matches) {
+      if (
+        window.matchMedia("(max-width: 620px)").matches ||
+        window.matchMedia("(pointer: coarse)").matches
+      ) {
         return REFERENCE_TOOLTIP_MARGIN;
       }
       const scrollbarWidth = Math.max(
@@ -16630,6 +16662,12 @@ ${data.description}`;
         REFERENCE_TOOLTIP_MARGIN,
         Math.min(left, window.innerWidth - tip.width - rightMargin)
       );
+      if (
+        window.matchMedia("(max-width: 620px)").matches ||
+        window.matchMedia("(pointer: coarse)").matches
+      ) {
+        left = REFERENCE_TOOLTIP_MARGIN;
+      }
       if (top + tip.height > window.innerHeight - REFERENCE_TOOLTIP_MARGIN) {
         top = rect.top - tip.height - 8;
       }
@@ -16715,16 +16753,17 @@ ${data.description}`;
       const startHeight = rect.height;
       const left = Number.parseFloat(referenceTooltip.style.left) || rect.left;
       const top = Number.parseFloat(referenceTooltip.style.top) || rect.top;
+      const rightLimit = window.innerWidth - getReferenceTooltipRightMargin();
       const maximumWidth = Math.max(
         240,
-        window.innerWidth - getReferenceTooltipRightMargin() - left
+        rightLimit - REFERENCE_TOOLTIP_MARGIN
       );
       const maximumHeight = Math.max(
         220,
         window.innerHeight - REFERENCE_TOOLTIP_MARGIN - top
       );
-      const minimumWidth = Math.min(240, maximumWidth);
-      const minimumHeight = Math.min(220, maximumHeight);
+      const minimumWidth = Math.min(240, startWidth);
+      const minimumHeight = Math.min(220, startHeight);
 
       try {
         referenceTooltip.setPointerCapture(pointerId);
@@ -16740,6 +16779,11 @@ ${data.description}`;
           Math.max(minimumHeight, startHeight + moveEvent.clientY - startY),
           maximumHeight
         );
+        const nextLeft = Math.max(
+          REFERENCE_TOOLTIP_MARGIN,
+          Math.min(left, rightLimit - width)
+        );
+        referenceTooltip.style.left = `${nextLeft}px`;
         referenceTooltip.style.width = `${width}px`;
         referenceTooltip.style.height = `${height}px`;
       };
@@ -17298,6 +17342,8 @@ ${data.description}`;
     for (const input of [spellCantripGift, spellAlwaysPrepared, spellGiftSpells]) {
       input.addEventListener("input", updateSpellcasting);
     }
+
+    spellMainClass.addEventListener("change", updateSpellLookupButtonLabel);
 
     featAdd.addEventListener("click", addFeatRow);
     featStyleAdd.addEventListener("click", addCombatFeat);
