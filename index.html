@@ -15208,7 +15208,7 @@ ${data.description}`;
       const wrapper = document.createElement("div");
       wrapper.className = "png-export-mode png-export-stack";
       wrapper.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-      wrapper.style.cssText = 'color:#111;background:#f8f8f6;font-family:"Microsoft YaHei",Arial,sans-serif;font-size:10px;';
+      wrapper.style.cssText = 'color:#111;background:#f8f8f6;font-family:"Microsoft YaHei",Arial,sans-serif;font-size:16px;';
       const width = Math.ceil(Math.max(...panels.map((panel) => panel.getBoundingClientRect().width)));
       wrapper.style.width = `${width}px`;
       for (const panel of panels) wrapper.append(preparePanelForPng(panel));
@@ -15298,7 +15298,7 @@ ${data.description}`;
         styleElement.textContent = collectExportCss();
         const styleMarkup = new XMLSerializer().serializeToString(styleElement);
         const wrapperMarkup = new XMLSerializer().serializeToString(wrapper);
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${layoutWidth}" height="${layoutHeight}" style="font-size:16px"><foreignObject x="0" y="0" width="${layoutWidth}" height="${layoutHeight}"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${visualWidth}" height="${visualHeight}" viewBox="0 0 ${layoutWidth} ${layoutHeight}" style="font-size:16px"><foreignObject x="0" y="0" width="${layoutWidth}" height="${layoutHeight}"><div xmlns="http://www.w3.org/1999/xhtml">${wrapperMarkup}${styleMarkup}</div></foreignObject></svg>`;
         // file:// 页面中 Blob URL 的 SVG 会被 Chrome 视为跨源并污染 Canvas；
         // data URL 可以避免该问题，同时不引入外部图片依赖。
         setBuilderSaveStatus("正在渲染 PNG…");
