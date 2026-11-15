@@ -2706,13 +2706,62 @@
       text-align: center;
     }
 
-    .class-feature-block { margin-top: 12px; }
+    .class-feature-block {
+      position: relative;
+      margin-top: 12px;
+    }
 
     .class-feature-title {
       margin-bottom: 4px;
+      padding-right: 190px;
       color: #111;
       font-size: 0.9rem;
       font-weight: bold;
+    }
+
+    .class-feature-lookup {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 1px 6px;
+      color: #800000;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.7rem;
+      line-height: 1.35;
+      white-space: nowrap;
+      cursor: help;
+    }
+
+    .class-feature-lookup:hover {
+      border-color: #800000;
+      background: #f8f8f6;
+    }
+
+    .special-ability-lookups {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .special-ability-lookup {
+      padding: 2px 8px;
+      color: #800000;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.74rem;
+      line-height: 1.4;
+      cursor: help;
+    }
+
+    .special-ability-lookup:hover {
+      border-color: #800000;
+      background: #f8f8f6;
     }
 
     .class-feature-text {
@@ -2952,6 +3001,23 @@
       user-select: none;
       -webkit-user-select: none;
       touch-action: none;
+    }
+
+    .class-lookup-heading {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .class-lookup-heading .lookup-source {
+      color: #777;
+      font-size: 0.68rem;
+      line-height: 1.2;
+    }
+
+    html[data-theme="dark"] .class-lookup-heading .lookup-source {
+      color: #aaa;
     }
 
     .spell-lookup-head .reference-title {
@@ -4813,6 +4879,15 @@ main.page-width {
 
 .png-export-mode .png-export-empty { display: none !important; }
 
+.png-export-mode .class-feature-lookup,
+.png-export-mode .special-ability-lookups {
+  display: none !important;
+}
+
+.png-export-mode .class-feature-title {
+  padding-right: 0;
+}
+
 .png-export-mode .skill-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
@@ -5321,6 +5396,11 @@ body.feature-dragging {
 }
 
 @media print {
+  .class-feature-lookup,
+  .special-ability-lookups {
+    display: none !important;
+  }
+
   .class-feature-paste-table .feature-table-toggle,
   .class-feature-paste-table .feature-table-delete,
   .class-feature-paste-table .feature-drag-handle {
@@ -6123,6 +6203,10 @@ body.feature-dragging {
               </thead>
               <tbody id="special-ability-body"></tbody>
             </table>
+            <div class="special-ability-lookups">
+              <button class="special-ability-lookup reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="魔能祈唤速查" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/角色职业/魔契师/魔能祈唤选项.htm">魔能祈唤速查</button>
+              <button class="special-ability-lookup reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="超魔法速查" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/角色职业/术士/超魔法选项.htm">超魔法速查</button>
+            </div>
           </div>
         </div>
 
@@ -6136,7 +6220,7 @@ body.feature-dragging {
           <h3 class="builder-section-title">职业特质 Class Trait</h3>
           <table class="core-trait-table" aria-label="核心特质">
             <thead>
-              <tr><th colspan="2">核心特质</th></tr>
+              <tr><th id="core-trait-title" colspan="2">核心特质</th></tr>
             </thead>
             <tbody id="core-trait-body"></tbody>
           </table>
@@ -6152,7 +6236,7 @@ body.feature-dragging {
                 <button type="button" class="custom-format" data-format="spell">法术</button>
                 <button type="button" class="custom-format" data-format="list">• 列表</button>
               </div>
-              <div id="main-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职的职业特性。" aria-label="主职职业特性"></div>
+              <div id="main-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职的职业特性。如果为5R格式会自动在下方生成模块性可编辑表格。" aria-label="主职职业特性"></div>
             </div>
           </div>
 
@@ -6167,7 +6251,7 @@ body.feature-dragging {
                 <button type="button" class="custom-format" data-format="spell">法术</button>
                 <button type="button" class="custom-format" data-format="list">• 列表</button>
               </div>
-              <div id="main-subclass-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职子职特性。" aria-label="主职子职特性"></div>
+              <div id="main-subclass-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴主职子职特性。如果为5R格式会自动在下方生成模块性可编辑表格。" aria-label="主职子职特性"></div>
             </div>
           </div>
 
@@ -6182,7 +6266,7 @@ body.feature-dragging {
                 <button type="button" class="custom-format" data-format="spell">法术</button>
                 <button type="button" class="custom-format" data-format="list">• 列表</button>
               </div>
-              <div id="multi-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职的职业特性。" aria-label="兼职职业特性"></div>
+              <div id="multi-class-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职的职业特性。如果为5R格式会自动在下方生成模块性可编辑表格。" aria-label="兼职职业特性"></div>
             </div>
           </div>
 
@@ -6197,7 +6281,7 @@ body.feature-dragging {
                 <button type="button" class="custom-format" data-format="spell">法术</button>
                 <button type="button" class="custom-format" data-format="list">• 列表</button>
               </div>
-              <div id="multi-subclass-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职子职特性。" aria-label="兼职子职特性"></div>
+              <div id="multi-subclass-feature-text" class="class-feature-text custom-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴兼职子职特性。如果为5R格式会自动在下方生成模块性可编辑表格。" aria-label="兼职子职特性"></div>
             </div>
           </div>
         </div>
@@ -9621,6 +9705,7 @@ window.AdventureTraits = {
     const skillTables = document.getElementById("skill-tables");
     const skillSummary = document.getElementById("skill-summary");
     const coreTraitBody = document.getElementById("core-trait-body");
+    const coreTraitTitle = document.getElementById("core-trait-title");
     const mainClassFeatureBlock = document.getElementById("main-class-feature-block");
     const mainClassFeatureTitle = document.getElementById("main-class-feature-title");
     const mainClassFeatureText = document.getElementById("main-class-feature-text");
@@ -9736,7 +9821,7 @@ window.AdventureTraits = {
         !backpackGearSection || !backpackToolSection || !backpackMagicSection ||
         !backpackAddGear || !backpackAddTool || !backpackAddMagic ||
         !backpackGearTotalWeight || !backpackGearTotalPrice ||
-        !skillTables || !skillSummary || !coreTraitBody ||
+        !skillTables || !skillSummary || !coreTraitBody || !coreTraitTitle ||
         !mainClassFeatureBlock || !mainClassFeatureTitle || !mainClassFeatureText ||
         !mainSubclassFeatureBlock || !mainSubclassFeatureTitle || !mainSubclassFeatureText ||
         !multiClassFeatureBlock || !multiClassFeatureTitle || !multiClassFeatureText ||
@@ -9762,21 +9847,109 @@ window.AdventureTraits = {
       "游侠", "游荡者", "术士", "魔契师", "法师", "奇械师"
     ];
 
-    const subclassMap = {
-      "野蛮人": ["狂战士道途", "兽心道途", "世界树道途", "狂热者道途", "先祖守卫道途", "风暴先驱道途", "狂野魔法道途", "野兽道途", "巨人道途"],
-      "吟游诗人": ["舞蹈学院", "魅心学院", "逸闻学院", "勇气学院", "剑舞学院", "低语学院", "创造学院", "雄辩学院", "精魂学院", "皓月学院"],
-      "牧师": ["生命领域", "光明领域", "诡术领域", "战争领域", "锻造领域", "坟墓领域", "秩序领域", "和平领域", "暮光领域", "知识领域"],
-      "德鲁伊": ["大地结社", "月亮结社", "海洋结社", "星辰结社", "梦境结社", "牧人结社", "孢子结社", "野火结社"],
-      "战士": ["战斗大师", "勇士", "奥法骑士", "灵能武士", "魔射手", "骑兵", "武士", "符文骑士", "回音骑士", "旗将"],
-      "武僧": ["命流武者", "暗影武者", "四象武者", "秘术武者", "散打武者", "醉拳宗", "剑圣宗", "日魂宗", "星我宗", "神龙宗"],
-      "圣武士": ["奉献之誓", "荣耀之誓", "古贤之誓", "复仇之誓", "征服之誓", "救赎之誓", "守望之誓", "王冠之誓", "巨灵贵族之誓"],
-      "游侠": ["驯兽师", "妖精漫游者", "幽域追踪者", "猎人", "边界行者", "怪物杀手", "集群牧者", "龙兽守卫", "凛冬行者"],
-      "游荡者": ["诡术师", "刺客", "魂刃", "盗贼", "调查员", "策士", "斥候", "游荡剑客", "鬼魅", "三神门徒"],
-      "术士": ["畸变术法", "时械术法", "龙族术法", "狂野术法", "神圣之魂", "幽影魔法", "风暴术法", "咒火术法"],
-      "魔契师": ["至高妖精宗主", "天界宗主", "邪魔宗主", "旧日支配者宗主", "咒剑", "巨灵宗主", "深海意志", "死灵宗主"],
-      "法师": ["防护师", "预言师", "塑能师", "幻术师", "战争魔法", "书士会", "时间魔法", "重力魔法", "剑咏者"],
-      "奇械师": ["炼金师", "装甲师", "魔炮师", "战地匠师", "制图师"]
+    const subclassCatalog = {
+      "野蛮人": [
+        ["狂战士道途"], ["兽心道途"], ["世界树道途"], ["狂热者道途"],
+        ["战狂道途", "SCAG"], ["先祖守卫道途", "XGE"], ["风暴先驱道途", "XGE"],
+        ["狂野魔法道途", "TCE"], ["野兽道途", "TCE"], ["巨人道途", "BPGG"]
+      ],
+      "吟游诗人": [
+        ["舞蹈学院"], ["魅心学院"], ["逸闻学院"], ["勇气学院"],
+        ["剑舞学院", "XGE"], ["低语学院", "XGE"], ["创造学院", "TCE"],
+        ["雄辩学院", "TCE"], ["皓月学院", "FR"], ["精魂学院", "RHW"]
+      ],
+      "牧师": [
+        ["生命领域"], ["光明领域"], ["诡术领域"], ["战争领域"],
+        ["自然领域", "PHB14"], ["风暴领域", "PHB14"], ["死亡领域", "DMG14"],
+        ["锻造领域", "XGE"], ["秩序领域", "TCE"], ["和平领域", "TCE"],
+        ["暮光领域", "TCE"], ["知识领域", "FR"], ["坟墓领域", "RHW"],
+        ["奥秘领域", "AU"]
+      ],
+      "德鲁伊": [
+        ["大地结社"], ["月亮结社"], ["海洋结社"], ["星辰结社"],
+        ["梦境结社", "XGE"], ["牧人结社", "XGE"], ["孢子结社", "TCE"],
+        ["野火结社", "TCE"]
+      ],
+      "战士": [
+        ["战斗大师"], ["勇士"], ["奥法骑士"], ["灵能武士"],
+        ["骑兵", "XGE"], ["武士", "XGE"], ["回音骑士", "EGW"],
+        ["符文骑士", "TCE"], ["旗将", "FR"], ["魔射手", "AU"]
+      ],
+      "武僧": [
+        ["命流武者"], ["暗影武者"], ["四象武者"], ["散打武者"],
+        ["永亡宗", "SCAG"], ["醉拳宗", "XGE"], ["剑圣宗", "XGE"],
+        ["日魂宗", "XGE"], ["星我宗", "TCE"], ["神龙宗", "FTD"],
+        ["秘术武者", "AU"]
+      ],
+      "圣武士": [
+        ["奉献之誓"], ["荣耀之誓"], ["古贤之誓"], ["复仇之誓"],
+        ["破誓者", "DMG14"], ["王冠之誓", "SCAG"], ["征服之誓", "XGE"],
+        ["救赎之誓", "XGE"], ["守望之誓", "TCE"], ["巨灵贵族之誓", "FR"]
+      ],
+      "游侠": [
+        ["驯兽师"], ["妖精漫游者"], ["幽域追猎者"], ["猎人"],
+        ["边界行者", "XGE"], ["怪物杀手", "XGE"], ["集群牧者", "TCE"],
+        ["龙兽守卫", "FTD"], ["凛冬行者", "FR"], ["幽邃戌卫", "RHW"]
+      ],
+      "游荡者": [
+        ["诡术师"], ["刺客"], ["魂刃"], ["盗贼"],
+        ["调查员", "XGE"], ["策士", "XGE"], ["斥候", "XGE"],
+        ["风流剑客", "XGE"], ["三神门徒", "FR"], ["鬼魅", "RHW"]
+      ],
+      "术士": [
+        ["畸变术法"], ["时械术法"], ["龙族术法"], ["狂野术法"],
+        ["神圣之魂", "XGE"], ["风暴术法", "XGE"], ["月之术法", "DSDQ"],
+        ["咒火术法", "FR"], ["幽影术法", "RHW"]
+      ],
+      "魔契师": [
+        ["至高妖精宗主"], ["天界宗主"], ["邪魔宗主"], ["旧日支配者宗主"],
+        ["不朽者", "SCAG"], ["咒剑", "XGE"], ["深海意志", "TCE"],
+        ["巨灵宗主", "TCE"], ["死灵宗主", "RHW"], ["契灵宗主", "AU"]
+      ],
+      "法师": [
+        ["防护师"], ["预言师"], ["塑能师"], ["幻术师"],
+        ["战争魔法", "XGE"], ["时间魔法", "EGW"], ["重力魔法", "EGW"],
+        ["书士会", "TCE"], ["剑咏者", "FR"], ["咒法师", "AU"],
+        ["惑控师", "AU"], ["死灵师", "AU"], ["变化师", "AU"]
+      ],
+      "奇械师": [
+        ["炼金师"], ["装甲师"], ["魔炮师"], ["战地匠师"],
+        ["制图师"], ["苏生师", "RHW"]
+      ]
     };
+
+    const subclassMap = Object.fromEntries(
+      Object.entries(subclassCatalog).map(([className, entries]) => [
+        className,
+        entries.map(([name]) => name)
+      ])
+    );
+
+    function subclassOptionLabel(name, source) {
+      return source ? `${name}(${source})` : name;
+    }
+
+    function restoreSubclassOptionLabels(select) {
+      for (const option of select.options) {
+        if (option.dataset.fullLabel) option.textContent = option.dataset.fullLabel;
+      }
+    }
+
+    function syncSubclassOptionLabels(select) {
+      restoreSubclassOptionLabels(select);
+      const selected = select.selectedOptions[0];
+      if (selected?.dataset.baseLabel) {
+        selected.textContent = selected.dataset.baseLabel;
+      }
+    }
+
+    function syncAllSubclassOptionLabels() {
+      for (const select of builderPanel.querySelectorAll(
+        "#builder-subclass, .profession-row-subclass"
+      )) {
+        syncSubclassOptionLabels(select);
+      }
+    }
 
     function termList(names) {
       return names.map((name) => `<b class="term-green">${name}</b>`).join("、");
@@ -10369,6 +10542,7 @@ window.AdventureTraits = {
         return;
       }
 
+      const subclassEntries = subclassCatalog[className] || [];
       const subclasses = subclassMap[className] || [];
       subclassField.replaceChildren();
       const placeholder = document.createElement("option");
@@ -10376,10 +10550,12 @@ window.AdventureTraits = {
       placeholder.textContent = level !== null && level >= 3 ? "请选择" : "—";
       subclassField.appendChild(placeholder);
 
-      for (const name of subclasses) {
+      for (const [name, source = ""] of subclassEntries) {
         const option = document.createElement("option");
         option.value = name;
-        option.textContent = name;
+        option.dataset.baseLabel = name;
+        option.dataset.fullLabel = subclassOptionLabel(name, source);
+        option.textContent = option.dataset.fullLabel;
         subclassField.appendChild(option);
       }
 
@@ -10396,6 +10572,7 @@ window.AdventureTraits = {
         ? previous
         : "";
       syncSelectEmpty(subclassField);
+      syncSubclassOptionLabels(subclassField);
       if (subclassField === subclassSelect) syncSubclassCustomUI();
       updateSummary();
     }
@@ -12602,6 +12779,34 @@ ${data.description}`;
       button.setAttribute("aria-label", `查看${label}`);
     }
 
+    function buildClassFeatureLookupTooltip(target) {
+      const title = target.dataset.lookupTitle || "职业特性速查";
+      const source = target.dataset.lookupSource || CLASS_FEATURE_LOOKUP_SOURCE;
+      const url = target.dataset.lookupUrl || "";
+      const actions = `<span class="spell-lookup-actions">
+<button class="spell-lookup-back" type="button" title="回退" aria-label="回退">←</button>
+<button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
+</span>`;
+      const header = `<div class="spell-lookup-head">
+<span class="class-lookup-heading">
+<span class="lookup-source">来源：${escapePlainText(source)}</span>
+<span class="reference-title">${escapePlainText(title)}</span>
+</span>
+${actions}
+</div>`;
+
+      if (!url) {
+        return `${header}
+<p>该职业特性速查页面暂未配置链接。</p>
+<span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
+      }
+
+      return `${header}
+<iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(title)}" loading="eager" referrerpolicy="no-referrer"></iframe>
+<div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
+<span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
+    }
+
     function buildSpellLookupTooltip(mode) {
       const allSpells = mode === "all";
       const selection = getSpellLookupSelection();
@@ -12718,6 +12923,9 @@ ${data.description}`;
       coreTraitBody.replaceChildren();
 
       const className = classSelect.value;
+      coreTraitTitle.textContent = className
+        ? `${currentMainClassName()}核心特质`
+        : "核心特质";
       if (!className) return;
 
       if (className === CUSTOM_VALUE) {
@@ -12805,40 +13013,208 @@ ${data.description}`;
       };
     }
 
+    const CLASS_FEATURE_LOOKUP_BASE = "https://5echm.kagangtuya.top/topics/";
+    const CLASS_FEATURE_LOOKUP_SOURCE = "玩家手册2024";
+    const SUBCLASS_SOURCE_BOOKS = {
+      PHB14: "玩家手册（2014）",
+      XGE: "珊娜萨的万事指南",
+      TCE: "塔莎的万事坩埚",
+      SCAG: "剑湾冒险者指南",
+      EGW: "荒洲探险家指南",
+      FTD: "费资本的巨龙宝库",
+      BPGG: "巨人之荣耀",
+      DSDQ: "龙枪：龙后之影",
+      FR: "被遗忘的国度：费伦英雄",
+      RHW: "鸦阁魔域：魔障深藏",
+      AU: "启封奥秘",
+      DMG14: "城主指南"
+    };
+
+    function getSubclassSourceCode(className, subclassName) {
+      const entry = (subclassCatalog[className] || []).find(([name]) => name === subclassName);
+      return entry?.[1] || "";
+    }
+
+    function buildSubclassLookupUrl(className, subclassName) {
+      const source = getSubclassSourceCode(className, subclassName);
+      const legacyWarlockNames = new Set(["XGE", "TCE", "SCAG"]);
+      const lookupClassName = className === "魔契师" && legacyWarlockNames.has(source)
+        ? "邪术师"
+        : className;
+      const lookupSubclassName = className === "魔契师" &&
+        source === "TCE" &&
+        subclassName === "巨灵"
+        ? "巨灵宗主"
+        : subclassName;
+      const name = `${lookupClassName}-${lookupSubclassName}`;
+      if (source === "PHB14") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}玩家手册/职业/${className}/${subclassName}.html`);
+      }
+      if (source === "XGE") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}珊娜萨的万事指南/角色选项/${lookupClassName}/${lookupSubclassName}.html`);
+      }
+      if (source === "TCE") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}塔莎的万事坩埚/玩家选项/职业/${lookupClassName}（TCE）/${lookupSubclassName}.html`);
+      }
+      if (source === "SCAG") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}剑湾冒险者指南/职业/${lookupClassName}-${lookupSubclassName}.html`);
+      }
+      if (source === "EGW") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}荒洲探险家指南/角色选项/子职/${className}/${name}.htm`);
+      }
+      if (source === "FTD") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}费资本的巨龙宝库/玩家选项/${name}.html`);
+      }
+      if (source === "BPGG") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}巨人之荣耀/角色选项/子职业选项_${className}_${subclassName}.htm`);
+      }
+      if (source === "DSDQ") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}龙枪：龙后之影/创立角色/${name}.htm`);
+      }
+      if (source === "FR") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}被遗忘的国度/费伦英雄/第一章/子职/${name}.htm`);
+      }
+      if (source === "RHW") {
+        const file = className === "游侠" && subclassName === "幽邃戌卫"
+          ? "游侠-幽邃戍卫"
+          : name;
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}鸦阁魔域：魔障深藏/第一章/子职/${file}.htm`);
+      }
+      if (source === "AU") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}启封奥秘/第一章/子职/${name}.htm`);
+      }
+      if (source === "DMG14") {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}城主指南/冒险之主/${name}.htm`);
+      }
+      return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}玩家手册2024/角色职业/${className}/${subclassName}.htm`);
+    }
+
+    function getClassFeatureLookupSource(className, subclassName, needsSubclass) {
+      if (!needsSubclass) return CLASS_FEATURE_LOOKUP_SOURCE;
+      const source = getSubclassSourceCode(className, subclassName);
+      return SUBCLASS_SOURCE_BOOKS[source] || CLASS_FEATURE_LOOKUP_SOURCE;
+    }
+
+    function buildClassFeatureLookupUrl(className, subclassName = "") {
+      if (!className || className === CUSTOM_VALUE) return "";
+      if (!subclassName) {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}玩家手册2024/角色职业/${className}/${className}.htm`);
+      }
+      return buildSubclassLookupUrl(className, subclassName);
+    }
+
+    function updateClassFeatureLookupButton(kind, title, className, subclassName = "") {
+      const block = {
+        "main-class": mainClassFeatureBlock,
+        "main-subclass": mainSubclassFeatureBlock,
+        "multi-class": multiClassFeatureBlock,
+        "multi-subclass": multiSubclassFeatureBlock
+      }[kind];
+      const button = block?.querySelector(".class-feature-lookup");
+      if (!button) return;
+      button.textContent = title;
+      button.title = title;
+      button.hidden = !className;
+      button.dataset.lookupTitle = title;
+      const needsSubclass = kind.endsWith("subclass");
+      button.dataset.lookupSource = getClassFeatureLookupSource(
+        className,
+        subclassName,
+        needsSubclass
+      );
+      button.dataset.lookupUrl = className && (!needsSubclass || subclassName)
+        ? buildClassFeatureLookupUrl(className, subclassName)
+        : "";
+    }
+
+    function setupClassFeatureLookupButtons() {
+      const blocks = [
+        [mainClassFeatureBlock, "main-class"],
+        [mainSubclassFeatureBlock, "main-subclass"],
+        [multiClassFeatureBlock, "multi-class"],
+        [multiSubclassFeatureBlock, "multi-subclass"]
+      ];
+
+      for (const [block, kind] of blocks) {
+        block.querySelector(".custom-editor-toolbar")?.remove();
+        let button = block.querySelector(".class-feature-lookup");
+        if (!button) {
+          button = document.createElement("button");
+          button.type = "button";
+          button.className = "class-feature-lookup reference-tooltip-trigger reference-click-help";
+          button.dataset.referenceTooltip = "class-lookup";
+          button.dataset.lookupKind = kind;
+          block.append(button);
+        }
+        button.dataset.lookupKind = kind;
+      }
+      syncClassFeatureEditors();
+    }
+
     function syncClassFeatureEditors() {
       const mainClass = classSelect.value;
       const mainLevel = getLevel(levelInput);
       if (mainClass) {
         mainClassFeatureBlock.hidden = false;
         mainClassFeatureTitle.textContent = buildClassFeatureTitle(mainClass, customClassInput.value);
+        updateClassFeatureLookupButton(
+          "main-class",
+          `${currentMainClassName()}特性速查`,
+          mainClass
+        );
 
         const showMainSubclass = mainLevel !== null && mainLevel >= 3;
         mainSubclassFeatureBlock.hidden = !showMainSubclass;
         mainSubclassFeatureTitle.textContent = showMainSubclass
           ? buildClassSubclassFeatureTitle(mainClass, customClassInput.value, currentMainSubclass())
           : "";
+        const mainSubclass = currentMainSubclass();
+        updateClassFeatureLookupButton(
+          "main-subclass",
+          mainSubclass ? `${mainSubclass}子职特性速查` : "子职特性速查",
+          mainClass,
+          mainSubclass
+        );
       } else {
         mainClassFeatureBlock.hidden = true;
         mainClassFeatureTitle.textContent = "";
         mainSubclassFeatureBlock.hidden = true;
         mainSubclassFeatureTitle.textContent = "";
+        updateClassFeatureLookupButton("main-class", "职业特性速查", "");
+        updateClassFeatureLookupButton("main-subclass", "子职特性速查", "");
       }
 
       const multi = getPrimaryMultiFeatureInfo();
       if (multi.className) {
         multiClassFeatureBlock.hidden = false;
         multiClassFeatureTitle.textContent = buildClassFeatureTitle(multi.className, multi.customName);
+        const multiDisplayName = multi.className === CUSTOM_VALUE
+          ? multi.customName
+          : multi.className;
+        updateClassFeatureLookupButton(
+          "multi-class",
+          `${multiDisplayName}特性速查`,
+          multi.className
+        );
 
         const showMultiSubclass = multi.level !== null && multi.level >= 3;
         multiSubclassFeatureBlock.hidden = !showMultiSubclass;
         multiSubclassFeatureTitle.textContent = showMultiSubclass
           ? buildClassSubclassFeatureTitle(multi.className, multi.customName, multi.subclass)
           : "";
+        updateClassFeatureLookupButton(
+          "multi-subclass",
+          multi.subclass ? `${multi.subclass}子职特性速查` : "子职特性速查",
+          multi.className,
+          multi.subclass
+        );
       } else {
         multiClassFeatureBlock.hidden = true;
         multiClassFeatureTitle.textContent = "";
         multiSubclassFeatureBlock.hidden = true;
         multiSubclassFeatureTitle.textContent = "";
+        updateClassFeatureLookupButton("multi-class", "兼职特性速查", "");
+        updateClassFeatureLookupButton("multi-subclass", "兼职子职特性速查", "");
       }
     }
 
@@ -15246,6 +15622,7 @@ ${data.description}`;
       updateBackpackSection("tool");
       updateBackpackSection("magic");
       updateBackpackGearTotals();
+      syncAllSubclassOptionLabels();
 
       undoManager.undo.length = 0;
       undoManager.redo.length = 0;
@@ -16943,14 +17320,16 @@ ${data.description}`;
         ? buildSpellLookupTooltip("main")
         : key === "spell-lookup-all"
           ? buildSpellLookupTooltip("all")
-          : referenceTooltipContents[key];
+          : key === "class-lookup"
+            ? buildClassFeatureLookupTooltip(target)
+            : referenceTooltipContents[key];
       if (!content) return;
 
       if (referenceTooltipHideTimer !== null) {
         window.clearTimeout(referenceTooltipHideTimer);
         referenceTooltipHideTimer = null;
       }
-      referenceTooltipSticky = key.startsWith("spell-lookup");
+      referenceTooltipSticky = key.startsWith("spell-lookup") || key === "class-lookup";
       referenceTooltip.classList.toggle("spell-lookup-tooltip", referenceTooltipSticky);
       referenceTooltip.classList.toggle(
         "spell-lookup-has-frame",
@@ -17100,12 +17479,15 @@ ${data.description}`;
     window.addEventListener("scroll", cancelAbilityTooltip, true);
     window.addEventListener("resize", cancelAbilityTooltip);
 
+    setupClassFeatureLookupButtons();
+
     for (const target of document.querySelectorAll("[data-reference-tooltip]")) {
       target.addEventListener("mouseenter", () => scheduleReferenceTooltip(target));
       target.addEventListener("mouseleave", scheduleReferenceTooltipHide);
       target.addEventListener("focusin", () => scheduleReferenceTooltip(target));
       target.addEventListener("focusout", (event) => {
-        if (target.dataset.referenceTooltip.startsWith("spell-lookup")) {
+        if (target.dataset.referenceTooltip.startsWith("spell-lookup") ||
+            target.dataset.referenceTooltip === "class-lookup") {
           if (event.relatedTarget instanceof Node &&
               referenceTooltip.contains(event.relatedTarget)) {
             return;
@@ -18075,6 +18457,25 @@ ${data.description}`;
     updateDstCommand();
 
     initializeBuilderPersistence();
+
+    builderPanel.addEventListener("pointerdown", (event) => {
+      const select = event.target.closest("#builder-subclass, .profession-row-subclass");
+      if (select) restoreSubclassOptionLabels(select);
+    }, true);
+    builderPanel.addEventListener("keydown", (event) => {
+      const select = event.target.closest("#builder-subclass, .profession-row-subclass");
+      if (select && ["ArrowDown", "ArrowUp", "Enter", " "].includes(event.key)) {
+        restoreSubclassOptionLabels(select);
+      }
+    }, true);
+    builderPanel.addEventListener("change", (event) => {
+      const select = event.target.closest("#builder-subclass, .profession-row-subclass");
+      if (select) syncSubclassOptionLabels(select);
+    }, true);
+    builderPanel.addEventListener("focusout", (event) => {
+      const select = event.target.closest("#builder-subclass, .profession-row-subclass");
+      if (select) syncSubclassOptionLabels(select);
+    }, true);
 
     builderPanel.addEventListener("input", handleUndoActivity, true);
     builderPanel.addEventListener("change", handleUndoActivity, true);
