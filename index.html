@@ -1535,6 +1535,27 @@
       margin-bottom: 4px;
     }
 
+    .paste-add-row-button {
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      color: #111;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      font-family: Arial, sans-serif;
+      font-size: 1.05rem;
+      font-weight: bold;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .paste-add-row-button:hover {
+      border-color: #800000;
+      background: #f7f7f7;
+    }
+
     .custom-format {
       padding: 2px 7px;
       color: #333;
@@ -2732,6 +2753,22 @@
       margin-top: 12px;
     }
 
+    .class-feature-block-actions {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .class-feature-block-actions .class-feature-lookup {
+      position: static;
+      top: auto;
+      right: auto;
+    }
+
     .class-feature-title {
       margin-bottom: 4px;
       padding-right: 190px;
@@ -3337,6 +3374,7 @@
 
     .spellbook-row td {
       height: 30px;
+      padding: 0;
     }
 
     .spellbook-row.is-expanded td {
@@ -3367,16 +3405,20 @@
     }
 
     .spellbook-cell {
-      min-height: 22px;
-      padding: 2px 3px;
+      box-sizing: border-box;
+      min-height: 30px;
+      padding: 4px 5px;
       color: #111;
       outline: none;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: clip;
+      display: flex;
+      align-items: center;
     }
 
     .spellbook-row.is-expanded .spellbook-cell {
+      display: block;
       white-space: normal;
       overflow: visible;
       text-overflow: clip;
@@ -3384,8 +3426,9 @@
     }
 
     .spellbook-cell:focus {
-      background: #FFF9E8;
-      box-shadow: 0 0 0 1px #800000 inset;
+      background: #fff;
+      outline: 1px solid #800000;
+      outline-offset: -1px;
     }
 
     .spellbook-cell[data-field="name"] {
@@ -3398,11 +3441,13 @@
       text-align: center;
     }
 
+    .spellbook-cell[data-field="level"],
     .spellbook-cell[data-field="school"],
     .spellbook-cell[data-field="castingTime"],
     .spellbook-cell[data-field="range"],
     .spellbook-cell[data-field="components"],
     .spellbook-cell[data-field="duration"] {
+      justify-content: center;
       text-align: center;
     }
 
@@ -3443,7 +3488,7 @@
     }
 
     .spellbook-prepared-select:focus {
-      background: #FFF9E8;
+      background: #fff;
       outline: none;
     }
 
@@ -3484,6 +3529,7 @@
       align-items: center;
       justify-content: center;
       gap: 3px;
+      height: 30px;
     }
 
     .spellbook-row-toggle,
@@ -3524,8 +3570,8 @@
       display: table-row;
     }
 
-    .spellbook-details-cell {
-      padding: 5px 7px 7px;
+    .spellbook-table .spellbook-details-cell {
+      padding: 0;
       background: #fffdf6;
     }
 
@@ -3557,8 +3603,9 @@
     }
 
     .spellbook-description {
-      min-height: 28px;
-      padding: 3px 4px;
+      box-sizing: border-box;
+      min-height: 30px;
+      padding: 6px 8px;
       color: #222;
       outline: none;
       line-height: 1.55;
@@ -3566,8 +3613,9 @@
     }
 
     .spellbook-description:focus {
-      background: #FFF9E8;
-      box-shadow: 0 0 0 1px #800000 inset;
+      background: #fff;
+      outline: 1px solid #800000;
+      outline-offset: -1px;
     }
 
     html[data-theme="dark"] .spellbook-lookup-button {
@@ -3706,9 +3754,11 @@
     .backpack-table input,
     .backpack-table select,
     .backpack-table textarea {
+      box-sizing: border-box;
+      display: block;
       width: 100%;
-      height: 28px;
-      padding: 2px 4px;
+      height: 26px;
+      padding: 0 4px;
       color: #111;
       background: transparent;
       border: 0;
@@ -3716,20 +3766,23 @@
       font-family: "Microsoft YaHei", Arial, sans-serif;
       font-size: 0.8rem;
       text-align: center;
+      vertical-align: top;
     }
 
     .backpack-table select {
       cursor: pointer;
       appearance: none;
       -webkit-appearance: none;
+      text-align: center;
+      text-align-last: center;
     }
 
     .backpack-gear-table textarea.backpack-description,
     .backpack-magic-table textarea.backpack-description {
-      height: 28px;
-      padding: 3px 5px;
+      height: 26px;
+      padding: 0 5px;
       overflow: hidden;
-      line-height: 1.35;
+      line-height: 26px;
       text-align: left;
       resize: none;
       white-space: pre-wrap;
@@ -3739,7 +3792,9 @@
     .backpack-magic-table textarea.backpack-description.is-expanded {
       overflow: auto;
       background: #fff;
-      box-shadow: inset 0 0 0 1px #800000;
+      padding: 4px 5px;
+      line-height: 1.4;
+      box-shadow: none;
     }
 
     .backpack-tool-table textarea.backpack-tool-operation,
@@ -3748,11 +3803,13 @@
     }
 
     .backpack-tool-table textarea.backpack-tool-operation {
-      height: 28px;
-      min-height: 28px;
-      padding: 3px 5px;
+      box-sizing: border-box;
+      display: block;
+      height: 26px;
+      min-height: 26px;
+      padding: 0 5px;
       overflow: hidden;
-      line-height: 1.35;
+      line-height: 26px;
       resize: none;
       white-space: pre-wrap;
     }
@@ -3760,7 +3817,9 @@
     .backpack-tool-table textarea.backpack-tool-operation.is-expanded {
       overflow: auto;
       background: #fff;
-      box-shadow: inset 0 0 0 1px #800000;
+      padding: 4px 5px;
+      line-height: 1.4;
+      box-shadow: none;
     }
 
     .backpack-table input.is-default,
@@ -3786,7 +3845,7 @@
 
     .backpack-delete {
       width: 100%;
-      height: 28px;
+      height: 26px;
       padding: 0;
       color: #888;
       background: transparent;
@@ -4765,6 +4824,22 @@
     .ledger-expense-cell .ledger-expense-amount { color: #C55A11; }
     .ledger-input::placeholder { color: #8EA9C1; opacity: 1; }
 
+    .language-tool-input:focus,
+    .language-tool-select:focus,
+    .language-tool-custom-input:focus,
+    .backpack-table input:focus,
+    .backpack-table select:focus,
+    .backpack-table textarea:focus,
+    .ledger-table input:focus,
+    .ledger-table select:focus,
+    .ledger-table textarea:focus,
+    .magic-equipment-table input:focus,
+    .magic-equipment-table select:focus,
+    .magic-feature-input:focus {
+      outline: 0.5px solid #800000 !important;
+      outline-offset: -1px;
+    }
+
     .ledger-actions {
       display: flex;
       justify-content: flex-end;
@@ -5732,6 +5807,17 @@ html[data-theme="dark"] .panel .subclass-under-level input {
   display: table-row;
 }
 
+.class-feature-paste-table .feature-name-row.is-expanded > td {
+  border-bottom: 0.5px solid #800000 !important;
+  box-shadow: none;
+}
+
+.class-feature-paste-table .feature-name-cell:focus,
+.class-feature-paste-table .feature-details-cell:focus {
+  outline: 1px solid #800000 !important;
+  outline-offset: -1px;
+}
+
 .class-feature-paste-table .feature-drag-handle {
   position: absolute;
   top: 5px;
@@ -5819,6 +5905,37 @@ body.feature-dragging {
 .class-feature-paste-table .feature-details-cell table.feature-auto-table-wide td {
   text-align: center;
   vertical-align: middle;
+}
+
+.class-feature-paste-table .feature-details-cell table,
+.class-feature-paste-table .feature-details-cell table th,
+.class-feature-paste-table .feature-details-cell table td {
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.class-feature-paste-table .feature-details-cell table tr:nth-child(even) > th,
+.class-feature-paste-table .feature-details-cell table tr:nth-child(even) > td {
+  background: #EEEEEE !important;
+}
+
+.class-feature-paste-table .feature-details-cell table {
+  margin: 2px 0;
+  font-size: 0.78rem;
+}
+
+.class-feature-paste-table .feature-details-cell table th,
+.class-feature-paste-table .feature-details-cell table td {
+  height: auto;
+  padding: 0 4px !important;
+  line-height: 1.15 !important;
+}
+
+.class-feature-paste-table .feature-details-cell table th > *,
+.class-feature-paste-table .feature-details-cell table td > * {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: inherit !important;
 }
 
 @media print {
@@ -16799,23 +16916,48 @@ ${actions}
       }).filter((record) => record.name || record.description);
     }
 
+    function getSpellbookTitleNodes(documentNode) {
+      const nodes = [];
+      for (const node of documentNode.body.querySelectorAll(
+        "h1, h2, h3, h4, h5, h6, .quickref-preview-title, strong"
+      )) {
+        const text = normalizeSpellbookText(node.textContent).trim();
+        if (!text) continue;
+        const isHeading = /^H[1-6]$/.test(node.tagName);
+        const isQuickrefTitle = node.classList.contains("quickref-preview-title");
+        if (!isHeading && !isQuickrefTitle && !isSpellbookTitleLine(text)) continue;
+        if (nodes.some((existing) => existing === node)) continue;
+        nodes.push(node);
+      }
+      nodes.sort((a, b) => {
+        const position = a.compareDocumentPosition(b);
+        if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+        if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+        return 0;
+      });
+      return nodes;
+    }
+
     function parseSpellbookHtml(html) {
       const documentNode = new DOMParser().parseFromString(html, "text/html");
-      const headings = [...documentNode.body.querySelectorAll("h1, h2, h3, h4, h5, h6")];
+      const titles = getSpellbookTitleNodes(documentNode);
       const records = [];
 
-      for (const heading of headings) {
-        const title = normalizeSpellbookText(heading.textContent).trim();
+      for (let index = 0; index < titles.length; index += 1) {
+        const titleNode = titles[index];
+        const title = normalizeSpellbookText(titleNode.textContent).trim();
         if (!title) continue;
         const record = createSpellbookRecord(title);
-        const lines = [];
-        let node = heading.nextSibling;
-        while (node) {
-          if (node.nodeType === Node.ELEMENT_NODE && /^H[1-6]$/.test(node.tagName)) break;
-          lines.push(...spellbookNodeLines(node));
-          node = node.nextSibling;
+        const content = document.createElement("div");
+        const range = documentNode.createRange();
+        range.setStartAfter(titleNode);
+        if (titles[index + 1]) {
+          range.setEndBefore(titles[index + 1]);
+        } else {
+          range.setEnd(documentNode.body, documentNode.body.childNodes.length);
         }
-        applySpellbookLines(record, lines);
+        content.append(range.cloneContents());
+        applySpellbookLines(record, spellbookNodeLines(content));
         records.push(record);
       }
 
@@ -16826,10 +16968,16 @@ ${actions}
 
     function parseSpellbookPaste(html, text) {
       if (html && html.trim()) {
-        const parsed = parseSpellbookHtml(html);
-        if (parsed.length) return parsed;
+        const documentNode = new DOMParser().parseFromString(html, "text/html");
+        if (getSpellbookTitleNodes(documentNode).length) {
+          const parsed = parseSpellbookHtml(html);
+          if (parsed.length) return parsed;
+        }
       }
-      return parseSpellbookPlainText(text || "");
+      const plain = parseSpellbookPlainText(text || "");
+      if (plain.length) return plain;
+      if (html && html.trim()) return parseSpellbookHtml(html);
+      return [];
     }
 
     function getSpellbookTableStack() {
@@ -17118,6 +17266,28 @@ ${actions}
       updateSpellbookEmptyState();
     }
 
+    function addBlankSpellbookRow() {
+      appendSpellbookRows([{
+        prepared: "none",
+        level: "",
+        name: "",
+        school: "",
+        castingTime: "",
+        range: "",
+        components: "",
+        duration: "",
+        source: "",
+        classes: "",
+        description: "",
+        descriptionHtml: "",
+        expanded: false
+      }]);
+      const rows = [...document.querySelectorAll(".spellbook-row")];
+      const lastRow = rows[rows.length - 1];
+      lastRow?.querySelector('[data-field="name"]')?.focus();
+      scheduleBuilderSave();
+    }
+
     function captureSpellbookRows() {
       const stack = getSpellbookTableStack();
       if (!stack) return [];
@@ -17161,14 +17331,44 @@ ${actions}
       updateSpellbookEmptyState();
     }
 
+    function parseSpellbookEditorContent(editor) {
+      if (!editor) return false;
+      const records = parseSpellbookPaste(
+        editor.innerHTML,
+        editor.innerText || editor.textContent || ""
+      );
+      if (!records.length) return false;
+      editor.innerHTML = "";
+      appendSpellbookRows(records);
+      editor.dispatchEvent(new Event("input", { bubbles: true }));
+      saveBuilderData();
+      window.clearTimeout(builderPersistence.timer);
+      setBuilderSaveStatus(`已加入 ${records.length} 个法术到法术书。`);
+      return true;
+    }
+
+    function scheduleSpellbookEditorParse(editor) {
+      window.setTimeout(() => parseSpellbookEditorContent(editor), 50);
+    }
+
     function handleSpellbookPaste(event) {
       const editor = event.currentTarget;
       const clipboard = event.clipboardData;
-      if (!clipboard) return;
+      if (!clipboard) {
+        scheduleSpellbookEditorParse(editor);
+        return;
+      }
       const html = clipboard.getData("text/html");
       const text = clipboard.getData("text/plain");
+      if (!html && !text) {
+        scheduleSpellbookEditorParse(editor);
+        return;
+      }
       const records = parseSpellbookPaste(html, text);
-      if (!records.length) return;
+      if (!records.length) {
+        scheduleSpellbookEditorParse(editor);
+        return;
+      }
 
       event.preventDefault();
       appendSpellbookRows(records);
@@ -17182,6 +17382,7 @@ ${actions}
     function setFeatureRowExpanded(nameRow, expanded) {
       const detailRow = nameRow.nextElementSibling;
       if (!detailRow) return;
+      nameRow.classList.toggle("is-expanded", expanded);
       detailRow.classList.toggle("is-expanded", expanded);
       const button = nameRow.querySelector(".feature-table-toggle");
       if (button) {
@@ -17207,6 +17408,27 @@ ${actions}
       detailRow?.remove();
       if (table && !table.querySelector(".feature-name-row")) table.remove();
       table?.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    function addBlankClassFeatureRow(editor) {
+      const stack = getClassFeatureTableStack(editor);
+      const blankTable = buildClassFeatureTable(
+        [{ nameHtml: "", descHtml: "", expanded: true }],
+        true
+      );
+      let targetTable = stack.querySelector(".class-feature-paste-table:last-of-type");
+      if (!targetTable) {
+        stack.append(blankTable);
+        targetTable = blankTable;
+      } else {
+        const targetBody = targetTable.querySelector("tbody");
+        const sourceBody = blankTable.querySelector("tbody");
+        while (sourceBody?.firstChild) targetBody.append(sourceBody.firstChild);
+      }
+      const names = targetTable.querySelectorAll(".feature-name-cell");
+      const nameEditor = names[names.length - 1];
+      stack.dispatchEvent(new Event("input", { bubbles: true }));
+      nameEditor?.focus();
     }
 
     let featureDragState = null;
@@ -17370,16 +17592,43 @@ ${actions}
       return stack;
     }
 
+    function parseClassFeatureEditorContent(editor) {
+      if (!editor || !CLASS_FEATURE_EDITOR_IDS.has(editor.id)) return false;
+      let features = parseClassFeaturePaste(editor.innerHTML);
+      if (!features.length) {
+        features = parseClassFeaturePlainText(editor.innerText || editor.textContent || "");
+      }
+      if (!features.length) return false;
+      editor.innerHTML = "";
+      const stack = getClassFeatureTableStack(editor);
+      stack.append(buildClassFeatureTable(features));
+      editor.dispatchEvent(new Event("input", { bubbles: true }));
+      return true;
+    }
+
+    function scheduleClassFeatureEditorParse(editor) {
+      window.setTimeout(() => parseClassFeatureEditorContent(editor), 50);
+    }
+
     function handleRichPaste(event) {
       const editor = event.currentTarget;
       const clipboard = event.clipboardData;
-      if (!editor || !clipboard) return;
+      if (!editor) return;
+      if (!clipboard) {
+        scheduleClassFeatureEditorParse(editor);
+        return;
+      }
 
       if (CLASS_FEATURE_EDITOR_IDS.has(editor.id)) {
         const html = clipboard.getData("text/html");
+        const text = clipboard.getData("text/plain");
+        if (!html && !text) {
+          scheduleClassFeatureEditorParse(editor);
+          return;
+        }
         let features = html ? parseClassFeaturePaste(html) : [];
         if (!features.length) {
-          features = parseClassFeaturePlainText(clipboard.getData("text/plain") || "");
+          features = parseClassFeaturePlainText(text || "");
         }
         if (features.length) {
           event.preventDefault();
@@ -17389,6 +17638,7 @@ ${actions}
           editor.dispatchEvent(new Event("input", { bubbles: true }));
           return;
         }
+        scheduleClassFeatureEditorParse(editor);
       }
 
       event.preventDefault();
@@ -18511,6 +18761,7 @@ ${actions}
       clone.querySelectorAll("#dnd-embedded-data").forEach((node) => node.remove());
       clone.querySelectorAll("#builder-import-offline-html, #builder-import-offline-file")
         .forEach((node) => node.remove());
+      clone.querySelectorAll(".paste-add-row-button").forEach((node) => node.remove());
 
       const clonedBody = clone.querySelector("body");
       const clonedTooltip = clone.querySelector("#reference-tooltip");
@@ -20702,16 +20953,60 @@ ${actions}
 
     for (const editor of document.querySelectorAll(".custom-editor")) {
       editor.addEventListener("paste", handleRichPaste);
+      if (CLASS_FEATURE_EDITOR_IDS.has(editor.id)) {
+        editor.addEventListener("input", (event) => {
+          if (event.inputType === "insertFromPaste") scheduleClassFeatureEditorParse(editor);
+        });
+      }
+    }
+
+    function createPasteAddButton(onClick) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "paste-add-row-button";
+      button.textContent = "+";
+      button.title = "添加一行空白内容";
+      button.setAttribute("aria-label", "添加一行空白内容");
+      button.addEventListener("click", () => onClick());
+      return button;
+    }
+
+    function setupPasteAddButtons() {
+      for (const block of document.querySelectorAll(".class-feature-block")) {
+        const content = block.querySelector(".custom-editor");
+        if (!content) continue;
+        let actions = block.querySelector(".class-feature-block-actions");
+        if (!actions) {
+          actions = document.createElement("div");
+          actions.className = "class-feature-block-actions";
+          block.append(actions);
+          const lookup = block.querySelector(".class-feature-lookup");
+          if (lookup) actions.append(lookup);
+        }
+        if (!actions.querySelector(".paste-add-row-button")) {
+          actions.append(createPasteAddButton(() => addBlankClassFeatureRow(content)));
+        }
+      }
+      const spellbookToolbar = document.querySelector(".spellbook-toolbar");
+      if (spellbookToolbar && !spellbookToolbar.querySelector(".paste-add-row-button")) {
+        spellbookToolbar.append(createPasteAddButton(addBlankSpellbookRow));
+      }
     }
 
     const spellbookPasteEditor = document.getElementById("spellbook-paste");
     if (spellbookPasteEditor) {
       spellbookPasteEditor.addEventListener("paste", handleSpellbookPaste);
+      spellbookPasteEditor.addEventListener("input", (event) => {
+        if (event.inputType === "insertFromPaste") {
+          scheduleSpellbookEditorParse(spellbookPasteEditor);
+        }
+      });
     }
     document.getElementById("spellbook-table-stack")?.addEventListener("input", () => {
       updateSpellbookEmptyState();
       scheduleBuilderSave();
     });
+    setupPasteAddButtons();
     updateSpellbookEmptyState();
 
     for (const input of document.querySelectorAll(".language-tool-input.is-default")) {
@@ -20778,7 +21073,7 @@ ${actions}
           textarea.style.height = `${Math.min(220, Math.max(56, textarea.scrollHeight))}px`;
         } else {
           textarea.rows = 1;
-          textarea.style.height = "28px";
+          textarea.style.height = "26px";
         }
       });
 
