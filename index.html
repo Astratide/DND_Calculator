@@ -2702,6 +2702,25 @@
 
     .core-trait-table tbody td { color: #222; }
 
+    .custom-core-trait-input {
+      width: 100%;
+      min-width: 0;
+      padding: 2px 4px;
+      color: #111;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .custom-core-trait-input:focus {
+      outline: 1px solid #800000;
+      outline-offset: -1px;
+      border-color: #800000;
+    }
+
     .core-trait-table .core-trait-empty {
       color: #888;
       font-weight: normal;
@@ -2963,10 +2982,15 @@
       flex: 0 0 auto;
     }
 
-    .spell-lookup-has-frame .spell-lookup-frame {
+    .spell-lookup-has-frame .spell-lookup-frame-wrap {
       flex: 1 1 auto;
-      height: auto;
       min-height: 160px;
+    }
+
+    .spell-lookup-frame-wrap {
+      position: relative;
+      overflow: hidden;
+      background: #fff;
     }
 
     .spell-lookup-has-frame .spell-lookup-note {
@@ -3060,12 +3084,17 @@
     }
 
     .spell-lookup-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
       display: block;
-      width: 100%;
-      height: min(480px, calc(100vh - 150px));
-      min-height: 240px;
+      width: calc(100% / 0.82);
+      height: calc(100% / 0.82);
+      min-height: 0;
       background: #fff;
       border: 1px solid #ccc;
+      transform: scale(0.82);
+      transform-origin: top left;
     }
 
     .spell-lookup-note {
@@ -6761,7 +6790,7 @@ body.feature-dragging {
         <h3>【传奇抗性变体】</h3>
         <p>很多首领所拥有的传奇抗性特性，对于控场类的施法者而言，是一个非常缺乏互动感的设计。有时候玩家可能想要一个新的传奇抗性机制，让施法者和物理输出者之间产生更多的互动，同时避免施法者在传奇抗性耗尽前感觉无力。</p>
         <p>这里提供一个解决方案：</p>
-        <p><b>领袖抗性 Boss Resistance（3/日）。</b>当怪物豁免失败时，可以消耗 30 点临时生命值将其改为成功。此外，怪物也可以通过传奇动作，并消耗次数来恢复 30 点生命值。</p>
+        <p><b>领袖抗性 Boss Resistance（3/日）。</b>当怪物豁免失败时，可以消耗 30 点临时生命值将其改为成功。此外，怪物的生命值被伤害降至0但并未立即死亡的时候，可以消耗抗性次数改为降至30点。 </p>
       </div>
     </section>
 
@@ -9051,7 +9080,7 @@ window.AdventureTraits = {
     "100. 学债压力。我背负学费、学徒债或学院贷款，只能靠冒险偿还。",
     "101. 幸存愧疚。我在灾难中活了下来，因愧疚而冒险保护更多人。",
     "102. 回家之路。我被困异乡或异界，冒险只为找到回家的方法。",
-    "103. 狂人之名。我的理论或发现曾被嘲笑为疯狂，我踏上旅途寻找证据。",
+    "103. 狂人之名。我的理论或发现曾被嘲笑为疯狂，我踏上旅途寻找证明自我的办法。",
     "104. 追求刺激。我迷恋惊险体验，哪里危险就往哪里去。",
     "105. 悲剧梦想。我追逐一个几乎不可能实现的愿望，却仍不愿放弃。",
     "106. 被迫作恶。我被诅咒、契约或威胁控制，冒险是为了摆脱不得不作恶的命运。",
@@ -9568,7 +9597,7 @@ window.AdventureTraits = {
     "3. 解密渴望。解开一个古老的谜团值得付出一个文明的代价。（智者）",
     "4. 离奇思路。我会忽略显而易见的解决方案，更倾向于复杂的方案。（智者）",
     "5. 直言不讳。我说话时总是不经过深思熟虑，因而老是冒犯到他人。（智者）",
-    "6. 从不保密。我做不到保守秘密，即便事关自己或他人的性命。（智者）"
+    "6. 难以守秘。我根本无法保守任何秘密，尤其是自己或他人受到致命威胁的时候。（智者）"
   ],
   "个性_流浪者": [
     "1. 收藏癖。我把食物碎屑和饰品深深地藏在口袋里。（流浪者）",
@@ -9870,7 +9899,6 @@ window.AdventureTraits = {
     const backpackAddMagic = document.getElementById("backpack-add-magic");
     const backpackGearTotalWeight = document.getElementById("backpack-gear-total-weight");
     const backpackGearTotalPrice = document.getElementById("backpack-gear-total-price");
-
     if (!raceSelect || !subraceField || !subraceSelect || !customRaceInput || !raceReset ||
         !customRaceEditor || !customRaceTraits || !characterName || !alignmentSelect ||
         !classSelect || !levelInput || !subclassSelect || !customClassInput ||
@@ -9922,10 +9950,19 @@ window.AdventureTraits = {
     // Chrome Android otherwise clips fixed descendants to the zoomed block.
     document.body.append(referenceTooltip);
 
-    const classNames = [
+    const coreClassNames = [
       "野蛮人", "吟游诗人", "牧师", "德鲁伊", "战士", "武僧", "圣武士",
       "游侠", "游荡者", "术士", "魔契师", "法师", "奇械师"
     ];
+    const thirdPartyClassNames = ["铳士", "怪物猎人", "拳斗士", "血族"];
+    const classNames = [...coreClassNames, ...thirdPartyClassNames];
+    let customCoreTraits = {
+      ability: "",
+      skills: "",
+      weapons: "",
+      armor: "",
+      equipment: ""
+    };
 
     const subclassCatalog = {
       "野蛮人": [
@@ -9995,6 +10032,21 @@ window.AdventureTraits = {
       "奇械师": [
         ["炼金师"], ["装甲师"], ["魔炮师"], ["战地匠师"],
         ["制图师"], ["苏生师", "RHW"]
+      ],
+      "铳士": [
+        ["死眼客"], ["豪赌客"], ["密间客"], ["魔弹客"],
+        ["花枪客"], ["白帽客"], ["快枪客"]
+      ],
+      "怪物猎人": [
+        ["刻肉会"], ["吞噬会"], ["秘学会"], ["捕猎会"]
+      ],
+      "拳斗士": [
+        ["犬师拳狩"], ["惧恶之手"], ["怒雷恶氓"], ["街角圣徒"],
+        ["方圆擂尊"], ["甜蜜科学"]
+      ],
+      "血族": [
+        ["布鲁赫"], ["冈格罗"], ["勒森魃"], ["诺斯费拉图"],
+        ["妥芮朵"], ["梵卓"]
       ]
     };
 
@@ -10048,7 +10100,11 @@ window.AdventureTraits = {
       "术士": "Sorcerer",
       "魔契师": "Warlock",
       "法师": "Wizard",
-      "奇械师": "Artificer"
+      "奇械师": "Artificer",
+      "铳士": "Gunslinger",
+      "怪物猎人": "Monster Hunter",
+      "拳斗士": "Pugilist",
+      "血族": "Kindred"
     };
 
     const classCoreTraits = {
@@ -10173,6 +10229,43 @@ window.AdventureTraits = {
         tools: "盗贼工具，修补工具，以及一种你选择的工匠工具",
         armor: "轻甲，中甲和盾牌",
         equipment: "选择A或B：（A）镶钉皮甲，匕首，盗贼工具，修补工具，地城套组，和16GP；或（B）150GP"
+      },
+      "铳士": {
+        ability: "敏捷",
+        hitDie: "每铳士等级D8",
+        saves: "敏捷与魅力",
+        skillsHtml: "选择2项：特技、驯兽、运动、欺瞒、洞悉、威吓、察觉、游说、巧手和隐匿",
+        weapons: "简易武器和军用远程武器",
+        armor: "轻甲",
+        equipment: "选择A或B：（A）皮甲，4把匕首，左轮枪，50发子弹，探索套组以及11GP；或者（B）175GP"
+      },
+      "怪物猎人": {
+        ability: "力量或敏捷，智力",
+        hitDie: "每怪物猎人等级D10",
+        saves: "敏捷与智力",
+        skillsHtml: "选择3项：运动、历史、调查、医药、自然、察觉、宗教和求生",
+        weapons: "简易和军用武器",
+        armor: "轻甲、中甲和盾牌",
+        equipment: "选择A、B或C：（A）鳞甲，长剑，轻弩，20支弩矢，探索套组以及5GP；（B）镶钉皮甲，弯刀，短剑，长弓，20支箭矢，箭袋，探索套组以及10GP；或者（C）160GP"
+      },
+      "拳斗士": {
+        ability: "力量",
+        hitDie: "每拳斗士等级D10",
+        saves: "力量与体质",
+        skillsHtml: "选择2项：特技、运动、欺瞒、威吓、察觉、巧手或隐匿",
+        weapons: "简易和临时武器",
+        tools: "任选1项赌具",
+        armor: "轻甲",
+        equipment: "选择A或B：（A）短棒，手斧，赌具（与上述工具熟练的种类相同），地城套组以及31GP；或者（B）50GP"
+      },
+      "血族": {
+        ability: "魅力",
+        hitDie: "每血族等级D10",
+        saves: "体质与魅力",
+        skillsHtml: "选择2项：运动、欺瞒、历史、威吓、察觉、游说、求生、隐匿",
+        weapons: "简易武器和具有轻型词条的军用武器",
+        armor: "轻甲和胸甲",
+        equipment: "选择A或B：（A）皮甲，2把匕首，短剑，你选择的工匠工具，探索套组以及15GP；或者（B）75GP"
       }
     };
 
@@ -10189,7 +10282,11 @@ window.AdventureTraits = {
       "术士": ["体质", "魅力"],
       "魔契师": ["感知", "魅力"],
       "法师": ["智力", "感知"],
-      "奇械师": ["体质", "智力"]
+      "奇械师": ["体质", "智力"],
+      "铳士": ["敏捷", "魅力"],
+      "怪物猎人": ["敏捷", "智力"],
+      "拳斗士": ["力量", "体质"],
+      "血族": ["体质", "魅力"]
     };
 
     const abilityRows = [
@@ -10586,6 +10683,7 @@ window.AdventureTraits = {
     };
 
     function populateClassSelect(select, noneLabel) {
+      const previousValue = select.value;
       select.replaceChildren();
       if (noneLabel) {
         const none = document.createElement("option");
@@ -10593,17 +10691,31 @@ window.AdventureTraits = {
         none.textContent = noneLabel;
         select.appendChild(none);
       }
-      for (const className of classNames) {
-        const option = document.createElement("option");
-        option.value = className;
-        option.textContent = className;
-        select.appendChild(option);
-      }
+      const appendGroup = (label, names) => {
+        const group = document.createElement("option");
+        group.value = "";
+        group.textContent = label;
+        group.disabled = true;
+        select.appendChild(group);
+        for (const className of names) {
+          const option = document.createElement("option");
+          option.value = className;
+          option.textContent = className;
+          select.appendChild(option);
+        }
+      };
+      appendGroup("—核心职业—", coreClassNames);
+      appendGroup("—第三方职业—", thirdPartyClassNames);
+      appendGroup("—其他—", []);
 
       const custom = document.createElement("option");
       custom.value = CUSTOM_VALUE;
       custom.textContent = "自定义";
       select.appendChild(custom);
+
+      if (previousValue && [...select.options].some((option) => option.value === previousValue)) {
+        select.value = previousValue;
+      }
     }
 
     function getLevel(input) {
@@ -12177,6 +12289,7 @@ ${data.description}`;
     }
 
     function renderSkillTables() {
+      const previousStates = captureSkillStates();
       skillTables.replaceChildren();
 
       for (const group of skillGroups) {
@@ -12281,6 +12394,20 @@ ${data.description}`;
 
         table.append(colgroup, thead, tbody);
         skillTables.append(table);
+      }
+
+      if (Object.keys(previousStates).length) {
+        for (const row of skillTables.querySelectorAll(".skill-table tbody tr")) {
+          const name = row.querySelector(".skill-name-cell")?.dataset.skill;
+          const state = previousStates[name];
+          if (!state) continue;
+          const select = row.querySelector(".skill-prof-select");
+          const correction = row.querySelector(".skill-correction-input");
+          if (select) select.value = state.proficiency ?? "0";
+          if (correction) correction.value = state.correction ?? "";
+          updateSkillNameColor(row.querySelector(".skill-name-cell"), Number(select?.value || 0));
+        }
+        updateSkillTotals();
       }
     }
 
@@ -12928,7 +13055,7 @@ ${actions}
       }
 
       return `${header}
-<iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(title)}" loading="eager" referrerpolicy="no-referrer"></iframe>
+<div class="spell-lookup-frame-wrap"><iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(title)}" loading="eager" referrerpolicy="no-referrer"></iframe></div>
 <div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
     }
@@ -12960,7 +13087,7 @@ ${actions}
 <button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
 </span>
 </div>
-<iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(label)}法术速查" loading="eager" referrerpolicy="no-referrer"></iframe>
+<div class="spell-lookup-frame-wrap"><iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(label)}法术速查" loading="eager" referrerpolicy="no-referrer"></iframe></div>
 <div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
     }
@@ -13045,6 +13172,53 @@ ${actions}
       alignPlusIndicators();
     }
 
+    function renderCustomCoreTraits() {
+      const className = customClassInput.value.trim() || "自定义职业";
+      const hitDie = professionCustomHitDie.value || "8";
+      const abilityLabels = {
+        str: "力量", dex: "敏捷", con: "体质",
+        int: "智力", wis: "感知", cha: "魅力"
+      };
+      const saves = [...document.querySelectorAll(".custom-save-check:checked")]
+        .map((input) => abilityLabels[input.dataset.ability])
+        .filter(Boolean)
+        .join("、") || "—";
+      const fields = [
+        ["主要属性", "ability", "例如：力量或敏捷"],
+        ["生命值骰", null, `每${className}等级D${hitDie}`],
+        ["豁免熟练", null, saves],
+        ["技能熟练", "skills", "例如：选择2项：运动、察觉"],
+        ["武器熟练", "weapons", "例如：简易武器和军用武器"],
+        ["护甲受训", "armor", "例如：轻甲、中甲和盾牌"],
+        ["起始装备", "equipment", "例如：选择A或B：……"]
+      ];
+
+      for (const [label, field, value] of fields) {
+        const row = document.createElement("tr");
+        const labelCell = document.createElement("th");
+        labelCell.scope = "row";
+        labelCell.textContent = label;
+        const valueCell = document.createElement("td");
+        if (field) {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.className = "custom-core-trait-input";
+          input.dataset.customCoreField = field;
+          input.value = customCoreTraits[field] || "";
+          input.placeholder = value;
+          input.autocomplete = "off";
+          input.addEventListener("input", () => {
+            customCoreTraits[field] = input.value;
+          });
+          valueCell.append(input);
+        } else {
+          valueCell.textContent = value;
+        }
+        row.append(labelCell, valueCell);
+        coreTraitBody.append(row);
+      }
+    }
+
     function renderCoreTraits() {
       coreTraitBody.replaceChildren();
 
@@ -13055,13 +13229,7 @@ ${actions}
       if (!className) return;
 
       if (className === CUSTOM_VALUE) {
-        const row = document.createElement("tr");
-        const cell = document.createElement("th");
-        cell.colSpan = 2;
-        cell.className = "core-trait-empty";
-        cell.textContent = "自定义职业暂无核心特质数据";
-        row.append(cell);
-        coreTraitBody.append(row);
+        renderCustomCoreTraits();
         return;
       }
 
@@ -13156,12 +13324,76 @@ ${actions}
       DMG14: "城主指南"
     };
 
+    const THIRD_PARTY_LOOKUP = {
+      "铳士": {
+        classPath: "第三方/瓦尔达的秘密尖塔/铳士/铳士职业.htm",
+        source: "瓦尔达的秘密尖塔",
+        subclasses: {
+          "死眼客": "第三方/瓦尔达的秘密尖塔/铳士/死眼客.htm",
+          "豪赌客": "第三方/瓦尔达的秘密尖塔/铳士/豪赌客.htm",
+          "密间客": "第三方/瓦尔达的秘密尖塔/铳士/密间客.htm",
+          "魔弹客": "第三方/瓦尔达的秘密尖塔/铳士/魔弹客.htm",
+          "花枪客": "第三方/瓦尔达的秘密尖塔/铳士/技枪客.htm",
+          "白帽客": "第三方/瓦尔达的秘密尖塔/铳士/白帽客.htm",
+          "快枪客": "第三方/瓦尔达的秘密尖塔/玩家包2/子职/铳士-快枪客.htm"
+        }
+      },
+      "怪物猎人": {
+        classPath: "第三方/鬼魅幽谷/玩家指南/第二章/怪物猎人.htm",
+        source: "鬼魅幽谷",
+        subclasses: {
+          "刻肉会": "第三方/鬼魅幽谷/玩家指南/第二章/刻肉会.htm",
+          "吞噬会": "第三方/鬼魅幽谷/玩家指南/第二章/吞噬会.htm",
+          "秘学会": "第三方/鬼魅幽谷/玩家指南/第二章/秘学会.htm",
+          "捕猎会": "第三方/鬼魅幽谷/玩家指南/第二章/捕猎会.htm"
+        }
+      },
+      "拳斗士": {
+        classPath: "第三方/拳斗士/拳斗士.htm",
+        source: "拳斗士",
+        subclasses: {
+          "犬师拳狩": "第三方/拳斗士/犬师拳狩.htm",
+          "惧恶之手": "第三方/拳斗士/惧恶之手.htm",
+          "怒雷恶氓": "第三方/拳斗士/怒雷恶氓.htm",
+          "街角圣徒": "第三方/拳斗士/街角圣徒.htm",
+          "方圆擂尊": "第三方/拳斗士/方圆擂尊.htm",
+          "甜蜜科学": "第三方/拳斗士/甜蜜科学.htm"
+        }
+      },
+      "血族": {
+        classPath: "第三方/吸血鬼：避世潜藏/血族职业/血族.htm",
+        source: "吸血鬼：避世潜藏",
+        subclasses: {
+          "布鲁赫": "第三方/吸血鬼：避世潜藏/血族职业/布鲁赫.htm",
+          "冈格罗": "第三方/吸血鬼：避世潜藏/血族职业/冈格罗.htm",
+          "勒森魃": "第三方/吸血鬼：避世潜藏/血族职业/勒森魃.htm",
+          "诺斯费拉图": "第三方/吸血鬼：避世潜藏/血族职业/诺斯费拉图.htm",
+          "妥芮朵": "第三方/吸血鬼：避世潜藏/血族职业/妥芮朵.htm",
+          "梵卓": "第三方/吸血鬼：避世潜藏/血族职业/梵卓.htm"
+        }
+      }
+    };
+
+    function getThirdPartyLookup(className, subclassName = "") {
+      const entry = THIRD_PARTY_LOOKUP[className];
+      if (!entry) return null;
+      if (subclassName && entry.subclasses[subclassName]) {
+        return entry.subclasses[subclassName];
+      }
+      return entry.classPath;
+    }
+
     function getSubclassSourceCode(className, subclassName) {
       const entry = (subclassCatalog[className] || []).find(([name]) => name === subclassName);
       return entry?.[1] || "";
     }
 
     function buildSubclassLookupUrl(className, subclassName) {
+      const thirdPartyPath = getThirdPartyLookup(className, subclassName);
+      if (thirdPartyPath) {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}${thirdPartyPath}`);
+      }
+
       const source = getSubclassSourceCode(className, subclassName);
       const legacyWarlockNames = new Set(["XGE", "TCE", "SCAG"]);
       const lookupClassName = className === "魔契师" && legacyWarlockNames.has(source)
@@ -13216,6 +13448,8 @@ ${actions}
     }
 
     function getClassFeatureLookupSource(className, subclassName, needsSubclass) {
+      const thirdParty = THIRD_PARTY_LOOKUP[className];
+      if (thirdParty) return thirdParty.source;
       if (!needsSubclass) return CLASS_FEATURE_LOOKUP_SOURCE;
       const source = getSubclassSourceCode(className, subclassName);
       return SUBCLASS_SOURCE_BOOKS[source] || CLASS_FEATURE_LOOKUP_SOURCE;
@@ -13223,6 +13457,10 @@ ${actions}
 
     function buildClassFeatureLookupUrl(className, subclassName = "") {
       if (!className || className === CUSTOM_VALUE) return "";
+      const thirdPartyPath = getThirdPartyLookup(className, subclassName);
+      if (thirdPartyPath) {
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}${thirdPartyPath}`);
+      }
       if (!subclassName) {
         return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}玩家手册2024/角色职业/${className}/${className}.htm`);
       }
@@ -15345,6 +15583,40 @@ ${actions}
       }
     }
 
+    function captureSkillStates() {
+      const states = {};
+      for (const row of skillTables.querySelectorAll(".skill-table tbody tr")) {
+        const name = row.querySelector(".skill-name-cell")?.dataset.skill;
+        if (!name) continue;
+        states[name] = {
+          proficiency: row.querySelector(".skill-prof-select")?.value ?? "0",
+          correction: row.querySelector(".skill-correction-input")?.value ?? ""
+        };
+      }
+      return states;
+    }
+
+    function restoreSkillStates(states) {
+      if (!states || !Object.keys(states).length) return;
+      if (!skillTables.querySelector(".skill-table")) renderSkillTables();
+      for (const row of skillTables.querySelectorAll(".skill-table tbody tr")) {
+        const name = row.querySelector(".skill-name-cell")?.dataset.skill;
+        const state = states[name];
+        if (!state) continue;
+        const select = row.querySelector(".skill-prof-select");
+        const correction = row.querySelector(".skill-correction-input");
+        if (select) {
+          select.value = state.proficiency ?? "0";
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        if (correction) {
+          correction.value = state.correction ?? "";
+          correction.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
+      updateSkillTotals();
+    }
+
     function captureBuilderData() {
       return {
         schema: "dnd5e2024.character",
@@ -15354,6 +15626,7 @@ ${actions}
         featRows: captureDynamicBuilderRows(featTableBody),
         combatFeatRows: captureDynamicBuilderRows(combatFeatBody),
         specialAbilityRows: captureDynamicBuilderRows(specialAbilityBody),
+        skillStates: captureSkillStates(),
         backpack: {
           gear: captureDynamicBuilderRows(backpackGearBody),
           tool: captureDynamicBuilderRows(backpackToolBody),
@@ -15386,7 +15659,8 @@ ${actions}
           offsetX: appearanceImageState.offsetX,
           offsetY: appearanceImageState.offsetY
         },
-        classFeatureTables: captureClassFeatureTables()
+        classFeatureTables: captureClassFeatureTables(),
+        customCoreTraits: { ...customCoreTraits }
       };
     }
 
@@ -15760,6 +16034,12 @@ ${actions}
       }
 
       builderPersistence.restoring = true;
+      if (data.customCoreTraits && typeof data.customCoreTraits === "object") {
+        customCoreTraits = {
+          ...customCoreTraits,
+          ...data.customCoreTraits
+        };
+      }
       restoreAppearanceImage(data.appearanceImage);
 
       const staticControls = new Map(
@@ -15782,8 +16062,16 @@ ${actions}
       };
 
       applyStatic();
-      restoreDynamicBuilderRows(data);
-      restoreClassFeatureTables(data.classFeatureTables || {});
+      try {
+        restoreDynamicBuilderRows(data);
+      } catch (error) {
+        console.error("恢复动态构筑内容失败", error);
+      }
+      try {
+        restoreClassFeatureTables(data.classFeatureTables || {});
+      } catch (error) {
+        console.error("恢复职业特性表格失败", error);
+      }
 
       const syncIds = [
         "builder-class", "builder-multi-class", "builder-race", "builder-background",
@@ -15826,6 +16114,8 @@ ${actions}
       updateBackpackSection("magic");
       updateBackpackGearTotals();
       syncAllSubclassOptionLabels();
+      restoreSkillStates(data.skillStates || {});
+      renderCoreTraits();
 
       undoManager.undo.length = 0;
       undoManager.redo.length = 0;
@@ -15863,16 +16153,6 @@ ${actions}
     }
 
     function loadBuilderData() {
-      try {
-        const testKey = `${BUILDER_STORAGE_KEY}.test`;
-        localStorage.setItem(testKey, "1");
-        localStorage.removeItem(testKey);
-      } catch (error) {
-        builderPersistence.available = false;
-        setBuilderSaveStatus("自动保存不可用，请导出 JSON。", true);
-        return false;
-      }
-
       const embedded = document.getElementById("dnd-embedded-data");
       if (embedded) {
         const embeddedId = embedded.dataset.embeddedId || "default";
@@ -15901,9 +16181,20 @@ ${actions}
             setBuilderSaveStatus("已载入离线角色卡。");
             return true;
           } catch (error) {
+            console.error("离线角色卡恢复失败", error);
             setBuilderSaveStatus("离线角色卡数据损坏，已忽略。", true);
           }
         }
+      }
+
+      try {
+        const testKey = `${BUILDER_STORAGE_KEY}.test`;
+        localStorage.setItem(testKey, "1");
+        localStorage.removeItem(testKey);
+      } catch (error) {
+        builderPersistence.available = false;
+        setBuilderSaveStatus("自动保存不可用，请导出 JSON。", true);
+        return false;
       }
 
       try {
@@ -15955,9 +16246,46 @@ ${actions}
       return (name || "角色卡").replace(/[\\/:*?"<>|]/g, "_").trim() || "角色卡";
     }
 
+    function materializeClonedFormValues(clone) {
+      const originals = [...document.querySelectorAll("input, select, textarea")];
+      const targets = [...clone.querySelectorAll("input, select, textarea")];
+      originals.forEach((original, index) => {
+        const target = targets[index];
+        if (!target) return;
+        if (original instanceof HTMLInputElement) {
+          if (original.type === "file") return;
+          if (original.type === "checkbox" || original.type === "radio") {
+            if (original.checked) target.setAttribute("checked", "checked");
+            else target.removeAttribute("checked");
+          } else {
+            target.setAttribute("value", original.value);
+          }
+        } else if (original instanceof HTMLTextAreaElement) {
+          target.textContent = original.value;
+        } else if (original instanceof HTMLSelectElement) {
+          [...target.options].forEach((option, optionIndex) => {
+            if (optionIndex === original.selectedIndex) {
+              option.setAttribute("selected", "selected");
+            } else {
+              option.removeAttribute("selected");
+            }
+          });
+        }
+      });
+    }
+
     function prepareOfflineExportClone() {
       const clone = document.documentElement.cloneNode(true);
+      materializeClonedFormValues(clone);
       clone.querySelectorAll("#dnd-embedded-data").forEach((node) => node.remove());
+
+      const clonedBody = clone.querySelector("body");
+      const clonedTooltip = clone.querySelector("#reference-tooltip");
+      const firstScript = clonedBody?.querySelector("script");
+      if (clonedBody && clonedTooltip && firstScript) {
+        clonedBody.insertBefore(clonedTooltip, firstScript);
+      }
+
       clone.querySelectorAll(
         ".equipment-table-actions, .equipment-action-col, .equipment-action-head, .equipment-action-cell"
       ).forEach((node) => node.remove());
@@ -15965,31 +16293,6 @@ ${actions}
       for (const control of clone.querySelectorAll(".weapon-name-control")) {
         const select = control.querySelector(".equipment-weapon-name-select");
         if (select) control.replaceWith(select);
-      }
-
-      clone.querySelectorAll(
-        "[data-added-weapon-row], [data-added-magic-row], " +
-        "[data-custom-language-row], [data-custom-tool-row]"
-      ).forEach((node) => node.remove());
-
-      for (const selector of [
-        "#feat-table-body", "#combat-feat-body", "#special-ability-body",
-        "#backpack-gear-body", "#backpack-tool-body", "#backpack-magic-body",
-        "#ledger-body", "#skill-tables"
-      ]) {
-        const element = clone.querySelector(selector);
-        if (element) element.replaceChildren();
-      }
-
-      const combatBlock = clone.querySelector("#combat-feat-block");
-      if (combatBlock) combatBlock.hidden = true;
-      const specialBlock = clone.querySelector("#special-ability-block");
-      if (specialBlock) specialBlock.hidden = true;
-
-      const imageFrame = clone.querySelector("#appearance-image-frame");
-      if (imageFrame) {
-        imageFrame.hidden = true;
-        imageFrame.querySelector("#appearance-image")?.removeAttribute("src");
       }
 
       const saveStatus = clone.querySelector("#builder-save-status");
@@ -16025,15 +16328,30 @@ ${actions}
     }
 
     function getOfflineExportClone() {
+      const currentClone = prepareOfflineExportClone();
       const template = window.__DND_OFFLINE_TEMPLATE__;
-      if (typeof template === "string" && template.trim()) {
-        const documentNode = new DOMParser().parseFromString(template, "text/html");
-        const clone = documentNode.documentElement.cloneNode(true);
-        clone.querySelectorAll("#dnd-embedded-data").forEach((node) => node.remove());
-        clone.querySelector("body")?.setAttribute("data-initial-tab", "builder");
-        return clone;
+      if (typeof template !== "string" || !template.trim()) {
+        return currentClone;
       }
-      return prepareOfflineExportClone();
+
+      const documentNode = new DOMParser().parseFromString(template, "text/html");
+      const clone = documentNode.documentElement.cloneNode(true);
+      clone.querySelectorAll("#dnd-embedded-data").forEach((node) => node.remove());
+
+      const livePanel = currentClone.querySelector("#panel-builder");
+      const templatePanel = clone.querySelector("#panel-builder");
+      if (livePanel && templatePanel) templatePanel.replaceWith(livePanel);
+
+      const liveTooltip = currentClone.querySelector("#reference-tooltip");
+      if (liveTooltip && !clone.querySelector("#reference-tooltip")) {
+        const body = clone.querySelector("body");
+        const firstScript = body?.querySelector("script");
+        if (firstScript) body.insertBefore(liveTooltip, firstScript);
+        else body?.append(liveTooltip);
+      }
+
+      clone.querySelector("body")?.setAttribute("data-initial-tab", "builder");
+      return clone;
     }
 
     async function exportOfflineHtml() {
@@ -16747,6 +17065,7 @@ ${actions}
 
     function updateDerivedStats() {
       syncClassFeatureEditors();
+      renderCoreTraits();
       const mainLevel = classSelect.value ? (getLevel(levelInput) ?? 0) : 0;
       const multiLevel = getExtraMultiLevelSum();
       const totalLevel = mainLevel + multiLevel;
@@ -18695,6 +19014,7 @@ ${actions}
     document.addEventListener("keydown", handleUndoShortcut);
     undoManager.lastState = captureUndoState();
   })();
+
 
 
 </script>
