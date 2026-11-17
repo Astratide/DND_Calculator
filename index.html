@@ -3325,7 +3325,7 @@
     }
 
     .spellbook-col-handle { width: 24px; }
-    .spellbook-col-prepared { width: 44px; }
+    .spellbook-col-prepared { width: 58px; }
     .spellbook-col-level { width: 52px; }
     .spellbook-col-name { width: 160px; }
     .spellbook-col-school { width: 50px; }
@@ -3337,15 +3337,33 @@
 
     .spellbook-row td {
       height: 30px;
-      background: #fff;
     }
 
     .spellbook-row.is-expanded td {
       height: auto;
     }
 
-    .spellbook-row:nth-of-type(4n + 1) td {
-      background: #fbfbf9;
+    .spellbook-row.is-leveled td,
+    .spellbook-row.is-leveled + .spellbook-details-row td {
+      background: #FBFBF9;
+    }
+
+    .spellbook-row.is-cantrip td,
+    .spellbook-row.is-cantrip + .spellbook-details-row td {
+      background: #F2F2F2;
+    }
+
+    .spellbook-row.is-unprepared .spellbook-cell,
+    .spellbook-row.is-unprepared .spellbook-description,
+    .spellbook-row.is-unprepared + .spellbook-details-row .spellbook-description,
+    .spellbook-row.is-unprepared .spellbook-prepared-select {
+      color: #8a8a8a;
+    }
+
+    .spellbook-row.is-unprepared .spellbook-row-toggle,
+    .spellbook-row.is-unprepared .spellbook-row-delete,
+    .spellbook-row.is-unprepared .spellbook-drag-handle {
+      color: #999;
     }
 
     .spellbook-cell {
@@ -3355,7 +3373,7 @@
       outline: none;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: clip;
     }
 
     .spellbook-row.is-expanded .spellbook-cell {
@@ -3401,16 +3419,16 @@
     }
 
     .spellbook-prepared-select {
-      width: 30px;
+      width: 100%;
       height: 30px;
-      margin: 0 auto;
+      margin: 0;
       padding: 0;
       color: #111;
       background: transparent;
       border: 0;
       border-radius: 0;
       font-family: "Microsoft YaHei", Arial, sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: bold;
       text-align: center;
       text-align-last: center;
@@ -6994,7 +7012,7 @@ body.feature-dragging {
         <div id="spellbook-paste" class="spellbook-paste" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="在此粘贴法术信息。如果为不全书格式则自动转换为法术表格。" aria-label="法术书粘贴区域"></div>
         <p id="spellbook-empty" class="spellbook-empty">尚未收录法术。将法术文本粘贴到上方输入框，会自动解析成可编辑表格。</p>
         <div id="spellbook-table-stack" class="spellbook-table-stack"></div>
-        <p id="spellbook-summary" class="spellbook-summary">法术书内现有 0 道环阶法术，其中已准备 0 道环阶法术。法术书中还有 0 道戏法，其中 0 道已被习得。</p>
+        <p id="spellbook-summary" class="spellbook-summary">法术书内现有 0 道环阶法术，已准备 0 道环阶法术，其中 0 道来自赠礼。法术书中还有 0 道戏法，其中 0 道已被习得。</p>
       </div>
 
       <div class="panel backpack-panel">
@@ -16617,6 +16635,13 @@ ${actions}
       return text;
     }
 
+    function normalizeSpellbookPrepared(value) {
+      const text = String(value || "").trim();
+      if (text === "gift" || text === "赠礼") return "gift";
+      if (text === "prepared" || text === "O" || text === "已准备") return "prepared";
+      return "none";
+    }
+
     function normalizeSpellCastingTime(value) {
       return String(value || "")
         .replace(/^\s*1\s*(?=(?:附赠动作|动作|反应))/, "")
@@ -16850,23 +16875,41 @@ ${actions}
       }
     }
 
+    function updateSpellbookRowState(row) {
+      if (!row) return;
+      const level = row.querySelector('[data-field="level"]')?.textContent.trim() || "";
+      const prepared = normalizeSpellbookPrepared(
+        row.querySelector(".spellbook-prepared-select")?.value
+      );
+      row.classList.toggle("is-cantrip", level === "戏法");
+      row.classList.toggle("is-leveled", level !== "戏法");
+      row.classList.toggle("is-unprepared", prepared === "none");
+    }
+
     function updateSpellbookEmptyState() {
       const stack = getSpellbookTableStack();
       const empty = document.getElementById("spellbook-empty");
       if (!stack || !empty) return;
       const rows = [...stack.querySelectorAll(".spellbook-row")];
       empty.hidden = rows.length > 0;
+      rows.forEach(updateSpellbookRowState);
       const isCantrip = (row) =>
         row.querySelector('[data-field="level"]')?.textContent.trim() === "戏法";
-      const isPrepared = (row) =>
-        row.querySelector(".spellbook-prepared-select")?.value === "O";
+      const preparedState = (row) => normalizeSpellbookPrepared(
+        row.querySelector(".spellbook-prepared-select")?.value
+      );
+      const isPrepared = (row) => {
+        const value = preparedState(row);
+        return value === "prepared" || value === "gift";
+      };
       const cantrips = rows.filter(isCantrip);
       const leveled = rows.filter((row) => !isCantrip(row));
       const preparedLeveled = leveled.filter(isPrepared).length;
+      const giftLeveled = leveled.filter((row) => preparedState(row) === "gift").length;
       const preparedCantrips = cantrips.filter(isPrepared).length;
       const summary = document.getElementById("spellbook-summary");
       if (summary) {
-        summary.textContent = `法术书内现有 ${leveled.length} 道环阶法术，其中已准备 ${preparedLeveled} 道环阶法术。法术书中还有 ${cantrips.length} 道戏法，其中 ${preparedCantrips} 道已被习得。`;
+        summary.textContent = `法术书内现有 ${leveled.length} 道环阶法术，已准备 ${preparedLeveled} 道环阶法术，其中 ${giftLeveled} 道来自赠礼。法术书中还有 ${cantrips.length} 道戏法，其中 ${preparedCantrips} 道已被习得。`;
       }
     }
 
@@ -16961,13 +17004,17 @@ ${actions}
       const preparedSelect = document.createElement("select");
       preparedSelect.className = "spellbook-prepared-select";
       preparedSelect.setAttribute("aria-label", "准备状态");
-      for (const value of ["X", "O"]) {
+      for (const [value, label] of [
+        ["none", "未准备"],
+        ["prepared", "已准备"],
+        ["gift", "赠礼"]
+      ]) {
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = value;
+        option.textContent = label;
         preparedSelect.append(option);
       }
-      preparedSelect.value = spell.prepared === "O" ? "O" : "X";
+      preparedSelect.value = normalizeSpellbookPrepared(spell.prepared);
       preparedSelect.addEventListener("change", () => {
         updateSpellbookEmptyState();
         scheduleBuilderSave();
@@ -17083,7 +17130,9 @@ ${actions}
           return isHtml ? element.innerHTML : element.textContent.trim();
         };
         return {
-          prepared: row.querySelector(".spellbook-prepared-select")?.value === "O" ? "O" : "X",
+          prepared: normalizeSpellbookPrepared(
+            row.querySelector(".spellbook-prepared-select")?.value
+          ),
           level: read("level"),
           name: read("name"),
           school: read("school"),
