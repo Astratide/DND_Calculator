@@ -3716,7 +3716,7 @@
       font-size: 0.8rem;
     }
 
-    .backpack-gear-name-col { width: 150px; }
+    .backpack-gear-name-col { width: 190px; }
     .backpack-gear-desc-col { width: auto; }
     .backpack-weight-col { width: 62px; }
     .backpack-price-col { width: 72px; }
@@ -5794,6 +5794,11 @@ html[data-theme="dark"] .panel .subclass-under-level input {
   white-space: normal;
 }
 
+.class-feature-paste-table .feature-name-cell.feature-title-maroon {
+  color: #800000;
+  font-weight: bold;
+}
+
 .class-feature-paste-table .feature-details-cell {
   min-height: 32px;
   white-space: pre-wrap;
@@ -5964,6 +5969,10 @@ body.feature-dragging {
   html[data-theme="dark"] .class-feature-paste-table .feature-name-cell,
   html[data-theme="dark"] .class-feature-paste-table .feature-details-cell {
     color: #e6e6e6 !important;
+  }
+
+  html[data-theme="dark"] .class-feature-paste-table .feature-name-cell.feature-title-maroon {
+    color: #f0a0a0 !important;
   }
 
   html[data-theme="dark"] .class-feature-paste-table .feature-table-toggle,
@@ -12425,6 +12434,7 @@ ${data.description}`;
           "技艺专家", "隐伏者", "劈砍者", "飙速跑者", "法术射手", "念动力",
           "心灵感应", "战地施法者", "武器大师", 
           "龙之瘢(FR)", "翠色魔法(FR)", "竖琴手协同(FR)", "教团韧性(FR)", "贵族信念(FR)", "紫龙指挥官(FR)", "咒火专家(FR)", "散塔林会战术(FR)", "寒地施法者(FR)", "妖精诡术(FR)", "迷锁触碰(FR)", "街头正义(FR)", 
+          "防护专家(AU)", "咒法专家(AU)", "预言专家(AU)", "惑控专家(AU)", "塑能专家(AU)", "幻术专家(AU)", "死灵专家(AU)", "变化专家(AU)", "元素魔宠(AU)", "异界魔宠(AU)", "慰疗魔宠(AU)", "尚武魔宠(AU)", "魔法行家(AU)", "法术抗性(AU)", "法术诡计(AU)",
           "嗜血(ABH)", "爆破手(ABH)", "沉溺痛苦(ABH)", "光明使者(ABH)", "吻痕(ABH)", "残尸败蜕(ABH)", "咎罪责难(ABH)", "祸国叛心(ABH)", "吸血鬼触碰(ABH)", "残尸败蜕(ABH)", "咎罪责难(ABH)", "祸国叛心(ABH)", 
           "高等异种龙纹(EFA)", "高等侦测龙纹(EFA)", "高等探寻龙纹(EFA)", "高等畜牧龙纹(EFA)", "高等医疗龙纹(EFA)", "高等招待龙纹(EFA)", "高等创造龙纹(EFA)", "高等通行龙纹(EFA)", "高等抄录龙纹(EFA)", "高等哨戒龙纹(EFA)", "高等阴影龙纹(EFA)", "高等暴风龙纹(EFA)", "高等守御龙纹(EFA)", "强效龙纹(EFA)"
         ]
@@ -12436,6 +12446,11 @@ ${data.description}`;
           "扭曲命运之恩惠", "超凡强韧之恩惠", "无敌攻势之恩惠",
           "强力恢复之恩惠", "博学多才之恩惠", "神行无拘之恩惠",
           "法术溯回之恩惠", "暗夜精魂之恩惠", "真实视觉之恩惠", 
+          "血海漂橹之恩惠(FR)", "生机勃发之恩惠(FR)", "八面玲珑之恩惠(FR)", 
+          "绝境逢生之恩惠(FR)", "熠熠生辉之恩惠(FR)", "变幻无常之恩惠(FR)", 
+          "命运眷顾之恩惠(FR)", "毒手殁心之恩惠(FR)", "夜宴狂欢之恩惠(FR)", 
+          "惊魂落魄之恩惠(FR)", "旭日骄阳之恩惠(FR)", "暴风骤岚之恩惠(FR)", "汲魂饮魄之恩惠(FR)",
+          "咒能爆发之恩惠(AU)", "学派宗师之恩惠(AU)", "钢铁意志之恩惠(AU)", 
           "炽耀黎明之恩惠(ABH)", "厄影迫现之恩惠(ABH)", 
           "雾影遁形之恩惠(ABH)", "西伯瑞斯之恩惠(EFA)"
         ]
@@ -13601,7 +13616,111 @@ ${data.description}`;
 传奇恩惠专长（先决：等级19+）
 你获得以下增益。
 属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
-真实视觉 Truesight。你获得60尺真实视觉。`
+真实视觉 Truesight。你获得60尺真实视觉。`,
+
+"血海漂橹之恩惠(FR)": `血海漂橹之恩惠 Boon of Bloodshed 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。 
+杀手机运Killer's Fortune。当一名你可见的敌人生命值降至0时，你的下次攻击检定获得优势，持续至你的下个回合结束。 
+痛心切骨Power from Pain。每回合一次，当你在浴血期间进行攻击检定时，你可以额外对目标造成等于熟练加值的伤害。额外伤害的伤害类型与该攻击的伤害类型一致。`,
+      "生机勃发之恩惠(FR)": `生机勃发之恩惠 Boon of Bountiful Health 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。 
+超健康Augmented Health。当你获得临时生命值时，该临时生命值数值提升5。 
+超恢复Superior Recuperation。当你消耗一枚或更多生命骰恢复生命值时，你能够以每枚骰子可能掷出的最高值替代其骰值。 `,
+      "八面玲珑之恩惠(FR)": `八面玲珑之恩惠 Boon of Communication 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。 
+巧妙讲演Cunning Speaker。你影响敌对生物时进行的属性检定不具有劣势。 
+天赐译员Gifted Interpreter。你理解你看见或听见的任意语言手势的字面意思。你理解你看见的任意语言文字的字面意思。 
+心灵沟通Mental Communication。你获得120尺心灵感应。`, 
+      "绝境逢生之恩惠(FR)": `绝境逢生之恩惠 Boon of Desperate Resilience 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的力量或体质提升1，至多提升至30。 
+心体防护Defense of Body and Mind。浴血期间，你对除力场伤害外的所有类型伤害具有抗性。 `,
+      "熠熠生辉之恩惠(FR)": `熠熠生辉之恩惠 Boon of Exquisite Radiance 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。 
+永恒安眠Eternal Rest。被你降至0生命值的生物无法变为亡灵。 
+磊落光明Powerful Radiance。当你进行一次造成光耀伤害的伤害掷骰时，你能够以每枚骰子可能掷出的最高值替代其骰值。此增益一经使用，直至完成长休你都无法再次使用。`, 
+      "变幻无常之恩惠(FR)": `变幻无常之恩惠 Boon of Fluid Forms 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。 
+变形生物Shapechanger。你能够以魔法动作变形为挑战等级不高于10的野兽、类人或怪兽。当你变形时，你获得等于新形态生命值的临时生命值。变形效应持续1小时，并在你不具有剩余的临时生命值时或在你执行魔法动作变回真实形态时提前结束。 
+你的游戏数据被你选择形态的数据卡所替换，但你保留你的生物类型；阵营；个性；智力、感知和魅力属性值；生命值；生命骰；熟练项；交流能力。若你具有施法或契约魔法特性，你同样保留之。变形时，由你决定着装或携带的每件装备是掉落在地上或是适应你的新形态调整大小与形状（仅当你置身其中期间）。 
+此增益一经使用，直至完成长休你都无法再次使用。 
+变化适性Hardy Transformation。当你在变形时获得临时生命值时，该临时生命值数值提升20。 `,
+      "命运眷顾之恩惠(FR)": `命运眷顾之恩惠 Boon of Fortune's Favor 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。 
+豁免重骰Saving Throw Reroll。当你的豁免检定失败时，你能够重新掷骰但必须使用新的结果。此增益一经使用，直至你的下个回合开始你都无法再次使用。 `,
+      "毒手殁心之恩惠(FR)": `毒手殁心之恩惠 Boon of Poison Mastery 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。 
+百毒不侵Antitoxic。你具有对毒素伤害和中毒状态的免疫。 
+完美毒师Perfect Poisoner。每回合一次，当你掷骰以决定生物因你的攻击、法术或特性受到的毒素伤害时，你能够以每枚骰子可能掷出的最高值替代其骰值。 `,
+      "夜宴狂欢之恩惠(FR)": `夜宴狂欢之恩惠 Boon of Revelry 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。 
+舞动灵感Inspire Dance。你始终准备着法术奥图迷舞Otto's Irresistible Dance。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。 
+当你施展该法术时无需法术成分，且受到伤害不会打断你该法术的专注。 
+（译注：本专长未写明法术的施法属性，原文如此） 
+放声歌唱Sing Out。若一名生物因对抗你的奥图迷舞Otto's Irresistible Dance豁免失败而陷入该法术造成的魅惑状态，其无法施展需要言语成分的法术，且若其能够唱歌，其将哼唱无意义的悦耳小调。 `,
+      "惊魂落魄之恩惠(FR)": `惊魂落魄之恩惠 Boon of Terror 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的魅力提升1，至多提升至30。 
+无所畏惧Fearless。你具有对恐慌状态的免疫。 
+逃吧，蠢货Flee, Fools！当一名陷入恐慌状态的生物在你60尺内开始其回合时，只要你可以看见该生物且其未身处全身掩护之后，你就能够以反应加剧其恐惧。若你如此做，该生物必须成功通过一次感知豁免（DC为8加你的魅力调整值加你的熟练加值），否则需要消耗其回合以可用的最快方式移动远离你。此增益一经使用，直至完成短休或长休你都无法再次使用。 
+令人生畏Intimidating。若你不具有威吓技能的熟练，你获得之。你还会获得威吓专精。 `,
+      "旭日骄阳之恩惠(FR)": `旭日骄阳之恩惠 Boon of the Bright Sun 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的体质、感知或魅力提升1，至多提升至30。 
+如日当空Daylight Presence。以一个附赠动作，你在30尺光环区域内散发如同阳光的明亮光照。若任意光环区域与法术创造的黑暗区域重叠，该法术被解除。光环持续至你解除之（无需动作）、你死亡或你陷入失能状态。 
+守御之光Fortifying Light。当你的如日当空激活时（译注：原文如此，按后文看应是激活期间），每个你的回合开始时，你和如日当空区域内你可见的盟友获得10临时生命值。 `,
+      "暴风骤岚之恩惠(FR)": `暴风骤岚之恩惠 Boon of the Furious Storm 
+传奇恩惠专长（先决：等级19+，施法或契约魔法特性） 
+你获得以下增益。 
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。 
+暴风之眼Eye of the Storm。你对闪电和雷鸣伤害具有抗性。浴血期间，你对闪电和雷鸣伤害具有免疫。 
+风暴之力Storm's Strength。生物在对抗你造成闪电或雷鸣伤害的法术时进行的豁免检定具有劣势。 `,
+      "汲魂饮魄之恩惠(FR)": `汲魂饮魄之恩惠 Boon of the Soul Drinker 
+传奇恩惠专长（先决：等级19+） 
+你获得以下增益。
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+墓亡抗性Grave Resistance。你对寒冷和暗蚀伤害具有抗性。
+生命虹吸Siphon Life。当一名位于你120尺内的敌人生命值降至0时，你能够以反应恢复50生命值。此增益一经使用，直至完成短休或长休你都无法再次使用。`,
+      "咒能爆发之恩惠(AU)": `咒能爆发之恩惠 Boon of Erupting Spellpower 
+传奇恩惠专长（先决：等级19+，施法或契约魔法特性）
+你获得以下增益。
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。
+法术过载Spell Overload。 当你使用法术位施展一道造成伤害的法术时，你可以令其爆发魔法能量浪涌。你能将该法术伤害骰投出的1和2都视为3，且受到该法术伤害的生物陷入倒地状态。
+此增益一经使用，直至投掷先攻、完成短休或完成长休你都无法再次使用。 `,
+      "学派宗师之恩惠(AU)": `学派宗师之恩惠 Boon of Magic School Mastery 
+传奇恩惠专长（先决：等级19+，施法或契约魔法特性）
+你获得以下增益。
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。
+学派精通Mastered Scool。 从八大魔法学派中选择一个：防护、咒法、预言、惑控、塑能、幻术、死灵、变化。你的选择赋予你以下特性：
+强记施法Rote Casting。选择一道来自你选择学派且记录在你职业法术列表的一环法术。你始终准备着那道法术，且可以无需法术位且无需法术成分地施展该法术。 
+招牌奥术Signature Arcanmum。 选择一道来自你选择学派的不高于七环的法术。你始终准备着那道法术。你可以无需法术位地施展该法术一次，当你完成长休时，重获以此法施展该法术的能力。
+你也能够以你拥有的任意合适环阶的法术位施展这些准备法术。
+复选Repeatable。你可多次选取本专长，但每次选取时都必须选择不同的魔法学派。`,
+      "钢铁意志之恩惠(AU)": `钢铁意志之恩惠 Boon of the Iron Mind 
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至30。
+矢志不移Unshakeable Focus。 当你正为某效应维持专注时*，你仅会因以下情况失去专注：你施展一道需要专注的法术，你激活另一个需要专注的效应，你陷入石化或昏迷状态或你死亡。`
+
     };
 
     function getFeatLevelDefaults() {
@@ -14209,9 +14328,17 @@ ${data.description}`;
     const adventuringGearData = {
       "强酸": { weight: "1磅", price: "25GP" },
       "炽火胶": { weight: "1磅", price: "50GP" },
-      "弹药": { weight: "多种", price: "多种" },
+      "弹药（箭矢20枚）": { weight: "1磅", price: "1GP" },
+      "弹药（弩矢20枚）": { weight: "1.5磅", price: "1GP" },
+      "弹药（枪械子弹10枚）": { weight: "2磅", price: "3GP" },
+      "弹药（石弹20枚）": { weight: "1.5磅", price: "4CP" },
+      "弹药（吹矢50枚）": { weight: "1磅", price: "1GP" },
       "抗毒剂": { weight: "—", price: "50GP" },
-      "奥术法器": { weight: "多种", price: "多种" },
+      "奥术法器（水晶）": { weight: "1磅", price: "10GP" },
+      "奥术法器（法球）": { weight: "3磅", price: "20GP" },
+      "奥术法器（权杖）": { weight: "2磅", price: "10GP" },
+      "奥术法器（法杖）": { weight: "4磅", price: "5GP" },
+      "奥术法器（魔杖）": { weight: "1磅", price: "10GP" },
       "背包": { weight: "5磅", price: "2GP" },
       "滚珠": { weight: "2磅", price: "1GP" },
       "木桶": { weight: "70磅", price: "2GP" },
@@ -14237,14 +14364,18 @@ ${data.description}`;
       "戏服": { weight: "4磅", price: "5GP" },
       "撬棍": { weight: "5磅", price: "2GP" },
       "外交套组": { weight: "39磅", price: "39GP" },
-      "德鲁伊法器": { weight: "多种", price: "多种" },
+      "德鲁伊法器（槲寄生枝条）": { weight: "—", price: "1GP" },
+      "德鲁伊法器（木质法杖）": { weight: "4磅", price: "5GP" },
+      "德鲁伊法器（紫杉魔杖）": { weight: "1磅", price: "10GP" },
       "地城套组": { weight: "55磅", price: "12GP" },
       "艺人套组": { weight: "58.5磅", price: "40GP" },
       "探索套组": { weight: "55磅", price: "10GP" },
       "扁瓶": { weight: "1磅", price: "2CP" },
       "爪钩": { weight: "4磅", price: "2GP" },
       "医疗包": { weight: "3磅", price: "5GP" },
-      "圣徽": { weight: "多种", price: "多种" },
+      "圣徽（护符）": { weight: "1磅", price: "5GP" },
+      "圣徽（纹章）": { weight: "—", price: "5GP" },
+      "圣徽（圣物匣）": { weight: "2磅", price: "5GP" },
       "圣水": { weight: "1磅", price: "25GP" },
       "捕猎陷阱": { weight: "25磅", price: "5GP" },
       "墨水": { weight: "—", price: "10GP" },
@@ -14349,6 +14480,22 @@ ${data.description}`;
     };
 
     const adventuringGearDescriptions = {
+      "弹药（箭矢20枚）": "箭矢20枚，重1磅，价格1GP。需放入箭袋（容器另购：1磅，1GP）使用。",
+      "弹药（弩矢20枚）": "弩矢20枚，重1.5磅，价格1GP。需放入弩矢匣（容器另购：1磅，1GP）使用。",
+      "弹药（枪械子弹10枚）": "枪械子弹10枚，重2磅，价格3GP。需放入小包（容器另购）使用。",
+      "弹药（石弹20枚）": "投石索用石弹20枚，重1.5磅，价格4CP。需放入小包（容器另购）使用。",
+      "弹药（吹矢50枚）": "吹箭筒用吹矢50枚，重1磅，价格1GP。需放入小包（容器另购）使用。",
+      "奥术法器（水晶）": "水晶形态的奥术法器，重1磅，价格10GP。术士、魔契师和法师可将其作为法器。",
+      "奥术法器（法球）": "法球形态的奥术法器，重3磅，价格20GP。术士、魔契师和法师可将其作为法器。",
+      "奥术法器（权杖）": "权杖形态的奥术法器，重2磅，价格10GP。术士、魔契师和法师可将其作为法器。",
+      "奥术法器（法杖）": "法杖形态的奥术法器，重4磅，价格5GP，也可以作为长棍使用。术士、魔契师和法师可将其作为法器。",
+      "奥术法器（魔杖）": "魔杖形态的奥术法器，重1磅，价格10GP。术士、魔契师和法师可将其作为法器。",
+      "德鲁伊法器（槲寄生枝条）": "槲寄生枝条形态的德鲁伊法器，重—，价格1GP。德鲁伊和游侠可将其作为法器。",
+      "德鲁伊法器（木质法杖）": "木质法杖形态的德鲁伊法器，重4磅，价格5GP，也可以作为长棍使用。德鲁伊和游侠可将其作为法器。",
+      "德鲁伊法器（紫杉魔杖）": "紫杉魔杖形态的德鲁伊法器，重1磅，价格10GP。德鲁伊和游侠可将其作为法器。",
+      "圣徽（护符）": "护符形态的圣徽，重1磅，价格5GP，需佩戴或手持。牧师和圣武士可将其作为法器。",
+      "圣徽（纹章）": "纹章形态的圣徽，重—，价格5GP，需挂载到织物或盾牌上。牧师和圣武士可将其作为法器。",
+      "圣徽（圣物匣）": "圣物匣形态的圣徽，重2磅，价格5GP，需手持。牧师和圣武士可将其作为法器。",
       "强酸": "当你执行攻击动作时，你可以将你的一次攻击替换为丢出一小瓶强酸。你可以选择位于你20尺内可见的一个生物或物件作为目标。该目标必须通过一次敏捷豁免（DC等于8+你的敏捷调整值+你的熟练加值），否则承受2d6点强酸伤害。",
       "炽火胶": "当你执行攻击动作时，你可以将你的一次攻击替换为丢出一扁瓶炽火胶。你可以选择位于你20尺内可见的一个生物或物件作为目标。该目标必须通过一次敏捷豁免（DC等于8+你的敏捷调整值+你的熟练加值），否则承受1d4点火焰伤害并开始燃烧（见术语汇编）。",
       "弹药": "具有弹药词条的武器需要弹药才能发射，武器的描述部分会指定这把武器需要哪种弹药。弹药按份量出售，容器需要单独购买：箭矢20枚（容器箭袋，1磅，1GP）；弩矢20枚（容器弩矢匣，1.5磅，1GP）；枪械子弹10枚（容器小包，2磅，3GP）；投石索子弹20枚（容器小包，1.5磅，4CP）；吹矢50枚（容器小包，1磅，1GP）。",
@@ -16683,14 +16830,59 @@ ${actions}
           while (descLines.length && !descLines[descLines.length - 1].trim()) descLines.pop();
           return {
             nameHtml: escapePlainText(feature.name),
-            descHtml: plainTextToFeatureHtml(descLines)
+            descHtml: plainTextToFeatureHtml(descLines),
+            titleMaroon: true
           };
         })
         .filter((feature) => feature.nameHtml || feature.descHtml);
     }
 
+    function classFeatureHeadingHasColor(heading) {
+      const candidates = [heading, ...heading.querySelectorAll("[style]")];
+      if (candidates.some((element) => (
+        /(?:^|;)\s*color\s*:/i.test(element.getAttribute("style") || "")
+      ))) {
+        return true;
+      }
+      return Boolean(heading.querySelector("font[color]"));
+    }
+
+    function parseClassFeatureHeadingNodes(doc, headings) {
+      return headings.map((heading, index) => {
+        const headingData = extractClassFeatureHeading(heading);
+        const content = document.createElement("div");
+        if (headingData?.descHtml) content.innerHTML = headingData.descHtml;
+        const range = doc.createRange();
+        range.setStartAfter(heading);
+        if (headings[index + 1]) {
+          range.setEndBefore(headings[index + 1]);
+        } else {
+          range.setEnd(doc.body, doc.body.childNodes.length);
+        }
+        content.append(range.cloneContents());
+        const headingLevel = Number(heading.tagName.replace(/\D/g, ""));
+        return {
+          nameHtml: sanitizeBuilderHtml(
+            convertClassFeatureHtml(headingData?.nameHtml || heading.innerHTML)
+          ),
+          descHtml: sanitizeBuilderHtml(normalizeClassFeatureDescriptionHtml(
+            convertClassFeatureHtml(content.innerHTML)
+          )),
+          titleMaroon: headingLevel >= 5 && !classFeatureHeadingHasColor(heading)
+        };
+      }).filter((feature) => feature.nameHtml || feature.descHtml);
+    }
+
     function parseClassFeaturePaste(html) {
       const doc = new DOMParser().parseFromString(html, "text/html");
+      const headingNodes = [...doc.body.querySelectorAll("h1, h2, h3, h4, h5, h6")]
+        .filter((heading) => /^\d+\s*级\s*[:：]/.test(
+          (heading.textContent || "").replace(/\s+/g, " ").trim()
+        ));
+      if (headingNodes.length) {
+        return parseClassFeatureHeadingNodes(doc, headingNodes);
+      }
+
       const features = [];
       let current = null;
 
@@ -17331,6 +17523,8 @@ ${actions}
       updateSpellbookEmptyState();
     }
 
+    const spellbookPasteWatches = new WeakMap();
+
     function parseSpellbookEditorContent(editor) {
       if (!editor) return false;
       const records = parseSpellbookPaste(
@@ -17338,6 +17532,7 @@ ${actions}
         editor.innerText || editor.textContent || ""
       );
       if (!records.length) return false;
+      editor.__pastePending = false;
       editor.innerHTML = "";
       appendSpellbookRows(records);
       editor.dispatchEvent(new Event("input", { bubbles: true }));
@@ -17348,7 +17543,24 @@ ${actions}
     }
 
     function scheduleSpellbookEditorParse(editor) {
-      window.setTimeout(() => parseSpellbookEditorContent(editor), 50);
+      if (!editor || spellbookPasteWatches.has(editor)) return;
+      editor.__pastePending = true;
+      const state = { attempts: 0 };
+      spellbookPasteWatches.set(editor, state);
+      const tick = () => {
+        if (parseSpellbookEditorContent(editor)) {
+          spellbookPasteWatches.delete(editor);
+          return;
+        }
+        state.attempts += 1;
+        if (state.attempts < 20) {
+          window.setTimeout(tick, 100);
+        } else {
+          editor.__pastePending = false;
+          spellbookPasteWatches.delete(editor);
+        }
+      };
+      window.setTimeout(tick, 0);
     }
 
     function handleSpellbookPaste(event) {
@@ -17533,6 +17745,7 @@ ${actions}
 
         const nameEditor = document.createElement("div");
         nameEditor.className = "feature-name-cell";
+        if (feature.titleMaroon) nameEditor.classList.add("feature-title-maroon");
         nameEditor.contentEditable = "true";
         nameEditor.spellcheck = false;
         nameEditor.innerHTML = sanitizeBuilderHtml(feature.nameHtml || "")
@@ -17592,6 +17805,8 @@ ${actions}
       return stack;
     }
 
+    const classFeaturePasteWatches = new WeakMap();
+
     function parseClassFeatureEditorContent(editor) {
       if (!editor || !CLASS_FEATURE_EDITOR_IDS.has(editor.id)) return false;
       let features = parseClassFeaturePaste(editor.innerHTML);
@@ -17599,6 +17814,7 @@ ${actions}
         features = parseClassFeaturePlainText(editor.innerText || editor.textContent || "");
       }
       if (!features.length) return false;
+      editor.__pastePending = false;
       editor.innerHTML = "";
       const stack = getClassFeatureTableStack(editor);
       stack.append(buildClassFeatureTable(features));
@@ -17607,7 +17823,24 @@ ${actions}
     }
 
     function scheduleClassFeatureEditorParse(editor) {
-      window.setTimeout(() => parseClassFeatureEditorContent(editor), 50);
+      if (!editor || classFeaturePasteWatches.has(editor)) return;
+      editor.__pastePending = true;
+      const state = { attempts: 0 };
+      classFeaturePasteWatches.set(editor, state);
+      const tick = () => {
+        if (parseClassFeatureEditorContent(editor)) {
+          classFeaturePasteWatches.delete(editor);
+          return;
+        }
+        state.attempts += 1;
+        if (state.attempts < 20) {
+          window.setTimeout(tick, 100);
+        } else {
+          editor.__pastePending = false;
+          classFeaturePasteWatches.delete(editor);
+        }
+      };
+      window.setTimeout(tick, 0);
     }
 
     function handleRichPaste(event) {
@@ -18026,10 +18259,12 @@ ${actions}
         result[id] = [...stack.querySelectorAll(".class-feature-paste-table")].map((table) => ({
           features: [...table.querySelectorAll(".feature-name-row")].map((nameRow) => {
             const detailRow = nameRow.nextElementSibling;
+            const nameCell = nameRow.querySelector(".feature-name-cell");
             return {
-              nameHtml: nameRow.querySelector(".feature-name-cell")?.innerHTML || "",
+              nameHtml: nameCell?.innerHTML || "",
               descHtml: detailRow?.querySelector(".feature-details-cell")?.innerHTML || "",
-              expanded: Boolean(detailRow?.classList.contains("is-expanded"))
+              expanded: Boolean(detailRow?.classList.contains("is-expanded")),
+              titleMaroon: Boolean(nameCell?.classList.contains("feature-title-maroon"))
             };
           })
         }));
@@ -20954,8 +21189,17 @@ ${actions}
     for (const editor of document.querySelectorAll(".custom-editor")) {
       editor.addEventListener("paste", handleRichPaste);
       if (CLASS_FEATURE_EDITOR_IDS.has(editor.id)) {
+        editor.addEventListener("beforeinput", (event) => {
+          const type = String(event.inputType || "").toLowerCase();
+          if (type.includes("paste") || type === "insertfromdrop") {
+            scheduleClassFeatureEditorParse(editor);
+          }
+        });
         editor.addEventListener("input", (event) => {
-          if (event.inputType === "insertFromPaste") scheduleClassFeatureEditorParse(editor);
+          const type = String(event.inputType || "").toLowerCase();
+          if (editor.__pastePending || type.includes("paste") || type === "insertfromdrop") {
+            scheduleClassFeatureEditorParse(editor);
+          }
         });
       }
     }
@@ -20996,8 +21240,15 @@ ${actions}
     const spellbookPasteEditor = document.getElementById("spellbook-paste");
     if (spellbookPasteEditor) {
       spellbookPasteEditor.addEventListener("paste", handleSpellbookPaste);
+      spellbookPasteEditor.addEventListener("beforeinput", (event) => {
+        const type = String(event.inputType || "").toLowerCase();
+        if (type.includes("paste") || type === "insertfromdrop") {
+          scheduleSpellbookEditorParse(spellbookPasteEditor);
+        }
+      });
       spellbookPasteEditor.addEventListener("input", (event) => {
-        if (event.inputType === "insertFromPaste") {
+        const type = String(event.inputType || "").toLowerCase();
+        if (spellbookPasteEditor.__pastePending || type.includes("paste") || type === "insertfromdrop") {
           scheduleSpellbookEditorParse(spellbookPasteEditor);
         }
       });
