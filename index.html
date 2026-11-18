@@ -6149,7 +6149,8 @@ body.feature-dragging {
 
     <section id="panel-builder" role="tabpanel" aria-labelledby="tab-builder" tabindex="0" hidden>
       <div class="panel">
-        <h2 class="panel-title">角色卡构筑</h2>
+        <h2 class="panel-title">角色卡构筑 Character Builder</h2>
+        <span style="color:grey; font-size: 75%;margin-bottom: 1em; display: block;">联系作者或反馈：语文科 (1831921192)</span>
 
         <div class="builder-toolbar">
           <div class="builder-toolbar-actions">
@@ -21186,6 +21187,14 @@ ${actions}
       });
     }
 
+    function watchPasteEditorContent(editor, scheduleParse) {
+      if (!editor) return;
+      const observer = new MutationObserver(() => {
+        if (editor.textContent.trim()) scheduleParse(editor);
+      });
+      observer.observe(editor, { childList: true, subtree: true, characterData: true });
+    }
+
     for (const editor of document.querySelectorAll(".custom-editor")) {
       editor.addEventListener("paste", handleRichPaste);
       if (CLASS_FEATURE_EDITOR_IDS.has(editor.id)) {
@@ -21195,12 +21204,10 @@ ${actions}
             scheduleClassFeatureEditorParse(editor);
           }
         });
-        editor.addEventListener("input", (event) => {
-          const type = String(event.inputType || "").toLowerCase();
-          if (editor.__pastePending || type.includes("paste") || type === "insertfromdrop") {
-            scheduleClassFeatureEditorParse(editor);
-          }
+        editor.addEventListener("input", () => {
+          if (editor.textContent.trim()) scheduleClassFeatureEditorParse(editor);
         });
+        watchPasteEditorContent(editor, scheduleClassFeatureEditorParse);
       }
     }
 
@@ -21246,12 +21253,12 @@ ${actions}
           scheduleSpellbookEditorParse(spellbookPasteEditor);
         }
       });
-      spellbookPasteEditor.addEventListener("input", (event) => {
-        const type = String(event.inputType || "").toLowerCase();
-        if (spellbookPasteEditor.__pastePending || type.includes("paste") || type === "insertfromdrop") {
+      spellbookPasteEditor.addEventListener("input", () => {
+        if (spellbookPasteEditor.textContent.trim()) {
           scheduleSpellbookEditorParse(spellbookPasteEditor);
         }
       });
+      watchPasteEditorContent(spellbookPasteEditor, scheduleSpellbookEditorParse);
     }
     document.getElementById("spellbook-table-stack")?.addEventListener("input", () => {
       updateSpellbookEmptyState();
