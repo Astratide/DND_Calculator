@@ -13720,7 +13720,48 @@ ${data.description}`;
 传奇恩惠专长（先决：等级19+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至30。
-矢志不移Unshakeable Focus。 当你正为某效应维持专注时*，你仅会因以下情况失去专注：你施展一道需要专注的法术，你激活另一个需要专注的效应，你陷入石化或昏迷状态或你死亡。`
+矢志不移Unshakeable Focus。 当你正为某效应维持专注时*，你仅会因以下情况失去专注：你施展一道需要专注的法术，你激活另一个需要专注的效应，你陷入石化或昏迷状态或你死亡。`,
+
+      "炽耀黎明之恩惠(ABH)": `炽耀黎明之恩惠 Boon of Blazing Dawn
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+蒙受日宠Beloved of the Sun。你具有对光耀伤害的免疫。
+炽曜打击Blazing Strike。当你以武器攻击命中一名生物时，你可以选择将其伤害改为光耀伤害，或是维持武器原本的伤害类型。
+东曦既驾Burst of Sunlight。每回合一次，当你以造成光耀伤害的攻击检定命中一名生物时，你自身散发出半径30尺的明亮光照以及额外30尺的微光光照，持续至你的下个回合开始。这些光照是阳光。`,
+
+      "厄影迫现之恩惠(ABH)": `厄影迫现之恩惠 Boon of Looming Shadows
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至30。
+舒阴展影Shadowy Stretch。当你执行攻击动作时，你近战武器攻击的触及范围提升10尺，持续至你的回合结束。
+舞动侧影Dacing Silhouette。你能以附赠动作执行回避动作。`,
+
+      "雾影遁形之恩惠(ABH)": `雾影遁形之恩惠 Boon of Misty Escape
+传奇恩惠专长（先决：等级19+）
+你获得以下增益。
+属性值提升Ability Score Increase。你的智力、感知或魅力提升1，至多提升至30。
+气化形体Gaseous Form。若你的生命值降至0但未立即死亡，你能改为将生命值降至1并无需法术位地施展法术气化形体Gaseous Form（无需动作）。以此法施展该法术时，你只能以你自身为目标，你的飞行速度为20尺，法术持续期间，你的每个回合开始时，你恢复10生命值。该法术的施法属性是你以此专长提升的属性。
+此增益一经使用，直至完成长休你都无法再次使用。`,
+
+      "西伯瑞斯之恩惠(EFA)": `西伯瑞斯之恩惠 Boon of Siberys
+传奇恩惠专长（先决：等级19+，艾伯伦战役）
+你获得以下增益。
+属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至30。
+异种魔法Aberrant Magic。 选择一道来自术士法术列表的不高于八环的法术或一道来自西伯瑞斯龙纹表的法术（若你想将此法术与某种龙纹相关联，表中包含龙纹建议）。你始终准备着这道法术。你可以无需法术位且无需法术成分地施展该法术一次，当你完成长休或短休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的这些法术的施法属性是感知、智力或魅力（在你获得该专长时选择）。
+西伯瑞斯龙纹Siberys Dragonmarks 法术 建议龙纹 
+真知术True Seeing 侦测 
+传送术Teleport 探寻 
+动物形态Animal Shapes 畜牧 
+再生术Regenerate 医疗 
+英雄宴Heroes' Feast 招待 
+半位面Demiplane 创造 
+位面转移Plane Shift 通行 
+徽记术Symbol 抄录 
+心灵屏障Mind Blank 哨戒 
+投影术Project Image 阴影 
+操控天气Control Wetdaer 暴风 
+迷宫术Maze 守御 `,
 
     };
 
@@ -16915,6 +16956,20 @@ ${actions}
         .filter((feature) => feature.nameHtml || feature.descHtml);
     }
 
+    function htmlContentToPlainText(html) {
+      const documentNode = new DOMParser().parseFromString(html || "", "text/html");
+      const clone = documentNode.body.cloneNode(true);
+      for (const br of clone.querySelectorAll("br")) br.replaceWith("\n");
+      for (const block of clone.querySelectorAll(
+        "div, p, li, tr, h1, h2, h3, h4, h5, h6, blockquote, section"
+      )) {
+        block.append(documentNode.createTextNode("\n"));
+      }
+      return normalizeSpellbookText(clone.textContent || "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
     function normalizeSpellbookText(text) {
       return String(text || "")
         .replace(/\u00a0/g, " ")
@@ -17530,7 +17585,10 @@ ${actions}
       if (!editor) return false;
       const records = parseSpellbookPaste(
         editor.innerHTML,
-        editor.innerText || editor.textContent || ""
+        htmlContentToPlainText(editor.innerHTML) ||
+        editor.innerText ||
+        editor.textContent ||
+        ""
       );
       if (!records.length) return false;
       editor.__pastePending = false;
@@ -17810,9 +17868,18 @@ ${actions}
 
     function parseClassFeatureEditorContent(editor) {
       if (!editor || !CLASS_FEATURE_EDITOR_IDS.has(editor.id)) return false;
+      const hasHeadingTags = Boolean(editor.querySelector("h1, h2, h3, h4, h5, h6"));
       let features = parseClassFeaturePaste(editor.innerHTML);
+      if (!hasHeadingTags && features.length) {
+        features = features.map((feature) => ({ ...feature, titleMaroon: true }));
+      }
       if (!features.length) {
-        features = parseClassFeaturePlainText(editor.innerText || editor.textContent || "");
+        features = parseClassFeaturePlainText(
+          htmlContentToPlainText(editor.innerHTML) ||
+          editor.innerText ||
+          editor.textContent ||
+          ""
+        );
       }
       if (!features.length) return false;
       editor.__pastePending = false;
