@@ -4353,7 +4353,9 @@
 
       .attack-panel { margin-top: 24px; }
 
-      .builder-basic-grid { grid-template-columns: 1fr; }
+      .builder-basic-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
 
       .builder-field { grid-template-columns: 80px minmax(0, 1fr); }
 
@@ -4370,7 +4372,9 @@
       .background-story-table,
       .builder-hometown-field { max-width: none; }
 
-      .language-tools-grid { grid-template-columns: 1fr; }
+      .language-tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
 
       .spell-summary {
         grid-template-columns: 1fr;
@@ -4482,7 +4486,9 @@
         grid-template-columns: 80px minmax(0, 1fr);
       }
 
-      .combat-tables { grid-template-columns: 1fr; }
+      .combat-tables {
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      }
 
       .combat-table { font-size: 0.78rem; }
 
@@ -4549,7 +4555,9 @@
       .combat-feat-table thead th { font-size: 0.68rem; padding: 0 2px 3px; }
       .combat-feat-table thead th:last-child { padding-left: 4px; }
 
-      .skill-grid { grid-template-columns: 1fr; }
+      .skill-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
 
       .skill-prof-col { width: 28px; }
       .skill-correction-col { width: 46px; }
@@ -15414,8 +15422,9 @@ ${data.description}`;
         ? `${lookupClass}法术速查`
         : "法术速查";
       for (const button of document.querySelectorAll(
-        ".spell-lookup-help, .spellbook-lookup-button"
+        ".spell-lookup-help, .spellbook-lookup-button[data-reference-tooltip='spell-lookup']"
       )) {
+        if (button.dataset.referenceTooltip === "spell-lookup-all") continue;
         button.textContent = label;
         button.title = label;
         button.setAttribute("aria-label", `查看${label}`);
