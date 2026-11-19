@@ -13,7 +13,7 @@
         var preference = localStorage.getItem("dnd5e2024.theme") || "system";
         if (!/^(system|light|dark)$/.test(preference)) preference = "system";
         var size = parseInt(localStorage.getItem("dnd5e2024.fontSize"), 10);
-        if (!Number.isFinite(size) || size < 10 || size > 24) size = 16;
+        if (!Number.isFinite(size) || size < 8 || size > 24) size = 16;
         var resolved = preference;
         if (preference === "system") {
           resolved = window.matchMedia &&
@@ -6061,8 +6061,8 @@ body.feature-dragging {
       <span>正文内容字体大小</span>
       <output id="settings-font-output" for="settings-font-range">16px</output>
     </label>
-    <input id="settings-font-range" class="settings-font-range" type="range" min="10" max="24" step="1" value="16" aria-label="正文内容字体大小">
-    <div class="settings-font-scale" aria-hidden="true"><span>10px</span><span>24px</span></div>
+    <input id="settings-font-range" class="settings-font-range" type="range" min="8" max="24" step="1" value="16" aria-label="正文内容字体大小">
+    <div class="settings-font-scale" aria-hidden="true"><span>8px</span><span>24px</span></div>
     <p class="settings-hint">主题与字体设置仅保存在当前浏览器；导出角色卡不会包含显示设置。</p>
   </div>
 
@@ -15238,6 +15238,18 @@ ${data.description}`;
       if (className === "牧师") return preparedSpellCounts.cleric[index];
       if (["术士", "德鲁伊", "吟游诗人"].includes(className)) return preparedSpellCounts.full[index];
       if (["游侠", "圣武士", "奇械师"].includes(className)) return preparedSpellCounts.half[index];
+
+      const thirdCasterSubclass = {
+        "战士": "奥法骑士",
+        "游荡者": "诡术师",
+        "武僧": "秘术武者"
+      };
+      if (thirdCasterSubclass[className] === currentMainSubclass()) {
+        const casterLevel = Math.floor(level / 3);
+        if (casterLevel < 1) return null;
+        return preparedSpellCounts.wizard[Math.min(20, casterLevel) - 1];
+      }
+
       return null;
     }
 
@@ -15397,15 +15409,17 @@ ${data.description}`;
     }
 
     function updateSpellLookupButtonLabel() {
-      const button = document.querySelector(".spell-lookup-help");
-      if (!button) return;
       const { lookupClass } = getSpellLookupSelection();
       const label = SPELL_LOOKUP_PAGES[lookupClass]
         ? `${lookupClass}法术速查`
         : "法术速查";
-      button.textContent = label;
-      button.title = label;
-      button.setAttribute("aria-label", `查看${label}`);
+      for (const button of document.querySelectorAll(
+        ".spell-lookup-help, .spellbook-lookup-button"
+      )) {
+        button.textContent = label;
+        button.title = label;
+        button.setAttribute("aria-label", `查看${label}`);
+      }
     }
 
     function buildClassFeatureLookupTooltip(target) {
@@ -22500,7 +22514,7 @@ ${actions}
   function readFontSize() {
     try {
       const value = parseInt(localStorage.getItem(FONT_KEY), 10);
-      return Number.isFinite(value) && value >= 10 && value <= 24 ? value : 16;
+      return Number.isFinite(value) && value >= 8 && value <= 24 ? value : 16;
     } catch (error) {
       return 16;
     }
@@ -22534,7 +22548,7 @@ ${actions}
   }
 
   function applyFontSize(size, persist = true) {
-    const value = Math.min(24, Math.max(10, Number(size) || 16));
+    const value = Math.min(24, Math.max(8, Number(size) || 16));
     root.style.setProperty("--content-zoom", (value / 16).toFixed(3));
     fontRange.value = String(value);
     fontOutput.textContent = `${value}px`;
