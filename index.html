@@ -789,6 +789,16 @@
       gap: 4px;
     }
 
+    .equipment-head-label {
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .equipment-header-help {
+      color: #fff;
+      border-color: #fff;
+    }
+
     .faith-help {
       display: inline-flex;
       align-items: center;
@@ -7042,8 +7052,8 @@ body.feature-dragging {
                 <tr class="equipment-column-row">
                   <th>武器</th>
                   <th>加值</th>
-                  <th>词条</th>
-                  <th>精通</th>
+                  <th><span class="faith-label equipment-head-label">词条<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="weapon-properties" aria-label="查看武器词条速查" title="查看武器词条速查">?</button></span></th>
+                  <th><span class="faith-label equipment-head-label">精通<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="weapon-mastery" aria-label="查看武器精通词条速查" title="查看武器精通词条速查">?</button></span></th>
                   <th>使用属性</th>
                   <th>攻击命中加值</th>
                   <th>武器伤害</th>
@@ -15866,13 +15876,40 @@ ${actions}
       return buildSubclassLookupUrl(className, subclassName);
     }
 
-    function updateClassFeatureLookupButton(kind, title, className, subclassName = "") {
-      const block = {
+    function ensureClassFeatureLookupButton(block, kind) {
+      if (!block) return null;
+      block.querySelector(".custom-editor-toolbar")?.remove();
+      let button = block.querySelector(".class-feature-lookup");
+      if (!button) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.className = "class-feature-lookup reference-tooltip-trigger reference-click-help";
+        button.dataset.referenceTooltip = "class-lookup";
+      }
+      const actions = block.querySelector(".class-feature-block-actions");
+      if (actions) actions.append(button);
+      else block.append(button);
+      button.dataset.lookupKind = kind;
+      return button;
+    }
+
+    function getStaticClassFeatureBlock(kind) {
+      return {
         "main-class": mainClassFeatureBlock,
         "main-subclass": mainSubclassFeatureBlock,
         "multi-class": multiClassFeatureBlock,
         "multi-subclass": multiSubclassFeatureBlock
       }[kind];
+    }
+
+    function updateClassFeatureLookupButton(
+      kind,
+      title,
+      className,
+      subclassName = "",
+      targetBlock = null
+    ) {
+      const block = targetBlock || getStaticClassFeatureBlock(kind);
       const button = block?.querySelector(".class-feature-lookup");
       if (!button) return;
       button.textContent = title;
@@ -15899,19 +15936,130 @@ ${actions}
       ];
 
       for (const [block, kind] of blocks) {
-        block.querySelector(".custom-editor-toolbar")?.remove();
-        let button = block.querySelector(".class-feature-lookup");
-        if (!button) {
-          button = document.createElement("button");
-          button.type = "button";
-          button.className = "class-feature-lookup reference-tooltip-trigger reference-click-help";
-          button.dataset.referenceTooltip = "class-lookup";
-          button.dataset.lookupKind = kind;
-          block.append(button);
-        }
-        button.dataset.lookupKind = kind;
+        ensureClassFeatureLookupButton(block, kind);
       }
       syncClassFeatureEditors();
+    }
+
+    function getExtraClassFeatureContainer() {
+      let container = document.getElementById("extra-class-feature-blocks");
+      if (container) return container;
+      container = document.createElement("div");
+      container.id = "extra-class-feature-blocks";
+      container.className = "extra-class-feature-blocks";
+      if (multiSubclassFeatureBlock?.parentNode) {
+        multiSubclassFeatureBlock.after(container);
+      } else {
+        document.querySelector(".class-trait-section")?.append(container);
+      }
+      return container;
+    }
+
+    function getExtraClassFeatureBlockId(index, kind) {
+      return `extra-class-feature-${index}-${kind}`;
+    }
+
+    function createExtraClassFeatureBlock(index, kind) {
+      const block = document.createElement("div");
+      block.className = "class-feature-block";
+      block.dataset.extraClassFeature = "";
+      block.dataset.extraIndex = String(index);
+      block.dataset.extraKind = kind;
+      block.hidden = true;
+
+      const editorId = getExtraClassFeatureBlockId(index, kind);
+      const title = document.createElement("div");
+      title.className = "class-feature-title";
+      title.id = `${editorId}-title`;
+
+      const editorWrapper = document.createElement("div");
+      editorWrapper.className = "class-feature-editor";
+      const editor = document.createElement("div");
+      editor.id = editorId;
+      editor.className = "class-feature-text custom-editor";
+      editor.contentEditable = "true";
+      editor.setAttribute("role", "textbox");
+      editor.setAttribute("aria-multiline", "true");
+      editor.setAttribute("aria-label", kind === "class" ? "兼职职业特性" : "兼职子职特性");
+      editor.dataset.placeholder = kind === "class"
+        ? "在此粘贴兼职的职业特性。如果为5R格式会自动在下方生成模块性可编辑表格。"
+        : "在此粘贴兼职子职特性。如果为5R格式会自动在下方生成模块性可编辑表格。";
+      editorWrapper.append(editor);
+      block.append(title, editorWrapper);
+
+      CLASS_FEATURE_EDITOR_IDS.add(editorId);
+      setupClassFeatureEditorEvents(editor);
+      ensureClassFeatureLookupButton(
+        block,
+        kind === "class" ? "extra-class" : "extra-subclass"
+      );
+      return block;
+    }
+
+    function syncExtraClassFeatureBlocks(entries) {
+      const container = getExtraClassFeatureContainer();
+      if (!container) return;
+
+      for (let index = 1; index < entries.length; index += 1) {
+        const entry = entries[index];
+        const className = entry.classSelect.value;
+        if (!className) continue;
+        const level = getLevel(entry.levelInput);
+        const subclassName = entry.subclassSelect.value;
+
+        let classBlock = container.querySelector(
+          `[data-extra-class-feature][data-extra-index="${index}"][data-extra-kind="class"]`
+        );
+        if (!classBlock) {
+          classBlock = createExtraClassFeatureBlock(index, "class");
+          container.append(classBlock);
+        }
+        classBlock.hidden = false;
+        container.append(classBlock);
+        classBlock.querySelector(".class-feature-title").textContent =
+          buildClassFeatureTitle(className, "");
+        updateClassFeatureLookupButton(
+          "extra-class",
+          `${className}特性速查`,
+          className,
+          "",
+          classBlock
+        );
+
+        const showSubclass = level !== null && level >= 3;
+        let subclassBlock = container.querySelector(
+          `[data-extra-class-feature][data-extra-index="${index}"][data-extra-kind="subclass"]`
+        );
+        if (showSubclass && !subclassBlock) {
+          subclassBlock = createExtraClassFeatureBlock(index, "subclass");
+          container.append(subclassBlock);
+        }
+        if (subclassBlock) {
+          subclassBlock.hidden = !showSubclass;
+          container.append(subclassBlock);
+          subclassBlock.querySelector(".class-feature-title").textContent = showSubclass
+            ? buildClassSubclassFeatureTitle(className, "", subclassName)
+            : "";
+          updateClassFeatureLookupButton(
+            "extra-subclass",
+            subclassName ? `${subclassName}子职特性速查` : "子职特性速查",
+            className,
+            subclassName,
+            subclassBlock
+          );
+        }
+      }
+
+      for (const block of [...container.querySelectorAll("[data-extra-class-feature]")]) {
+        const index = Number(block.dataset.extraIndex);
+        const entry = entries[index];
+        if (!entry || !entry.classSelect.value) {
+          const editorId = block.querySelector(".custom-editor")?.id;
+          if (editorId) CLASS_FEATURE_EDITOR_IDS.delete(editorId);
+          block.remove();
+        }
+      }
+      setupPasteAddButtons();
     }
 
     function syncClassFeatureEditors() {
@@ -15947,29 +16095,30 @@ ${actions}
         updateClassFeatureLookupButton("main-subclass", "子职特性速查", "");
       }
 
-      const multi = getPrimaryMultiFeatureInfo();
-      if (multi.className) {
+      const extraEntries = getExtraMultiEntries();
+      const multiEntry = extraEntries[0];
+      const multiClass = multiEntry?.classSelect.value || "";
+      if (multiClass) {
+        const multiLevel = getLevel(multiEntry.levelInput);
+        const multiSubclass = multiEntry.subclassSelect.value;
         multiClassFeatureBlock.hidden = false;
-        multiClassFeatureTitle.textContent = buildClassFeatureTitle(multi.className, multi.customName);
-        const multiDisplayName = multi.className === CUSTOM_VALUE
-          ? multi.customName
-          : multi.className;
+        multiClassFeatureTitle.textContent = buildClassFeatureTitle(multiClass, "");
         updateClassFeatureLookupButton(
           "multi-class",
-          `${multiDisplayName}特性速查`,
-          multi.className
+          `${multiClass}特性速查`,
+          multiClass
         );
 
-        const showMultiSubclass = multi.level !== null && multi.level >= 3;
+        const showMultiSubclass = multiLevel !== null && multiLevel >= 3;
         multiSubclassFeatureBlock.hidden = !showMultiSubclass;
         multiSubclassFeatureTitle.textContent = showMultiSubclass
-          ? buildClassSubclassFeatureTitle(multi.className, multi.customName, multi.subclass)
+          ? buildClassSubclassFeatureTitle(multiClass, "", multiSubclass)
           : "";
         updateClassFeatureLookupButton(
           "multi-subclass",
-          multi.subclass ? `${multi.subclass}子职特性速查` : "子职特性速查",
-          multi.className,
-          multi.subclass
+          multiSubclass ? `${multiSubclass}子职特性速查` : "子职特性速查",
+          multiClass,
+          multiSubclass
         );
       } else {
         multiClassFeatureBlock.hidden = true;
@@ -15979,6 +16128,8 @@ ${actions}
         updateClassFeatureLookupButton("multi-class", "兼职特性速查", "");
         updateClassFeatureLookupButton("multi-subclass", "兼职子职特性速查", "");
       }
+
+      syncExtraClassFeatureBlocks(extraEntries);
     }
 
     const armorNames = {
@@ -19371,6 +19522,7 @@ ${actions}
       } catch (error) {
         console.error("恢复动态构筑内容失败", error);
       }
+      syncClassFeatureEditors();
       try {
         restoreClassFeatureTables(data.classFeatureTables || {});
       } catch (error) {
@@ -20543,6 +20695,7 @@ ${actions}
       summary.textContent = parts.join(" · ");
       updateDerivedStats();
       updateDstCommand();
+      syncClassFeatureEditors();
     }
 
     function dstText(value, fallback = "0") {
@@ -20772,6 +20925,28 @@ ${actions}
 
     const referenceTooltipContents = {
       hometown: `<span class="reference-title">费伦故乡信息 Homelands of Faerûn</span>${window.__DND_HOMETOWN_LORE__ || "<p>故乡资料未加载。</p>"}`,
+      "weapon-properties": `<span class="reference-title">武器词条 Weapon Properties</span>
+<p>以下是武器列表所提及过的各项词条的具体定义。</p>
+<p><b>弹药 Ammunition。</b>使用具有弹药词条的武器发动远程攻击时，你必须拥有该武器需求的弹药。所需弹药的种类会与武器的射程写在一起。每次使用该武器攻击都会花费一枚弹药，且取出该弹药的行为视为此次攻击的一部分（你需要一只空手来装填一把单手武器的弹药）。在战斗结束后，你可以花费一分钟搜索战场，以回收你在战斗中所消耗的弹药的一半（向下取整），而剩下的那些弹药将会损失。</p>
+<p><b>灵巧 Finesse。</b>使用一把灵巧武器发动攻击时，你可以自由选择此次攻击检定与伤害掷骰使用力量调整值还是敏捷调整值。但是攻击检定与伤害掷骰必须使用同一个调整值。</p>
+<p><b>重型 Heavy。</b>如果你的力量属性值低于13点，则你用重型近战武器发动的攻击检定具有劣势；如果你的敏捷属性值低于13点，则你用重型远程武器发动的攻击检定具有劣势。</p>
+<p><b>轻型 Light。</b>当你在自己回合中执行攻击动作，并用一把轻型武器发动一次攻击后，你可以在同一回合中用附赠动作发动一次额外的攻击。这次额外的攻击你必须使用另一把轻型武器发动，并且这次攻击的伤害无法加入你的属性调整值（除非该调整值为负数）。例如，若你在你的回合中执行了攻击动作，一只手手持短剑，另一只手手持匕首，而这两把武器均有轻型词条，则你可以使用你的动作和附赠动作，来用这两把武器各发动一次攻击。但你不能将力量或敏捷调整值加入第二把武器造成的伤害中（除非该调整值为负数）。</p>
+<p><b>装填 Loading。</b>当你用一把装填武器通过一个动作、附赠动作或反应进行射击时，不论你正常情况下能发动多少次攻击，你都只能用其射出一发弹药。</p>
+<p><b>射程 Range。</b>射程武器在其弹药词条或投掷词条后，会以括号标明其射程。射程会列出两个数字，第一个是武器的常规射程（单位为尺），第二个是武器的最大射程。攻击一个超出常规射程的目标时，你的攻击检定具有劣势；而你无法攻击一个处于最大射程之外的目标。</p>
+<p><b>触及 Reach。</b>使用触及武器攻击时，它为你的触及范围增加5尺。此触及范围增值同样会影响用它发动的借机攻击。</p>
+<p><b>投掷 Thrown。</b>如果一把武器具有投掷词条，你可以把它投掷出去来发动一次远程攻击。同时，拔出这把武器可以视作这次攻击的一部分。如果投掷出去的武器是一把近战武器，则你在攻击检定和伤害掷骰中使用与你用其发动近战攻击时相同的属性调整值。</p>
+<p><b>双手 Two-Handed。</b>用双手武器攻击时，你需要双手并用。</p>
+<p><b>多用 Versatile。</b>多用武器可以单手使用也可以双手使用。该词条后将跟随一个括号，其内的伤害数值即为双手持用该武器进行近战攻击时的伤害。</p>`,
+      "weapon-mastery": `<span class="reference-title">精通词条 Mastery Properties</span>
+<p>每把武器都具有自己的精通词条。一个角色必须拥有能够解锁精通词条的特性（例如武器精通特性）才能使用这类词条。精通词条如下所示。</p>
+<p><b>横扫 Cleave。</b>当你用这把武器进行的近战攻击检定命中一个生物时，你可以用该武器对位于该生物5尺内，且同样身处你触及范围内的另一生物再进行一次近战攻击检定。命中时，第二个生物也会受到此武器的伤害，但你无法将你的属性调整值加入这次伤害中（除非该调整值为负数）。每个回合中你只能发动一次横扫的额外攻击。</p>
+<p><b>擦掠 Graze。</b>当你以这把武器对一个生物发动的攻击检定失手时，你仍可以对目标生物造成一定伤害。其数额等同于此次攻击所使用的属性调整值，其伤害类型与你所使用的武器一致，并且这个伤害只能通过属性调整值的提高而增长。</p>
+<p><b>迅击 Nick。</b>当你发动由轻型词条所提供的额外的攻击时，你可以将本次攻击视作攻击动作的一部分，而非使用附赠动作。而你每一回合仍然只能进行一次由轻型词条所提供的额外的攻击。</p>
+<p><b>推离 Push。</b>当你用这把武器命中一个生物时，如果该生物的体型不超过大型，则你可以将该生物自你处直线推离至多10尺。</p>
+<p><b>削弱 Sap。</b>当你用这把武器命中一个生物时，直到你的下一回合开始前，该生物的下一次攻击检定将具有劣势。</p>
+<p><b>缓速 Slow。</b>当你用这把武器命中了一个生物并造成伤害时，你可以将对方的速度减少10尺，直至你的下一回合开始。如果该生物被拥有缓速词条的武器多次命中，其速度削减量也不会因此超过10尺。</p>
+<p><b>失衡 Topple。</b>当你用这把武器命中了一个生物时，你可以迫使该生物进行一次体质豁免（DC等于8+本次攻击所使用的调整值+你的熟练加值）。豁免检定失败时，该生物陷入倒地状态。</p>
+<p><b>侵扰 Vex。</b>当你用这把武器命中一个生物并对其造成伤害时，直到你的下一回合结束前，你对该生物的下一次攻击检定将具有优势。</p>`,
       language: `<span class="reference-title">选择语言 Choose Languages</span>
 <p>你的角色至少懂得三门语言：通用语，加上两种你从标准语言表直接或掷骰选取的语言。懂得一门语言意味着你的角色能以之交流、阅读文字以及用其书写。你的职业和其他特性也可能让你懂得一门语言。</p>
 <p>标准语言表列出了遍布于DND诸世界的语言。每一个玩家角色都懂得通用语这门源自位面大都会、多元宇宙之焦点——印记城——的语言。其他标准语言源自DND诸世界中最突出的那些种族的初代成员，并已经被广泛传播。</p>
@@ -21789,19 +21964,27 @@ ${actions}
       observer.observe(editor, { childList: true, subtree: true, characterData: true });
     }
 
-    for (const editor of document.querySelectorAll(".custom-editor")) {
+    function setupClassFeatureEditorEvents(editor) {
+      if (!editor || editor.dataset.classFeatureEventsBound) return;
+      editor.dataset.classFeatureEventsBound = "1";
       editor.addEventListener("paste", handleRichPaste);
+      editor.addEventListener("beforeinput", (event) => {
+        const type = String(event.inputType || "").toLowerCase();
+        if (type.includes("paste") || type === "insertfromdrop") {
+          scheduleClassFeatureEditorParse(editor);
+        }
+      });
+      editor.addEventListener("input", () => {
+        if (editor.textContent.trim()) scheduleClassFeatureEditorParse(editor);
+      });
+      watchPasteEditorContent(editor, scheduleClassFeatureEditorParse);
+    }
+
+    for (const editor of document.querySelectorAll(".custom-editor")) {
       if (CLASS_FEATURE_EDITOR_IDS.has(editor.id)) {
-        editor.addEventListener("beforeinput", (event) => {
-          const type = String(event.inputType || "").toLowerCase();
-          if (type.includes("paste") || type === "insertfromdrop") {
-            scheduleClassFeatureEditorParse(editor);
-          }
-        });
-        editor.addEventListener("input", () => {
-          if (editor.textContent.trim()) scheduleClassFeatureEditorParse(editor);
-        });
-        watchPasteEditorContent(editor, scheduleClassFeatureEditorParse);
+        setupClassFeatureEditorEvents(editor);
+      } else {
+        editor.addEventListener("paste", handleRichPaste);
       }
     }
 
@@ -21828,8 +22011,14 @@ ${actions}
           const lookup = block.querySelector(".class-feature-lookup");
           if (lookup) actions.append(lookup);
         }
-        if (!actions.querySelector(".paste-add-row-button")) {
-          actions.append(createPasteAddButton(() => addBlankClassFeatureRow(content)));
+        const lookup = block.querySelector(".class-feature-lookup");
+        if (lookup) actions.prepend(lookup);
+        let plus = actions.querySelector(".paste-add-row-button");
+        if (!plus) {
+          plus = createPasteAddButton(() => addBlankClassFeatureRow(content));
+          actions.append(plus);
+        } else if (lookup && plus.previousElementSibling !== lookup) {
+          lookup.after(plus);
         }
       }
       const spellbookToolbar = document.querySelector(".spellbook-toolbar");
