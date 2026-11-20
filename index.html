@@ -15890,6 +15890,7 @@ ${actions}
       if (actions) actions.append(button);
       else block.append(button);
       button.dataset.lookupKind = kind;
+      bindReferenceTooltipTrigger(button);
       return button;
     }
 
@@ -21571,7 +21572,9 @@ ${actions}
 
     setupClassFeatureLookupButtons();
 
-    for (const target of document.querySelectorAll("[data-reference-tooltip]")) {
+    function bindReferenceTooltipTrigger(target) {
+      if (!target || target.dataset.referenceEventsBound) return;
+      target.dataset.referenceEventsBound = "1";
       target.addEventListener("mouseenter", () => scheduleReferenceTooltip(target));
       target.addEventListener("mouseleave", scheduleReferenceTooltipHide);
       target.addEventListener("focusin", () => scheduleReferenceTooltip(target));
@@ -21587,16 +21590,19 @@ ${actions}
         if (referenceTooltipPointerInside) return;
         cancelReferenceTooltip();
       });
-    }
 
-    for (const helpButton of document.querySelectorAll(".reference-click-help")) {
-      helpButton.addEventListener("pointerdown", (event) => event.stopPropagation());
-      helpButton.addEventListener("contextmenu", (event) => event.preventDefault());
-      helpButton.addEventListener("click", (event) => {
+      if (!target.classList.contains("reference-click-help")) return;
+      target.addEventListener("pointerdown", (event) => event.stopPropagation());
+      target.addEventListener("contextmenu", (event) => event.preventDefault());
+      target.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        showReferenceTooltip(helpButton);
+        showReferenceTooltip(target);
       });
+    }
+
+    for (const target of document.querySelectorAll("[data-reference-tooltip]")) {
+      bindReferenceTooltipTrigger(target);
     }
 
     document.addEventListener("pointerdown", (event) => {
