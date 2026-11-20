@@ -722,6 +722,28 @@
 
     .builder-section-title:first-of-type { margin-top: 0; }
 
+    .builder-section-title-with-help {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .class-lookup-tip {
+      margin: 0 0 7px;
+      padding: 5px 8px;
+      color: #5a4b2a;
+      background: #fbf5e7;
+      border: 1px solid #d9c7a0;
+      font-size: 0.72rem;
+      line-height: 1.5;
+    }
+
+    html[data-theme="dark"] .class-lookup-tip {
+      color: #f0d9a8;
+      background: #332b1d;
+      border-color: #6b5a3a;
+    }
+
     .builder-toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -778,7 +800,7 @@
       background: #fff;
       border: 1px solid #999;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       line-height: 1.65;
       pointer-events: auto;
     }
@@ -795,8 +817,162 @@
     }
 
     .equipment-header-help {
+      color: #888;
+      border-color: #888;
+    }
+
+    html .panel .equipment-group-row .equipment-header-help {
+      color: #fff !important;
+      background: transparent !important;
+      border-color: #fff !important;
+    }
+
+    html .panel .equipment-column-row .equipment-header-help {
+      color: #888 !important;
+      background: transparent !important;
+      border-color: #888 !important;
+    }
+
+    .backpack-head-label {
+      justify-content: center;
+      gap: 3px;
+      white-space: nowrap;
+    }
+
+    html .panel .backpack-table .backpack-header-help {
+      color: #888 !important;
+      background: transparent !important;
+      border-color: #aaa !important;
+    }
+
+    html .panel .backpack-table .backpack-header-help:hover {
+      color: #555 !important;
+      border-color: #777 !important;
+    }
+
+    html[data-theme="dark"] .panel .backpack-table .backpack-header-help {
+      color: #aaa !important;
+      border-color: #777 !important;
+    }
+
+    .skill-head-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    html .panel .skill-table .skill-head-help {
+      width: 13px;
+      height: 13px;
+      color: #888 !important;
+      background: transparent !important;
+      border-color: #999 !important;
+      font-size: 0.6rem;
+    }
+
+    html .panel .skill-table .skill-head-help:hover {
+      color: #555 !important;
+      border-color: #777 !important;
+    }
+
+    html[data-theme="dark"] .panel .skill-table .skill-head-help {
+      color: #aaa !important;
+      border-color: #777 !important;
+    }
+
+    .feat-head-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    html .panel .feat-section-title .feat-title-help {
+      color: #800000 !important;
+      background: transparent !important;
+      border-color: #800000 !important;
+    }
+
+    html[data-theme="dark"] .panel .feat-section-title .feat-title-help {
+      color: #f0a0a0 !important;
+      border-color: #f0a0a0 !important;
+    }
+
+    html .panel .feat-table .feat-head-help {
+      width: 13px;
+      height: 13px;
+      color: #888 !important;
+      background: transparent !important;
+      border-color: #999 !important;
+      font-size: 0.6rem;
+    }
+
+    html .panel .feat-table .feat-head-help:hover {
+      color: #555 !important;
+      border-color: #777 !important;
+    }
+
+    html[data-theme="dark"] .panel .feat-table .feat-head-help {
+      color: #aaa !important;
+      border-color: #777 !important;
+    }
+
+    .feat-lookup-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 0 0 auto;
+      max-height: 150px;
+      margin-bottom: 6px;
+      overflow: auto;
+    }
+
+    .feat-lookup-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .feat-lookup-label {
+      color: #555;
+      font-size: 0.68rem;
+      font-weight: bold;
+      margin-right: 2px;
+    }
+
+    .feat-lookup-tab {
+      padding: 1px 6px;
+      color: #800000;
+      background: #fff;
+      border: 1px solid #aaa;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.66rem;
+      line-height: 1.45;
+      cursor: pointer;
+    }
+
+    .feat-lookup-tab.is-active {
       color: #fff;
-      border-color: #fff;
+      background: #800000;
+      border-color: #800000;
+    }
+
+    html[data-theme="dark"] .feat-lookup-label {
+      color: #bbb;
+    }
+
+    html[data-theme="dark"] .feat-lookup-tab {
+      color: #f0a0a0;
+      background: #2b2b2b;
+      border-color: #666;
+    }
+
+    html[data-theme="dark"] .feat-lookup-tab.is-active {
+      color: #fff;
+      background: #800000;
+      border-color: #800000;
     }
 
     .faith-help {
@@ -835,7 +1011,7 @@
       padding: 2px 4px;
       background: transparent;
       border: 0;
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       text-align: left;
       vertical-align: top;
     }
@@ -855,11 +1031,25 @@
       font-weight: bold;
     }
 
+    .reference-tooltip.is-local-tooltip {
+      font-size: 0.66rem;
+    }
+
+    .reference-tooltip.is-local-tooltip .tooltip-deity-table th,
+    .reference-tooltip.is-local-tooltip .tooltip-deity-table td,
+    .reference-tooltip.is-local-tooltip .tooltip-language-table th,
+    .reference-tooltip.is-local-tooltip .tooltip-language-table td {
+      font-size: 0.66rem;
+    }
+
+    .reference-tooltip.is-local-tooltip h2 { font-size: 0.74rem; }
+    .reference-tooltip.is-local-tooltip h5 { font-size: 0.68rem; }
+
     .reference-tooltip h2 {
       margin: 10px 0 5px;
       padding-bottom: 2px;
       color: #800000;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: bold;
       text-align: center;
       border-bottom: 1px solid #c9b79a;
@@ -868,7 +1058,7 @@
     .reference-tooltip h5 {
       margin: 8px 0 3px;
       color: #800000;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: bold;
     }
 
@@ -907,7 +1097,7 @@
       padding: 2px 4px;
       background: transparent;
       border: 0;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       text-align: left;
     }
 
@@ -3136,6 +3326,43 @@
       flex: 0 0 auto;
     }
 
+    .lookup-page-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 0 0 auto;
+      margin: 0 0 6px;
+    }
+
+    .lookup-page-tab {
+      padding: 2px 8px;
+      color: #800000;
+      background: #fff;
+      border: 1px solid #aaa;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 0.68rem;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+
+    .lookup-page-tab.is-active {
+      color: #fff;
+      background: #800000;
+      border-color: #800000;
+    }
+
+    html[data-theme="dark"] .lookup-page-tab {
+      color: #f0a0a0;
+      background: #2b2b2b;
+      border-color: #666;
+    }
+
+    html[data-theme="dark"] .lookup-page-tab.is-active {
+      color: #fff;
+      background: #800000;
+      border-color: #800000;
+    }
+
     .spell-lookup-actions button {
       width: 24px;
       height: 24px;
@@ -3166,12 +3393,12 @@
       top: 0;
       left: 0;
       display: block;
-      width: calc(100% / 0.82);
-      height: calc(100% / 0.82);
+      width: calc(100% / 0.72);
+      height: calc(100% / 0.72);
       min-height: 0;
       background: #fff;
       border: 1px solid #ccc;
-      transform: scale(0.82);
+      transform: scale(0.72);
       transform-origin: top left;
     }
 
@@ -5054,7 +5281,7 @@
   padding: 0;
   color: #fff;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 0;
   border-radius: 7px;
   font-family: "Microsoft YaHei", Arial, sans-serif;
   font-size: 1rem;
@@ -5066,7 +5293,7 @@
 .settings-button:hover,
 .settings-button[aria-expanded="true"] {
   background: rgba(255, 255, 255, 0.16);
-  border-color: #fff;
+  border-color: transparent;
 }
 
 .settings-panel {
@@ -5286,7 +5513,7 @@ main.page-width {
 
   html[data-theme="dark"] .settings-button {
     color: #fff;
-    border-color: rgba(255, 255, 255, 0.65);
+    border-color: transparent;
   }
 }
 
@@ -6003,7 +6230,13 @@ body.feature-dragging {
 
 @media print {
   .class-feature-lookup,
-  .special-ability-lookups {
+  .special-ability-lookups,
+  .class-feature-block-actions,
+  .class-feature-editor,
+  .spellbook-toolbar,
+  #spellbook-paste,
+  #spellbook-empty,
+  .paste-add-row-button {
     display: none !important;
   }
 
@@ -6208,7 +6441,7 @@ body.feature-dragging {
     <section id="panel-builder" role="tabpanel" aria-labelledby="tab-builder" tabindex="0" hidden>
       <div class="panel">
         <h2 class="panel-title">角色卡构筑 Character Builder</h2>
-        <span style="color:grey; font-size: 75%;margin-bottom: 1em; display: block;">联系作者或反馈：语文科 (1831921192)</span>
+        <span style="color:grey; font-size: 75%;margin-bottom: 1em; display: block;">联系作者或反馈建议：语文科 (1831921192)</span>
 
         <div class="builder-toolbar">
           <div class="builder-toolbar-actions">
@@ -6316,7 +6549,7 @@ body.feature-dragging {
           </tbody>
         </table>
 
-        <h3 class="builder-section-title">角色背景 Background</h3>
+        <h3 class="builder-section-title builder-section-title-with-help">角色背景 Background<button class="faith-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="起源的构成部分 Background Origins" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/角色起源/起源的构成部分.htm" data-lookup-note="提示：在5E2024（也称5R）版本中，种族不再提供属性值加成，相反，你的背景会给你提供特定的属性值加成。" aria-label="查看起源的构成部分" title="查看起源的构成部分">?</button></h3>
         <div class="builder-race-row">
           <label class="builder-field builder-race-field builder-background-field">
             <span>背景</span>
@@ -6854,7 +7087,7 @@ body.feature-dragging {
 
         <div class="feat-section">
           <div class="feat-section-head">
-            <h3 class="builder-section-title feat-section-title">专长 Feat</h3>
+            <h3 class="builder-section-title feat-section-title"><span class="faith-label">专长 Feat<button class="faith-help feat-title-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="feat-overview" aria-label="查看专长说明" title="查看专长说明">?</button></span></h3>
             <button id="feat-style-add" class="feat-style-add" type="button" title="添加战斗风格专长" aria-label="添加战斗风格专长">战斗风格</button>
             <button id="special-ability-add" class="feat-style-add" type="button" title="添加特殊能力" aria-label="添加特殊能力">特殊能力</button>
             <button id="feat-add" class="feat-add" type="button" title="添加一行（最多10行）" aria-label="添加专长行">＋</button>
@@ -6868,7 +7101,7 @@ body.feature-dragging {
             <thead>
               <tr>
                 <th scope="col">等级</th>
-                <th scope="col">专长</th>
+                <th scope="col"><span class="feat-head-label">专长<button class="faith-help feat-head-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="feat-lookup" aria-label="查看专长速查" title="查看专长速查">?</button></span></th>
                 <th scope="col">描述</th>
               </tr>
             </thead>
@@ -6913,7 +7146,7 @@ body.feature-dragging {
         </div>
 
         <div class="skill-section">
-          <h3 class="builder-section-title">技能 Skill</h3>
+          <h3 class="builder-section-title builder-section-title-with-help">技能 Skill<button class="faith-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="熟练 Proficiency" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/进行游戏/熟练.htm" aria-label="查看熟练速查" title="查看熟练速查">?</button></h3>
           <div id="skill-tables" class="skill-grid"></div>
           <p id="skill-summary" class="skill-summary">已选择 0 项技能熟练，其中 0 项专精。</p>
         </div>
@@ -7004,7 +7237,7 @@ body.feature-dragging {
               </colgroup>
               <thead>
                 <tr class="equipment-group-row">
-                  <th colspan="4">主要装备</th>
+                  <th colspan="4"><span class="faith-label">主要装备<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="护甲 Armor" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/护甲.htm" aria-label="查看护甲速查" title="查看护甲速查">?</button></span></th>
                   <th colspan="3">盾牌</th>
                 </tr>
                 <tr class="equipment-column-row">
@@ -7050,10 +7283,10 @@ body.feature-dragging {
               </colgroup>
               <thead>
                 <tr class="equipment-column-row">
-                  <th>武器</th>
+                  <th><span class="faith-label equipment-head-label">武器<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="武器 Weapons" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/武器.htm" aria-label="查看武器速查" title="查看武器速查">?</button></span></th>
                   <th>加值</th>
-                  <th><span class="faith-label equipment-head-label">词条<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="weapon-properties" aria-label="查看武器词条速查" title="查看武器词条速查">?</button></span></th>
-                  <th><span class="faith-label equipment-head-label">精通<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="weapon-mastery" aria-label="查看武器精通词条速查" title="查看武器精通词条速查">?</button></span></th>
+                  <th><span class="faith-label equipment-head-label">词条<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="武器词条 Weapon Properties" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/词条.htm" aria-label="查看武器词条速查" title="查看武器词条速查">?</button></span></th>
+                  <th><span class="faith-label equipment-head-label">精通<button class="faith-help equipment-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="精通词条 Mastery Properties" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/精通词条.htm" aria-label="查看武器精通词条速查" title="查看武器精通词条速查">?</button></span></th>
                   <th>使用属性</th>
                   <th>攻击命中加值</th>
                   <th>武器伤害</th>
@@ -7262,7 +7495,7 @@ body.feature-dragging {
                 <col class="backpack-price-col">
                 <col class="backpack-delete-col">
               </colgroup>
-              <thead><tr><th>冒险装备</th><th>描述</th><th>重量</th><th>价格</th><th class="backpack-delete-head"></th></tr></thead>
+              <thead><tr><th><span class="faith-label backpack-head-label">冒险装备<button class="faith-help backpack-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="冒险装备 Adventuring Gear" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/冒险装备.htm" aria-label="查看冒险装备速查" title="查看冒险装备速查">?</button></span></th><th>描述</th><th>重量</th><th>价格</th><th class="backpack-delete-head"></th></tr></thead>
               <tbody id="backpack-gear-body"></tbody>
               <tfoot>
                 <tr>
@@ -7288,7 +7521,7 @@ body.feature-dragging {
                 <col class="backpack-price-col">
                 <col class="backpack-delete-col">
               </colgroup>
-              <thead><tr><th>工具</th><th>属性</th><th>操作</th><th>制造</th><th>重量</th><th>价格</th><th class="backpack-delete-head"></th></tr></thead>
+              <thead><tr><th><span class="faith-label backpack-head-label">工具<button class="faith-help backpack-header-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="工匠工具 Artisan Tools" data-lookup-source="玩家手册2024" data-lookup-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/工匠工具.htm" data-lookup-alt-title="其他工具 Other Tools" data-lookup-alt-url="https://5echm.kagangtuya.top/topics/玩家手册2024/装备/其他工具.htm" data-lookup-tab-label="工匠工具" data-lookup-alt-tab-label="其他工具" aria-label="查看工具速查" title="查看工具速查">?</button></span></th><th>属性</th><th>操作</th><th>制造</th><th>重量</th><th>价格</th><th class="backpack-delete-head"></th></tr></thead>
               <tbody id="backpack-tool-body"></tbody>
             </table>
           </div>
@@ -12857,8 +13090,7 @@ ${data.description}`;
           "骄阳之子(LFL)", "影原咒者(LFL)", 
           "无休狂宴(ABH)", "吸血鬼猎人(ABH)", "吸血鬼玩物(ABH)", 
           "锐眼(RHW)", "幸存者(RHW)", 
-          "奥法艺术家(AU)", "奥法雄辩家(AU)", "奥法渗透者(AU)", "奥法预言家(AU)", "奥法超负荷(AU)", "奥法护佑者(AU)", "奥法殡葬师(AU)", "魔宠密友(AU)", "穿界者(AU)", "万化本质(AU)", 
-          "异种龙纹(EFA)", "侦测龙纹(EFA)", "探寻龙纹(EFA)", "畜牧龙纹(EFA)", "医疗龙纹(EFA)", "招待龙纹(EFA)", "创造龙纹(EFA)", "通行龙纹(EFA)", "抄录龙纹(EFA)", "哨戒龙纹(EFA)", "阴影龙纹(EFA)", "暴风龙纹(EFA)", "守御龙纹(EFA)"
+          "奥法艺术家(AU)", "奥法雄辩家(AU)", "奥法渗透者(AU)", "奥法预言家(AU)", "奥法超负荷(AU)", "奥法护佑者(AU)", "奥法殡葬师(AU)", "魔宠密友(AU)", "穿界者(AU)", "万化本质(AU)"
         ]
       },
       {
@@ -12874,8 +13106,7 @@ ${data.description}`;
           "心灵感应", "战地施法者", "武器大师", 
           "龙之瘢(FR)", "翠色魔法(FR)", "竖琴手协同(FR)", "教团韧性(FR)", "贵族信念(FR)", "紫龙指挥官(FR)", "咒火专家(FR)", "散塔林会战术(FR)", "寒地施法者(FR)", "妖精诡术(FR)", "迷锁触碰(FR)", "街头正义(FR)", 
           "防护专家(AU)", "咒法专家(AU)", "预言专家(AU)", "惑控专家(AU)", "塑能专家(AU)", "幻术专家(AU)", "死灵专家(AU)", "变化专家(AU)", "元素魔宠(AU)", "异界魔宠(AU)", "慰疗魔宠(AU)", "尚武魔宠(AU)", "魔法行家(AU)", "法术抗性(AU)", "法术诡计(AU)",
-          "嗜血(ABH)", "爆破手(ABH)", "沉溺痛苦(ABH)", "光明使者(ABH)", "吻痕(ABH)", "残尸败蜕(ABH)", "咎罪责难(ABH)", "祸国叛心(ABH)", "吸血鬼触碰(ABH)", "残尸败蜕(ABH)", "咎罪责难(ABH)", "祸国叛心(ABH)", 
-          "高等异种龙纹(EFA)", "高等侦测龙纹(EFA)", "高等探寻龙纹(EFA)", "高等畜牧龙纹(EFA)", "高等医疗龙纹(EFA)", "高等招待龙纹(EFA)", "高等创造龙纹(EFA)", "高等通行龙纹(EFA)", "高等抄录龙纹(EFA)", "高等哨戒龙纹(EFA)", "高等阴影龙纹(EFA)", "高等暴风龙纹(EFA)", "高等守御龙纹(EFA)", "强效龙纹(EFA)"
+          "嗜血(ABH)", "爆破手(ABH)", "沉溺痛苦(ABH)", "光明使者(ABH)", "吻痕(ABH)", "残尸败蜕(ABH)", "咎罪责难(ABH)", "祸国叛心(ABH)", "吸血鬼触碰(ABH)", "残尸败蜕(ABH)", "咎罪责难(ABH)", "祸国叛心(ABH)"
         ]
       },
       {
@@ -12891,7 +13122,7 @@ ${data.description}`;
           "惊魂落魄之恩惠(FR)", "旭日骄阳之恩惠(FR)", "暴风骤岚之恩惠(FR)", "汲魂饮魄之恩惠(FR)",
           "咒能爆发之恩惠(AU)", "学派宗师之恩惠(AU)", "钢铁意志之恩惠(AU)", 
           "炽耀黎明之恩惠(ABH)", "厄影迫现之恩惠(ABH)", 
-          "雾影遁形之恩惠(ABH)", "西伯瑞斯之恩惠(EFA)"
+          "雾影遁形之恩惠(ABH)"
         ]
       }
     ];
@@ -13061,166 +13292,6 @@ ${data.description}`;
 你获得以下增益。
 杯弓蛇影Hypervigilance。每当你进行先攻掷骰时，若D20骰值不超过9，你能够重新投掷D20。你必须使用新的结果。
 我心如铁Steel Yourself。 当你为避免或结束魅惑或恐慌状态进行的豁免失败时，你能够以反应在结果中加入加值，这可能令检定改为成功。加值等于你的熟练加值。该反应一经使用，直至完成长休你都无法再如此做。`,
-      "异种龙纹(EFA)": `异种龙纹 Abrrant Dragonmark
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。 
-异种坚韧Aberrant Fortitude。当你体质豁免失败时，你能以反应投掷1d4并将骰值加入豁免中。此增益一经使用，直至完成长休你都无法再次使用。 
-异种魔法Aberrant Magic。你知晓一道你选择的来自术士法术列表的戏法。此外，选择一道来自术士法术列表的一环法术，你始终准备着这道法术。你可以无需法术位地施展该法术一次，当你完成长休或短休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意法术位施展该法术。你的该法术的施法属性是体质。 
-异种浪涌Aberrant Surge。当你施展本专长给予的一环法术时，你可以消耗一枚你的生命骰并投掷之。若结果为偶数，你获得等于骰值的临时生命值。若结果为奇数，位于你30尺内的一名生物（不包括你）受到等于骰值的力场伤害。若范围内没有其他生物，此伤害由你承受。`,
-      "侦测龙纹(EFA)": `侦测龙纹 Mark of Detection
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-推理直觉Deductive Intuition。 当你进行智力（调查）或感知（洞悉）检定时，你可以投掷1d4并将骰值加入属性检定中。 
-魔法侦测Magical Detection。你始终准备着法术侦测魔法Detect Magic和侦测毒性和疾病Detect Poison and Disease 。你可以无需法术位地施展每道法术各一次，当你完成长休时，你重获以此法施展这些法术的能力。你也能够以你拥有的任意合适环阶的法术位施展这些法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-当你角色等级到达3级时，你始终准备着法术识破隐形See Invisibility ，并可用相同方式施展该法术。 
-龙纹法术Spells of the Mark。若你具有施法或契约魔法特性，侦测龙纹法术表中的法术将加入那个特性的法术列表中。
-侦测龙纹法术Mark of Detection Spells 法术环阶 法术 
-一环 侦测善恶Detect Evil and Good，鉴定术Identify 
-二环 侦测思想Detect Thoughts，寻找陷阱Find Traps 
-三环 鹰眼术Clairvoyance ，回避侦测Nondetection 
-四环 秘法眼Arcane Eye，预言术Divination 
-五环 通晓传奇Legend Lore `,
-      "探寻龙纹(EFA)": `探寻龙纹 Mark of Finding
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-猎手直觉Hunter's Intuition。 当你进行感知（察觉或求生）检定时，你可以投掷1d4并将骰值加入属性检定中。 
-探寻魔法Finder's Magic。你始终准备着法术猎人印记Hunter's Mark 。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的该法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-当你角色等级到达3级时，你始终准备着法术物件定位术Locate Object ，并可用相同方式施展该法术。 
-龙纹法术Spells of the Mark。若你具有施法或契约魔法特性，探寻龙纹法术表中的法术将加入那个特性的法术列表中。
-探寻龙纹法术Mark of Finding Spells 法术环阶 法术 
-一环 妖火Faerie Fire，大步奔行Longstrider 
-二环 动植物定位术Locate Animals or Plants，心灵尖刺Mind Spike 
-三环 鹰眼术Clairvoyance，植物交谈Speak with Plants 
-四环 预言术Divination，生物定位术Locate Creature 
-五环 问道自然Commune with Nature `,
-      "畜牧龙纹(EFA)": `畜牧龙纹 Mark of Handling
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-野性直觉Wild Intuition。 当你进行智力（自然）或感知（驯兽）检定时，你可以投掷1d4并将骰值加入属性检定中。 
-原初联结Primal Connection。你始终准备着法术化兽为友Animal Friendship和动物交谈Speak with Animals 。你可以无需法术位地施展每道法术各一次，当你完成长休时，你重获以此法施展这些法术的能力。你也能够以你拥有的任意法术位施展这些法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。 
-异兽联结Monstrous Connections。当你角色等级到达3级时，你施展法术化兽为友Animal Friendship和动物交谈Speak with Animals 时，能够以智力不高于3的怪兽为目标。 
-龙纹法术Spells of the Mark。若你具有施法或契约魔法特性，畜牧龙纹法术表中的法术将加入那个特性的法术列表中。
-畜牧龙纹法术Mark of Handling Spells 法术环阶 法术 
-一环 命令术Command，寻获魔宠Find Familiar 
-二环 野兽感官Beast Sense，安定心神Calm Emotions 
-三环 希望信标Beacon of Hope，咒唤兽群Conjure Animals 
-四环 生命灵光Aura of Life，支配野兽Dominate Beast 
-五环 启蒙术Awaken `,
-      "医疗龙纹(EFA)": `医疗龙纹 Mark of Healing
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-医学直觉Medical Intuition。当你进行感知（医药）检定或使用草药工具的属性检定时，你可以投掷1d4并将骰值加入属性检定中。
-治愈之触Healing Touch。你始终准备着法术疗伤术Cure Wounds 。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的该法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-当你角色等级到达3级时，你始终准备着法术次等复原术Lesser Restoration ，并可用相同方式施展该法术。 
-龙纹法术Spells of the Mark。若你具有施法或契约魔法特性，医疗龙纹法术表中的法术将加入那个特性的法术列表中。
-医疗龙纹法术Mark of Healing Spells 法术环阶 法术 
-一环 虚假生命False Life，治愈真言Healing Word 
-二环 复苏秘法Arcane Vigor，治疗祷言Prayer of Healing 
-三环 活力灵光Aura of Vitality，群体治愈真言Mass Healing Word 
-四环 生命灵光Aura of Life，净化灵光Aura of Purity 
-五环 高等复原术Greater Restoration `,
-      "招待龙纹(EFA)": `招待龙纹 Mark of Hospitality
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-永恒款待Ever Hospitable。 当你进行魅力（游说）检定或使用酿酒工具或厨师工具的属性检定时，你可以投掷1d4并将骰值加入属性检定中。 
-掌柜魔法Innkeeper's Magic。你始终准备着法术净化饮食Purify Food and Drink和隐形仆役Unseen Servant 。你可以无需法术位地施展每道法术各一次，当你完成长休时，你重获以此法施展这些法术的能力。你也能够以你拥有的任意合适环阶的法术位施展这些法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-当你角色等级到达3级时，你始终准备着法术安定心神Calm Emotions ，并可用相同方式施展该法术。 
-龙纹法术Spells of the Mark。若你具有施法或契约魔法特性，招待龙纹法术表中的法术将加入那个特性的法术列表中。
-招待龙纹法术Mark of Hospitality Spells 法术环阶 法术 
-一环 神莓术Goodberry，睡眠术Sleep 
-二环 援助术Aid，强化属性Echance Ability 
-三环 造粮术Create Food and Water，李欧蒙小屋Leomund's Tiny Hut 
-四环 净化灵光Aura of Purity，魔邓肯的私人密室Mordenkainen's Private Sanctum 
-五环 圣居Hallow `,
-      "创造龙纹(EFA)": `创造龙纹 Mark of Making
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-工匠直觉Artisan's Intuition。 当你进行智力（奥秘）检定或使用工匠工具的属性检定时，你可以投掷1d4并将骰值加入属性检定中。 
-法术匠人Spellsmith。你知晓戏法修复术Mending。你始终准备着法术魔化武器Magic Weapon。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意*法术位施展该法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。 （译注：原文如此） 
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，创造龙纹法术表中的法术将加入那个特性的法术列表中。
-创造龙纹法术Mark of Making Spells 法术环阶 法术 
-一环 鉴定术Identify，谭森浮碟术Tenser's Floating Disk 
-二环 不灭明焰Continual Flame，灵体武器Spiritual Weapon 
-三环 箭如雨下Conjure Barrage，元素武器Elemental Weapon 
-四环 鬼斧神工Fabricate，塑石术Stone Shape 
-五环 造物术Creation `,
-      "通行龙纹(EFA)": `通行龙纹 Mark of Passage
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-信使极速Courier's Speed。 你的速度提升5尺。
-直觉行动Intuitive Motion。 当你进行力量（运动）或敏捷（特技）检定时，你可以投掷1d4并将骰值加入属性检定中。
-魔法通行Magical Passage。你始终准备着法术迷踪步Misty Step。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意*法术位施展该法术。你的该法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。 （译注：原文如此） 
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，通行龙纹法术表中的法术将加入那个特性的法术列表中。
-通行龙纹法术Mark of Passage Spells 法术环阶 法术 
-一环 脚底抹油Expeditious Retreat，跳跃术Jump 
-二环 行动无踪Pass without Trace，寻获坐骑Find Steed 
-三环 闪现术Blink，魅影驹Phantom Steed 
-四环 任意门Dimension Door，行动自如Freedom of Movement 
-五环 传送法阵Teleportation Circle `,
-      "抄录龙纹(EFA)": `抄录龙纹 Mark of Scribing
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-天才文员Gifted Scribe。 当你进行智力（历史）检定或使用书法工具的属性检定时，你可以投掷1d4并将骰值加入属性检定中。
-文员洞见Scribe's Insight。你知晓戏法传讯术Message。你始终准备着法术通晓语言Comprehend Languages 。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的该法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-当你角色等级到达3级时，你始终准备着法术魔嘴术Magic Mouth ，并可用相同方式施展该法术。
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，抄录龙纹法术表中的法术将加入那个特性的法术列表中。
-抄录龙纹法术Mark of Scribing Spells 法术环阶 法术 
-一环 命令术Command，迷幻手稿Illusory Script 
-二环 动物信使Animal Messenger，沉默术Silence 
-三环 短讯术Sending，巧言术Tongues 
-四环 秘法眼Arcane Eye，困惑术Confusion 
-五环 托梦术Dream `,
-      "哨戒龙纹(EFA)": `哨戒龙纹 Mark of Sentinel
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-哨戒直觉Sentinel's Intuition。 当你进行感知（洞悉或察觉）检定时，你可以投掷1d4并将骰值加入属性检定中。
-卫护之盾Guardian's Shield。你始终准备着法术护盾术Shield 。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意法术位施展该法术。你的该法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-警戒哨卫Vigilant Guardian。 当一名位于你5尺内你可见的生物被攻击检定命中时，你可以执行反应来与该生物交换位置，并代替其被那次攻击命中。你能够使用此特性*的次数等于你的熟练加值，当你完成长休时，重获所有已消耗的使用次数。（译注:原文如此） 
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，哨戒龙纹法术表中的法术将加入那个特性的法术列表中。
-哨戒龙纹法术Mark of Sentinel Spells 法术环阶 法术 
-一环 强令对决Compelled Duel，虔诚护盾Shield of Faith 
-二环 守护之链Warding Bond，诚实之域Zone of Truth 
-三环 法术反制Counterspell，防护能量伤害Protection from Energy 
-四环 防死结界Death Ward，信仰守卫Guardian of Faith 
-五环 毕格比之手Bigby's Hand `,
-      "阴影龙纹(EFA)": `阴影龙纹 Mark of Shadow
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-狡黠直觉Cunning Intuition。 当你进行敏捷（隐匿）或魅力（表演）检定时，你可以投掷1d4并将骰值加入属性检定中。
-阴影塑形Shape Shadows。你知晓戏法次级幻象Minor Illusion。你始终准备着法术隐形术Invisibility 。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，阴影龙纹法术表中的法术将加入那个特性的法术列表中。
-阴影龙纹法术Mark of Shadow Spells 法术环阶 法术 
-一环 易容术Disguise Self，无声幻影Silent Image 
-二环 黑暗术Darkness，行动无踪Pass without Trace 
-三环 鹰眼术Clairvoyance，高级幻影Major Image 
-四环 高等隐形术Greater Invisibility，幻景Hallucinatory Terrain 
-五环 假象术Mislead `,
-      "暴风龙纹(EFA)": `暴风龙纹 Mark of Storm
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-风骑直觉Windwright's Intuition。 当你进行敏捷（特技）检定或使用领航工具的属性检定时，你可以投掷1d4并将骰值加入属性检定中。
-暴风恩惠Storm's Boon。 你具有对闪电伤害的抗性。
-暴风魔法Storm Magic。你知晓戏法鸣雷破Thunderclap。当你角色等级到达3级时，你始终准备着法术造风术Gust of Wind 。你可以无需法术位地施展该法术一次，当你完成长休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，暴风龙纹法术表中的法术将加入那个特性的法术列表中。
-暴风龙纹法术Mark of Storm Spells 法术环阶 法术 
-一环 羽落术Feather Fall，云雾术Fog Cloud 
-二环 浮空术Levitate，粉碎音波Shatter 
-三环 雪雨暴Sleet Storm，风墙术Wind Wall 
-四环 咒唤微元素群Conjure Minor Elemental，操控水体Control Water 
-五环 咒唤元素Conjure Elemental `,
-      "守御龙纹(EFA)": `守御龙纹 Mark of Warding
-龙纹专长（先决：艾伯伦战役，不具有其他龙纹专长）
-你获得以下增益。
-御护直觉Warder's Intuition。 当你进行智力（调查）检定或使用盗贼工具的属性检定时，你可以投掷1d4并将骰值加入属性检定中。
-缄守封护Wards and Seals。你始终准备着法术警报术Alarm和法师护甲Mage Armor 。你可以无需法术位地施展每道法术各一次，当你完成长休时，你重获以此法施展这些法术的能力。你也能够以你拥有的任意合适环阶的法术位施展这些法术。你的这些法术的施法属性是感知、智力或魅力（在你选取该专长时选择）。
-当你角色等级到达3级时，你始终准备着法术秘法锁Arcane Lock ，并可用相同方式施展该法术。
-龙纹法术Spells of the Mark。 若你具有施法或契约魔法特性，守御龙纹法术表中的法术将加入那个特性的法术列表中。
-守御龙纹法术Mark of Warding Spells 法术环阶 法术 
-一环 黯冰狱铠Armor of Agathys，庇护术Sanctuary 
-二环 敲击术Knock，涅斯图魔法灵光Nystul's Magic Aura 
-三环 守卫刻纹Glyph of Warding，防护法阵Magic Circle 
-四环 李欧蒙秘藏箱Leomund's Secret Chest，魔邓肯忠犬Mordenkainen's Faithful Hound 
-五环 防活物护罩Antilife Shell `,
       "属性值提升": `属性值提升 Ability Score Improvement
 通用专长（先决：等级4+）
 你选择的一项属性提升2，或者你选择的两项属性各提升1。你无法依靠本专长令某个属性值超出20。
@@ -13823,6 +13894,7 @@ ${data.description}`;
 
 
 "嗜血(ABH)": `嗜血 Bloodlust
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你的力量、敏捷或体质提升1，至多提升至20。
@@ -13831,6 +13903,7 @@ ${data.description}`;
 你可以使用此增益的次数等同于等于你的熟练加值，完成长休后，你重获所有已消耗的使用次数。`,
 
 "爆破手(ABH)": `爆破手 Bomber
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你的敏捷提升1，至多提升至20。
@@ -13838,6 +13911,7 @@ ${data.description}`;
 百步穿杨Long Shots。 使用投掷武器攻击超出常规射程的目标时，你的攻击检定不会因此具有劣势。`,
 
 "黏滞迷雾(ABH)": `黏滞迷雾Cloying Mists 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你的智力、感知或魅力提升1，至多提升至20。
@@ -13845,12 +13919,14 @@ ${data.description}`;
 缠云缚雾Grasping Mist。每当你施展云雾术Fog Cloud 时，法术球状区域内的非魔法火焰会被熄灭，并且除你与你盟友以外的生物在法术球状区域中的速度减少5尺。`,
 
 "沉溺痛苦(ABH)": `沉溺痛苦 Delicious Pain 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至20。
 坚韧身躯Toughened Flesh。 在受到钝击、穿刺或挥砍伤害后，你能立即以反应来获得对钝击、穿刺与挥砍伤害的抗性，持续至你的下个回合开始。此增益一经使用，直至完成短休或长休你都无法再次使用。`,
 
 "光明使者(ABH)": `光明使者 Light Bringer 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你的智力、感知或魅力提升1，至多提升至20。
@@ -13858,25 +13934,30 @@ ${data.description}`;
 日耀之辉Solar Luminance。 当你施展光亮术时，你可以使该法术的光芒成为日光。此增益一经使用，直至完成短休或长休你都无法再次使用。
 日之疗愈Sun's Healing。 若你身处日光下，你能以附赠动作消耗一枚生命骰，掷骰并恢复等于掷骰结果的生命值。此增益一经使用，直至完成短休或长休你都无法再次使用。`,
 
+
 "吻痕(ABH)": `吻痕 Love Bites 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至20。
 甘之如饴Endearing Pain。 在你以近战武器或徒手打击对一名生物造成伤害后，你能立即以附赠动作令目标陷入魅惑状态，持续至你的下个回合开始，或在你或你的盟友对其造成伤害时提前结束。此增益一经使用，直至完成短休或长休你都无法再次使用。`,
 
 "残尸败蜕(ABH)": `残尸败蜕 Putrefy 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至20。
 疽腐蚀骨Necrosis。当你进行暗蚀伤害的伤害掷骰时，你能令受到此伤害的一名生物陷入中毒状态，直至你的下个回合开始。此增益一经使用，直至完成短休或长休你都无法再次使用。`,
 
 "咎罪责难(ABH)": `咎罪责难 Rebuke 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至20。
 至耀光击Radiant Strike。 当你进行光耀伤害的伤害掷骰时，你能令受到此伤害的一名不超过巨型的生物陷入倒地状态。此增益一经使用，直至完成短休或长休你都无法再次使用。`,
 
 "祸国叛心(ABH)": `祸国叛心 Treacherous Allure 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你的智力、感知或魅力提升1，至多提升至20。
@@ -13884,117 +13965,11 @@ ${data.description}`;
 命定之逆Inevitable Betrayal。 你对陷入魅惑状态的生物进行的攻击检定具有优势。`,
 
 "吸血鬼触碰(ABH)": `吸血鬼触碰 Vampire Touched 
+出处：《阿斯代伦的饥渴之书》
 通用专长（先决：等级4+）
 你获得以下增益。
 属性值提升Ability Score Increase。 你的智力、感知或魅力提升1，至多提升至20。
 吸血鬼魔法Vampire Magic。选择一道惑控或幻术学派的一环法术，你始终准备着你选择的这道法术与蛛行术Spider Climb。你可以无需法术位地施展每道法术各一次，但当你以此法施展蛛行术Spider Climb 时，必须以你自身为目标。你必须完成长休后才能再次以此法施展这些法术。你也能够以你拥有的任意合适环阶的法术位施展这些法术。这些法术的施法属性是你以此专长提升的属性。`,
-
-
-"高等异种龙纹(EFA)": `高等异种龙纹 Greater Aberrant Mark 
-通用专长（先决：等级4+，异种龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你的体质属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你异种龙纹的异种坚韧增益时，可以不再投掷1d4，改为投掷1d6。且现在你完成长休或短休时均会重置异种坚韧的使用权。 
-灵感龙纹Mark of Inspiration。当你施展一道戏法时，你可以投掷一枚或两枚你未消耗的生命骰。你获得等于骰值加你体质调整值的临时生命值，位于你30尺内的一名生物（不包括你）受到等于骰值的力场伤害。然后这些生命骰被消耗。 
-你可以使用此增益的次数等于你的熟练加值，当你完成长休时，你重获所有已消耗的使用次数。`,
-
-"高等侦测龙纹(EFA)": `高等侦测龙纹 Greater Mark of Detection 
-通用专长（先决：等级4+，侦测龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你侦测龙纹的推理直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-有识同享Shared Detection。当你使用你侦测龙纹的魔法侦测增益不消耗法术位地施展法术识破隐形See Invisibility 时，你选择一名位于你30尺内你可见的生物。该生物在持续时间内也获得该法术的增益。`,
-
-"高等探寻龙纹(EFA)": `高等探寻龙纹 Greater Mark of Finding 
-通用专长（先决：等级4+，探寻龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你探寻龙纹的猎手直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-探幽索隐Improved Finding。当你使用你探寻龙纹的探寻魔法增益不消耗法术位地施展法术猎人印记Hunter's Mark 时，法术的施法距离翻倍，且你可以调整法术，使目标在法术持续期间无法受益于隐形状态。`,
-
-"高等畜牧龙纹(EFA)": `高等畜牧龙纹 Greater Mark of Handiling 
-通用专长（先决：等级4+，畜牧龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你畜牧龙纹的野性直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-万畜牧首Improved Handling。骑乘期间，在你以近战攻击检定命中一名位于你坐骑5尺内的目标后，你的坐骑可以立即执行反应，移动至多等于其速度的距离或执行攻击动作来发动仅一次攻击（由你选择）。 
-震服万兽Subdue Animal。以一个魔法动作，你对一名位于你30尺内你可见的野兽或怪兽施加命令。目标必须成功通过一次感知豁免（DC为8+你的感知调整值+你的熟练加值），否则陷入恐慌状态，直至你的下个回合开始。你可以使用此增益的次数等于你的熟练加值，当你完成长休时，你重获所有已消耗的使用次数。`,
-
-"高等医疗龙纹(EFA)": `高等医疗龙纹 Greater Mark of Healing 
-通用专长（先决：等级4+，医疗龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你医药龙纹的医学直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-妙手回春Improved Healing。现在你能使用你医疗龙纹的治愈之触增益不消耗法术位地施展法术疗伤术Cure Wounds 的次数，等于你的熟练加值，当你完成长休时，你重获所有已消耗的使用次数。 
-此外，当你施展法术疗伤术Cure Wounds ，为决定生命值恢复量进行掷骰时，你可以将骰子投出的1和2都视为3。`,
-
-"高等招待龙纹(EFA)": `高等招待龙纹 Greater Mark of Hospitality 
-通用专长（先决：等级4+，招待龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你招待龙纹的永恒款待增益时，可以不再投掷1d4，改为投掷1d6。 
-宾至如归Inspired Hospitality。当你施展法术净化饮食Purify Food and Drink 时，你可以调整其效果以代替法术的原效果，改为使位于你30尺内每名你选择的生物恢复精神。每名受影响生物的力竭等级减少一级，且获得一定量的临时生命值，数值等于你的熟练加值加你的智力、魅力或感知调整值（在你选取该专长时选择）。一旦你以此增益调整该法术，直至完成长休你都无法再如此做。`,
-
-"高等创造龙纹(EFA)": `高等创造龙纹 Greater Mark of Making 
-通用专长（先决：等级4+，创造龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你创造龙纹的工匠直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-鬼斧神造Improved Making。当你使用你创造龙纹的法术匠人增益不消耗法术位地施展法术魔化武器Magic Weapon 时，你施展该法术的三环版本。`,
-
-"高等通行龙纹(EFA)": `高等通行龙纹 Greater Mark of Passage 
-通用专长（先决：等级4+，通行龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你通行龙纹的直觉行动增益时，可以不再投掷1d4，改为投掷1d6。 
-比翼生花Inspired Passage。当你使用你通行龙纹的魔法通行增益不消耗法术位地施展法术迷踪步Misty Step 时，在传送前，你可以选择至多两名位于你30尺内你可见的自愿生物。其后每名目标能以反应也传送至多30尺至一处其可见的未占据空间。`,
-
-"高等抄录龙纹(EFA)": `高等抄录龙纹 Greater Mark of Scribing 
-通用专长（先决：等级4+，抄录龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你抄录龙纹的天才文员增益时，可以不再投掷1d4，改为投掷1d6。 
-刻神牍心Inspired Scribing。当你施展法术通晓语言Comprehend Languages 时，你可以调整其效果，包围至多三名位于你30尺内你可见的自愿生物。每名被选生物在持续时间内也获得该法术的增益。此外，在法术持续时间内，只要你和被选生物位于彼此1里内，你们就能以心灵感应互相交流。一旦你以此增益调整该法术，直至完成长休你都无法再如此做。`,
-
-"高等哨戒龙纹(EFA)": `高等哨戒龙纹 Greater Mark of Sentinel 
-通用专长（先决：等级4+，哨戒龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你哨戒龙纹的哨戒直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-枕戈待旦Improved Sentinel。当你使用你哨戒龙纹的警戒哨卫增益时，作为该反应的一部分，你还能以武器或徒手打击发动一次攻击。`,
-
-"高等阴影龙纹(EFA)": `高等阴影龙纹 Greater Mark of Shadow 
-通用专长（先决：等级4+，阴影龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你阴影龙纹的狡黠直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-幽邃匿影Improved Shadow。当你使用你阴影龙纹的阴影塑形增益不消耗法术位地施展法术隐形术Invisibility时，你施展该法术的三环版本。`,
-
-"高等暴风龙纹(EFA)": `高等暴风龙纹 Greater Mark of Storm 
-通用专长（先决：等级4+，暴风龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你暴风龙纹的风骑直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-长风化翼Improved Storm。当你使用你暴风龙纹的暴风魔法增益不消耗法术位地施展法术造风术Gust of Wind 时，你在法术持续期间还会获得60尺飞行速度。`,
-
-"高等守御龙纹(EFA)": `高等守御龙纹 Greater Mark of Warding 
-通用专长（先决：等级4+，守御龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你选择的一项属性提升1，至多提升至20。 
-直觉锐化Improved Intuition。当你使用你守御龙纹的御护直觉增益时，可以不再投掷1d4，改为投掷1d6。 
-固若金汤Improved Warding。当一名生物对你或位于你30尺内你可见的生物进行攻击检定时，你能以反应迫使此检定承受劣势。你可以使用此增益的次数等于你的熟练加值，当你完成长休时，你重获所有已消耗的使用次数。`,
-
-"强效龙纹(EFA)": `强效龙纹 Potent Dragonmark 
-通用专长（先决：等级4+，任意龙纹专长） 
-你获得以下增益。 
-属性值提升Ability Score Increase。你龙纹专长使用的施法属性提升1，至多提升至20。 
-龙纹准备Dragonmark Preparation。你始终准备着龙纹法术列表中的法术（若有）。 
-龙纹施法Dragonmark Spellcasting。你具有一个额外法术位，用于施展你的龙纹专长赋予你的法术。该法术位的环阶等于你等级的一半（向上取整），最高为五环。当你完成短休或长休时，你重获已消耗的该法术位。你使用该法术位施展的法术，只能是你因你的龙纹专长或本专长的龙纹准备增益准备着的法术。`,
-      "英勇战斗之恩惠": `英勇战斗之恩惠 Boon of Combat Prowess
-传奇恩惠专长（先决：等级19+）
-你获得以下增益。
-属性值提升 Ability Score Increase。你选择的一项属性提升1，至多提升至30。
-无双锁定 Peerless Aim。当你的一次攻击检定失手时，你可以将其改为命中。该增益一经使用，下个你的回合开始后你才能再次使用它。`,
       "次元旅行之恩惠": `次元旅行之恩惠 Boon of Dimensional Travel
 传奇恩惠专长（先决：等级19+）
 你获得以下增益。
@@ -14182,25 +14157,6 @@ ${data.description}`;
 气化形体Gaseous Form。若你的生命值降至0但未立即死亡，你能改为将生命值降至1并无需法术位地施展法术气化形体Gaseous Form（无需动作）。以此法施展该法术时，你只能以你自身为目标，你的飞行速度为20尺，法术持续期间，你的每个回合开始时，你恢复10生命值。该法术的施法属性是你以此专长提升的属性。
 此增益一经使用，直至完成长休你都无法再次使用。`,
 
-      "西伯瑞斯之恩惠(EFA)": `西伯瑞斯之恩惠 Boon of Siberys
-传奇恩惠专长（先决：等级19+，艾伯伦战役）
-你获得以下增益。
-属性值提升Ability Score Increase。 你选择的一项属性提升1，至多提升至30。
-异种魔法Aberrant Magic。 选择一道来自术士法术列表的不高于八环的法术或一道来自西伯瑞斯龙纹表的法术（若你想将此法术与某种龙纹相关联，表中包含龙纹建议）。你始终准备着这道法术。你可以无需法术位且无需法术成分地施展该法术一次，当你完成长休或短休时，你重获以此法施展该法术的能力。你也能够以你拥有的任意合适环阶的法术位施展该法术。你的这些法术的施法属性是感知、智力或魅力（在你获得该专长时选择）。
-西伯瑞斯龙纹Siberys Dragonmarks 法术 建议龙纹 
-真知术True Seeing 侦测 
-传送术Teleport 探寻 
-动物形态Animal Shapes 畜牧 
-再生术Regenerate 医疗 
-英雄宴Heroes' Feast 招待 
-半位面Demiplane 创造 
-位面转移Plane Shift 通行 
-徽记术Symbol 抄录 
-心灵屏障Mind Blank 哨戒 
-投影术Project Image 阴影 
-操控天气Control Wetdaer 暴风 
-迷宫术Maze 守御 `,
-
     };
 
     function getFeatLevelDefaults() {
@@ -14278,8 +14234,8 @@ ${data.description}`;
 
     const combatStyleCatalog = [
       "箭术", "盲斗", "防御", "对决", "巨武器战斗", "拦截", "守护",
-      "投掷武器战斗", "双武器战斗", "徒手战斗", "集群战斗", "俯卧战斗",
-      "奥法武斗家"
+      "投掷武器战斗", "双武器战斗", "徒手战斗", "集群战斗(Drop)", "俯卧战斗(Drop)",
+      "奥法武斗家(AU)"
     ];
 
     const combatStyleDescriptionData = {
@@ -14688,7 +14644,23 @@ ${data.description}`;
         columnRow.className = "skill-column-head";
         for (const text of ["熟练", "技能", "修正", "", "总值"]) {
           const th = document.createElement("th");
-          th.textContent = text;
+          if (text === "技能" && group.name === "力量系") {
+            const label = document.createElement("span");
+            label.className = "skill-head-label";
+            label.textContent = "技能";
+            const help = document.createElement("button");
+            help.type = "button";
+            help.className = "faith-help skill-head-help reference-tooltip-trigger reference-click-help";
+            help.dataset.referenceTooltip = "skill-proficiency";
+            help.textContent = "?";
+            help.title = "查看技能熟练说明";
+            help.setAttribute("aria-label", "查看技能熟练说明");
+            label.append(help);
+            th.append(label);
+            bindReferenceTooltipTrigger(help);
+          } else {
+            th.textContent = text;
+          }
           if (text === "") th.className = "skill-gap";
           columnRow.append(th);
         }
@@ -15441,11 +15413,172 @@ ${data.description}`;
       }
     }
 
+    function buildIframeZoomActions() {
+      return `<button class="spell-lookup-zoom" type="button" data-iframe-zoom="-1" title="缩小内容" aria-label="缩小内容">−</button>
+<button class="spell-lookup-zoom" type="button" data-iframe-zoom="1" title="放大内容" aria-label="放大内容">+</button>`;
+    }
+
+    const FEAT_LOOKUP_DATA = {
+      "起源专长": {
+        official: [
+          { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/起源专长.htm" },
+          { label: "费伦英雄", source: "被遗忘的国度：费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/起源专长.htm" },
+          { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/起源专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦的饥渴之书", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/起源专长.htm" },
+          { label: "鸦阁书", source: "鸦阁魔域：魔障深藏", url: "https://5echm.kagangtuya.top/topics/鸦阁魔域：魔障深藏/第一章/起源专长.htm" },
+          { label: "鸦阁黑暗赠礼", source: "鸦阁魔域：魔障深藏", url: "https://5echm.kagangtuya.top/topics/鸦阁魔域：魔障深藏/第一章/黑暗赠礼.htm" },
+          { label: "洛温初光", source: "洛温：初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
+          { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/龙纹专长.htm" },
+          { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/起源专长.htm" }
+        ],
+        third: [
+          { label: "歪曲之月", source: "歪曲之月", url: "https://5echm.kagangtuya.top/topics/第三方/歪曲之月/第五章/起源专长.htm" },
+          { label: "鬼魅幽谷", source: "鬼魅幽谷", url: "https://5echm.kagangtuya.top/topics/第三方/鬼魅幽谷/玩家指南/第四章/起源专长.htm" },
+          { label: "斯坦哈德", source: "斯坦哈德的诡怖猎杀指南", url: "https://5echm.kagangtuya.top/topics/第三方/斯坦哈德的诡怖猎杀指南/专长与背景/起源专长.htm" },
+          { label: "克苏鲁", source: "火炬光下的克苏鲁", url: "https://5echm.kagangtuya.top/topics/第三方/火炬光下的克苏鲁/第二章/起源专长.htm" },
+          { label: "血族书", source: "吸血鬼：避世潜藏", url: "https://5echm.kagangtuya.top/topics/第三方/吸血鬼：避世潜藏/专长/起源专长.htm" },
+          { label: "探秘艾伯伦：种族", source: "探秘艾伯伦", url: "https://5echm.kagangtuya.top/topics/第三方/探秘艾伯伦/第六章/起源专长.htm" }
+        ]
+      },
+      "通用专长": {
+        official: [
+          { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/通用专长.htm" },
+          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/通用专长.htm" },
+          { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/通用专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/通用专长.htm" },
+          { label: "洛温初光", source: "洛温初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
+          { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/通用专长.htm" },
+          { label: "种族专长(旧)", source: "塔莎的万事坩埚", url: "https://5echm.kagangtuya.top/topics/塔莎的万事坩埚/玩家选项/专长.html" },
+          { label: "塔莎专长(旧)", source: "塔莎的万事坩埚", url: "https://5echm.kagangtuya.top/topics/塔莎的万事坩埚/玩家选项/专长.html" },
+          { label: "龙类赋礼(旧)", source: "费资本的巨龙宝库", url: "https://5echm.kagangtuya.top/topics/费资本的巨龙宝库/玩家选项/龙类专长.html" },
+          { label: "巨人专长(旧)", source: "毕格比巨献：巨人之荣耀", url: "https://5echm.kagangtuya.top/topics/巨人之荣耀/角色选项/专长.htm" },
+          { label: "卡牌占卜师(旧)", source: "万象无常书", url: "https://5echm.kagangtuya.top/topics/万象无常书/贤者/专长：卡牌占卜师.htm" }
+        ],
+        third: [
+          { label: "歪曲之月", source: "歪曲之月", url: "https://5echm.kagangtuya.top/topics/第三方/歪曲之月/第五章/通用专长.htm" },
+          { label: "鬼魅幽谷", source: "鬼魅幽谷", url: "https://5echm.kagangtuya.top/topics/第三方/鬼魅幽谷/玩家指南/第四章/通用专长.htm" },
+          { label: "斯坦哈德", source: "斯坦哈德的诡怖猎杀指南", url: "https://5echm.kagangtuya.top/topics/第三方/斯坦哈德的诡怖猎杀指南/专长与背景/通用专长.htm" },
+          { label: "血族书", source: "吸血鬼：避世潜藏", url: "https://5echm.kagangtuya.top/topics/第三方/吸血鬼：避世潜藏/专长/血族专长.htm" },
+          { label: "探秘艾伯伦：种族", source: "探秘艾伯伦", url: "https://5echm.kagangtuya.top/topics/第三方/探秘艾伯伦/第六章/通用专长.htm" },
+          { label: "秘密尖塔1", source: "瓦尔达的秘密尖塔1", url: "https://5echm.kagangtuya.top/topics/第三方/瓦尔达的秘密尖塔/玩家包1/专长.htm" },
+          { label: "秘密尖塔2", source: "瓦尔达的秘密尖塔2", url: "https://5echm.kagangtuya.top/topics/第三方/瓦尔达的秘密尖塔/玩家包2/专长.htm" },
+          { label: "空际远坠：战术", source: "空际远坠（beyond drops）", url: "https://5echm.kagangtuya.top/topics/其他/beyond%20drops/26.7/通用专长.htm" },
+          { label: "空际远坠：异域", source: "空际远坠（beyond drops）", url: "https://5echm.kagangtuya.top/topics/其他/beyond%20drops/26.5/专长.htm" },
+          { label: "空际远坠：黑暗", source: "空际远坠（beyond drops）", url: "https://5echm.kagangtuya.top/topics/其他/beyond%20drops/26.10/专长.htm" },
+          { label: "空际远坠：妖精", source: "空际远坠（beyond drops）", url: "https://5echm.kagangtuya.top/topics/其他/beyond%20drops/26.8/专长.htm" }
+        ]
+      },
+      "传奇恩惠专长": {
+        official: [
+          { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/传奇恩惠专长.htm" },
+          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/传奇恩惠.htm" },
+          { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/传奇恩惠专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/传奇恩惠专长.htm" },
+          { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/传奇恩惠.htm" },
+          { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/传奇恩惠.htm" }
+        ],
+        third: [
+          { label: "血族书", source: "吸血鬼：避世潜藏", url: "https://5echm.kagangtuya.top/topics/第三方/吸血鬼：避世潜藏/专长/传奇恩惠专长.htm" }
+        ]
+      },
+      "战斗风格专长": {
+        official: [
+          { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/战斗风格专长.htm" },
+          { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/战斗风格专长.htm" },
+          { label: "空际远坠：战术", source: "空际远坠（beyond drops）", url: "https://5echm.kagangtuya.top/topics/其他/beyond%20drops/26.7/战斗风格专长.htm" }
+        ],
+        third: [
+          { label: "鬼魅幽谷", source: "鬼魅幽谷", url: "https://5echm.kagangtuya.top/topics/第三方/鬼魅幽谷/玩家指南/第四章/战斗风格专长.htm" }
+        ]
+      }
+    };
+
+    function featLookupPageButtons(category, pages, markFirst = false) {
+      return pages.map((page, index) => (
+        `<button class="feat-lookup-tab${markFirst && index === 0 ? " is-active" : ""}" type="button" data-feat-page data-feat-category="${escapePlainText(category)}" data-feat-source="${escapePlainText(page.source)}" data-feat-url="${page.url}">${escapePlainText(page.label)}</button>`
+      )).join("");
+    }
+
+    function featLookupTabRows(category) {
+      const data = FEAT_LOOKUP_DATA[category];
+      const categories = Object.keys(FEAT_LOOKUP_DATA).map((name) => (
+        `<button class="feat-lookup-tab${name === category ? " is-active" : ""}" type="button" data-feat-category-tab="${escapePlainText(name)}">${escapePlainText(name)}</button>`
+      )).join("");
+      return `<div class="feat-lookup-row">${categories}</div>
+<div class="feat-lookup-row"><b class="feat-lookup-label">官方扩展：</b><span data-feat-official>${featLookupPageButtons(category, data.official, true)}</span></div>
+<div class="feat-lookup-row"><b class="feat-lookup-label">第三方扩展：</b><span data-feat-third>${featLookupPageButtons(category, data.third)}</span></div>`;
+    }
+
+    function buildFeatLookupTooltip() {
+      const category = "起源专长";
+      const first = FEAT_LOOKUP_DATA[category].official[0];
+      const title = `${first.source} - ${category}`;
+      return `<div class="spell-lookup-head">
+<span class="class-lookup-heading">
+<span class="lookup-source">来源：5e不全书</span>
+<span class="reference-title" data-feat-title>${escapePlainText(title)}</span>
+</span>
+<span class="spell-lookup-actions">
+${buildIframeZoomActions()}
+<button class="spell-lookup-back" type="button" title="回退" aria-label="回退">←</button>
+<button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
+</span>
+</div>
+<div class="feat-lookup-tabs" data-feat-tabs>${featLookupTabRows(category)}</div>
+<div class="spell-lookup-frame-wrap"><iframe class="spell-lookup-frame" src="${first.url}" title="${escapePlainText(title)}" loading="eager" referrerpolicy="no-referrer"></iframe></div>
+<div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${first.url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
+<span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
+    }
+
+    function setFeatLookupPage(button) {
+      const frame = referenceTooltip.querySelector(".spell-lookup-frame");
+      if (!frame || !button) return;
+      frame.src = button.dataset.featUrl;
+      const title = `${button.dataset.featSource} - ${button.dataset.featCategory}`;
+      frame.title = title;
+      const titleNode = referenceTooltip.querySelector("[data-feat-title]");
+      if (titleNode) titleNode.textContent = title;
+      const link = referenceTooltip.querySelector(".spell-lookup-note a");
+      if (link) link.href = button.dataset.featUrl;
+      for (const page of referenceTooltip.querySelectorAll("[data-feat-page]")) {
+        page.classList.toggle("is-active", page === button);
+      }
+    }
+
+    function setFeatLookupCategory(category) {
+      const data = FEAT_LOOKUP_DATA[category];
+      if (!data) return;
+      for (const tab of referenceTooltip.querySelectorAll("[data-feat-category-tab]")) {
+        tab.classList.toggle("is-active", tab.dataset.featCategoryTab === category);
+      }
+      referenceTooltip.querySelector("[data-feat-official]").innerHTML =
+        featLookupPageButtons(category, data.official, true);
+      referenceTooltip.querySelector("[data-feat-third]").innerHTML =
+        featLookupPageButtons(category, data.third);
+      const first = referenceTooltip.querySelector("[data-feat-official] [data-feat-page]");
+      if (first) setFeatLookupPage(first);
+    }
+
     function buildClassFeatureLookupTooltip(target) {
       const title = target.dataset.lookupTitle || "职业特性速查";
       const source = target.dataset.lookupSource || CLASS_FEATURE_LOOKUP_SOURCE;
       const url = target.dataset.lookupUrl || "";
+      const note = target.dataset.lookupNote || "";
+      const noteHtml = note
+        ? `<div class="class-lookup-tip">${escapePlainText(note)}</div>`
+        : "";
+      const alternateUrl = target.dataset.lookupAltUrl || "";
+      const alternateTitle = target.dataset.lookupAltTitle || "其他页面";
+      const tabLabel = target.dataset.lookupTabLabel || title;
+      const alternateTabLabel = target.dataset.lookupAltTabLabel || alternateTitle;
+      const pageTabs = alternateUrl
+        ? `<div class="lookup-page-tabs">
+<button class="lookup-page-tab is-active" type="button" data-lookup-page-url="${url}" data-lookup-page-title="${escapePlainText(title)}">${escapePlainText(tabLabel)}</button>
+<button class="lookup-page-tab" type="button" data-lookup-page-url="${alternateUrl}" data-lookup-page-title="${escapePlainText(alternateTitle)}">${escapePlainText(alternateTabLabel)}</button>
+</div>`
+        : "";
       const actions = `<span class="spell-lookup-actions">
+${url ? buildIframeZoomActions() : ""}
 <button class="spell-lookup-back" type="button" title="回退" aria-label="回退">←</button>
 <button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
 </span>`;
@@ -15459,11 +15592,14 @@ ${actions}
 
       if (!url) {
         return `${header}
+${noteHtml}
 <p>该职业特性速查页面暂未配置链接。</p>
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
       }
 
       return `${header}
+${pageTabs}
+${noteHtml}
 <div class="spell-lookup-frame-wrap"><iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(title)}" loading="eager" referrerpolicy="no-referrer"></iframe></div>
 <div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
@@ -15492,6 +15628,7 @@ ${actions}
       return `<div class="spell-lookup-head">
 <span class="reference-title">${escapePlainText(label)} · 法术速查 Spell Lookup</span>
 <span class="spell-lookup-actions">
+${buildIframeZoomActions()}
 <button class="spell-lookup-back" type="button" title="回退" aria-label="回退">←</button>
 <button class="spell-lookup-close" type="button" title="关闭" aria-label="关闭">×</button>
 </span>
@@ -20251,7 +20388,29 @@ ${actions}
         }
       });
       builderImportJson.addEventListener("click", () => builderImportFile.click());
-      builderExportPdf.addEventListener("click", () => window.print());
+
+      let printTitleBefore = null;
+      const preparePrintTitle = () => {
+        if (printTitleBefore !== null) return;
+        const title = summary.textContent.trim()
+          .replace(/[\\/:*?"<>|]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (!title) return;
+        printTitleBefore = document.title;
+        document.title = title;
+      };
+      const restorePrintTitle = () => {
+        if (printTitleBefore === null) return;
+        document.title = printTitleBefore;
+        printTitleBefore = null;
+      };
+      window.addEventListener("beforeprint", preparePrintTitle);
+      window.addEventListener("afterprint", restorePrintTitle);
+      builderExportPdf.addEventListener("click", () => {
+        preparePrintTitle();
+        window.print();
+      });
 
       builderImportFile.addEventListener("change", async () => {
         const file = builderImportFile.files && builderImportFile.files[0];
@@ -20680,20 +20839,22 @@ ${actions}
       const mainName = currentMainClassName();
       if (mainName) {
         const level = getLevel(levelInput);
-        parts.push(`${mainName} ${level === null ? "?" : level}级`);
         const mainSubclass = currentMainSubclass();
-        if (mainSubclass) parts.push(mainSubclass);
+        const subclassText = mainSubclass ? `（${mainSubclass}）` : "";
+        parts.push(`${mainName}${subclassText}${level === null ? "?" : level}级`);
       }
 
       for (const entry of getExtraMultiEntries()) {
         const multiName = entry.classSelect.value;
         if (!multiName) continue;
         const multiLevel = getLevel(entry.levelInput);
-        parts.push(`兼职 ${multiName}${multiLevel === null ? "" : ` ${multiLevel}级`}`);
-        if (entry.subclassSelect.value) parts.push(entry.subclassSelect.value);
+        const subclassText = entry.subclassSelect.value
+          ? `（${entry.subclassSelect.value}）`
+          : "";
+        parts.push(`兼职 ${multiName}${subclassText}${multiLevel === null ? "?" : multiLevel}级`);
       }
 
-      summary.textContent = parts.join(" · ");
+      summary.textContent = parts.join(" ");
       updateDerivedStats();
       updateDstCommand();
       syncClassFeatureEditors();
@@ -20770,10 +20931,10 @@ ${actions}
         "【.rc 优势 特技】进行优势检定"
       ];
       for (const weapon of weapons) {
-        helpLines.push(`【.rc+${weapon.name}】进行武器攻击`);
+        helpLines.push(`【.rc${weapon.name}】进行武器攻击`);
       }
       if (combatSpellAbility.value) {
-        helpLines.push("【.rc+法术攻击】进行法术攻击");
+        helpLines.push("【.rc法术攻击】进行法术攻击");
       }
       helpLines.push(
         "【.show 运动】检查加值",
@@ -20926,28 +21087,21 @@ ${actions}
 
     const referenceTooltipContents = {
       hometown: `<span class="reference-title">费伦故乡信息 Homelands of Faerûn</span>${window.__DND_HOMETOWN_LORE__ || "<p>故乡资料未加载。</p>"}`,
-      "weapon-properties": `<span class="reference-title">武器词条 Weapon Properties</span>
-<p>以下是武器列表所提及过的各项词条的具体定义。</p>
-<p><b>弹药 Ammunition。</b>使用具有弹药词条的武器发动远程攻击时，你必须拥有该武器需求的弹药。所需弹药的种类会与武器的射程写在一起。每次使用该武器攻击都会花费一枚弹药，且取出该弹药的行为视为此次攻击的一部分（你需要一只空手来装填一把单手武器的弹药）。在战斗结束后，你可以花费一分钟搜索战场，以回收你在战斗中所消耗的弹药的一半（向下取整），而剩下的那些弹药将会损失。</p>
-<p><b>灵巧 Finesse。</b>使用一把灵巧武器发动攻击时，你可以自由选择此次攻击检定与伤害掷骰使用力量调整值还是敏捷调整值。但是攻击检定与伤害掷骰必须使用同一个调整值。</p>
-<p><b>重型 Heavy。</b>如果你的力量属性值低于13点，则你用重型近战武器发动的攻击检定具有劣势；如果你的敏捷属性值低于13点，则你用重型远程武器发动的攻击检定具有劣势。</p>
-<p><b>轻型 Light。</b>当你在自己回合中执行攻击动作，并用一把轻型武器发动一次攻击后，你可以在同一回合中用附赠动作发动一次额外的攻击。这次额外的攻击你必须使用另一把轻型武器发动，并且这次攻击的伤害无法加入你的属性调整值（除非该调整值为负数）。例如，若你在你的回合中执行了攻击动作，一只手手持短剑，另一只手手持匕首，而这两把武器均有轻型词条，则你可以使用你的动作和附赠动作，来用这两把武器各发动一次攻击。但你不能将力量或敏捷调整值加入第二把武器造成的伤害中（除非该调整值为负数）。</p>
-<p><b>装填 Loading。</b>当你用一把装填武器通过一个动作、附赠动作或反应进行射击时，不论你正常情况下能发动多少次攻击，你都只能用其射出一发弹药。</p>
-<p><b>射程 Range。</b>射程武器在其弹药词条或投掷词条后，会以括号标明其射程。射程会列出两个数字，第一个是武器的常规射程（单位为尺），第二个是武器的最大射程。攻击一个超出常规射程的目标时，你的攻击检定具有劣势；而你无法攻击一个处于最大射程之外的目标。</p>
-<p><b>触及 Reach。</b>使用触及武器攻击时，它为你的触及范围增加5尺。此触及范围增值同样会影响用它发动的借机攻击。</p>
-<p><b>投掷 Thrown。</b>如果一把武器具有投掷词条，你可以把它投掷出去来发动一次远程攻击。同时，拔出这把武器可以视作这次攻击的一部分。如果投掷出去的武器是一把近战武器，则你在攻击检定和伤害掷骰中使用与你用其发动近战攻击时相同的属性调整值。</p>
-<p><b>双手 Two-Handed。</b>用双手武器攻击时，你需要双手并用。</p>
-<p><b>多用 Versatile。</b>多用武器可以单手使用也可以双手使用。该词条后将跟随一个括号，其内的伤害数值即为双手持用该武器进行近战攻击时的伤害。</p>`,
-      "weapon-mastery": `<span class="reference-title">精通词条 Mastery Properties</span>
-<p>每把武器都具有自己的精通词条。一个角色必须拥有能够解锁精通词条的特性（例如武器精通特性）才能使用这类词条。精通词条如下所示。</p>
-<p><b>横扫 Cleave。</b>当你用这把武器进行的近战攻击检定命中一个生物时，你可以用该武器对位于该生物5尺内，且同样身处你触及范围内的另一生物再进行一次近战攻击检定。命中时，第二个生物也会受到此武器的伤害，但你无法将你的属性调整值加入这次伤害中（除非该调整值为负数）。每个回合中你只能发动一次横扫的额外攻击。</p>
-<p><b>擦掠 Graze。</b>当你以这把武器对一个生物发动的攻击检定失手时，你仍可以对目标生物造成一定伤害。其数额等同于此次攻击所使用的属性调整值，其伤害类型与你所使用的武器一致，并且这个伤害只能通过属性调整值的提高而增长。</p>
-<p><b>迅击 Nick。</b>当你发动由轻型词条所提供的额外的攻击时，你可以将本次攻击视作攻击动作的一部分，而非使用附赠动作。而你每一回合仍然只能进行一次由轻型词条所提供的额外的攻击。</p>
-<p><b>推离 Push。</b>当你用这把武器命中一个生物时，如果该生物的体型不超过大型，则你可以将该生物自你处直线推离至多10尺。</p>
-<p><b>削弱 Sap。</b>当你用这把武器命中一个生物时，直到你的下一回合开始前，该生物的下一次攻击检定将具有劣势。</p>
-<p><b>缓速 Slow。</b>当你用这把武器命中了一个生物并造成伤害时，你可以将对方的速度减少10尺，直至你的下一回合开始。如果该生物被拥有缓速词条的武器多次命中，其速度削减量也不会因此超过10尺。</p>
-<p><b>失衡 Topple。</b>当你用这把武器命中了一个生物时，你可以迫使该生物进行一次体质豁免（DC等于8+本次攻击所使用的调整值+你的熟练加值）。豁免检定失败时，该生物陷入倒地状态。</p>
-<p><b>侵扰 Vex。</b>当你用这把武器命中一个生物并对其造成伤害时，直到你的下一回合结束前，你对该生物的下一次攻击检定将具有优势。</p>`,
+      "skill-proficiency": `<span class="reference-title">技能熟练 Skill Proficiency</span>
+<p><b>X：</b>无熟练<br><b>O：</b>有熟练<br><b>🅞：</b>专精</p>
+<p>当你使用你熟练的技能进行检定的时候，可以加入熟练加值。如果你专精该技能，则可以加入双倍熟练加值。</p>
+<p>注意：技能熟练并不叠加，即便你获得了多次相同技能的熟练，也不会变成专精。只有特定职业，例如游荡者、游侠或法师的职业特性会让你可以专精一个技能。</p>`,
+      "feat-overview": `<span class="reference-title">专长 Feat</span>
+<p>你的背景会给予你一个起源专长。</p>
+<p>达到一定等级时，通常是4级后，你的职业也会为你提供属性值提升专长，或者也允许你选择另一项你符合条件的专长。</p>
+<p>起源专长并非只有1级的时候可以从背景获得，即便你已经抵达4级或更高等级，你也依然可以选取起源专长。如果你的职业有战斗风格特性，你也可以选取更多其他的战斗风格专长。但是要注意你是否满足选取这些专长的条件，例如有些专长可能对你的种族或者属性值有要求。</p>
+<p><b>专长的组成部分 Parts of a Feat</b></p>
+<p>专长由以下几种部分组成，这些部分列于专长名称之后：</p>
+<p><b>分类Category。</b>每个专长都有自己的分类，并会在专长描述中标明它属于哪一种。当你被要求从某个特定分类中选择专长，例如从起源分类中进行选择时，你所选的专长分类必须有写在专长的名字正下方。如果你被要求选择专长而不限定分类时，你可以从任何分类中选择专长。</p>
+<p><b>先决Prerequisite。</b>为了选择*某个专长，你必须满足其描述部分的先决条件，除非某个特性允许你无视先决选择该专长。如果一个专长的先决包括职业，那你必须至少有一级对应的职业等级才能选择这个专长。</p>
+<p>*译注：此处的选择原文为take a feat，外网玩家表示这个句子包含了维持专长的引申义，仅供参考</p>
+<p><b>增益Benefit。</b>专长的具体效益会在先决描述下详细列出。如果你获得了一个专长，你就会获得其增益。</p>
+<p><b>复选Repeatable。</b>每个专长都只能选择一次，除非在描述部分的“复选”部分明确允许。</p>`,
       language: `<span class="reference-title">选择语言 Choose Languages</span>
 <p>你的角色至少懂得三门语言：通用语，加上两种你从标准语言表直接或掷骰选取的语言。懂得一门语言意味着你的角色能以之交流、阅读文字以及用其书写。你的职业和其他特性也可能让你懂得一门语言。</p>
 <p>标准语言表列出了遍布于DND诸世界的语言。每一个玩家角色都懂得通用语这门源自位面大都会、多元宇宙之焦点——印记城——的语言。其他标准语言源自DND诸世界中最突出的那些种族的初代成员，并已经被广泛传播。</p>
@@ -21400,6 +21554,21 @@ ${actions}
       window.addEventListener("pointercancel", finish, { once: true });
     }
 
+    function setReferenceFrameScale(frame, scale) {
+      if (!frame) return;
+      const value = Math.min(1, Math.max(0.5, Math.round(scale * 100) / 100));
+      frame.dataset.iframeScale = String(value);
+      frame.style.width = `${100 / value}%`;
+      frame.style.height = `${100 / value}%`;
+      frame.style.transform = `scale(${value})`;
+    }
+
+    function applyReferenceFrameScales() {
+      for (const frame of referenceTooltip.querySelectorAll(".spell-lookup-frame")) {
+        setReferenceFrameScale(frame, Number(frame.dataset.iframeScale) || 0.72);
+      }
+    }
+
     function showReferenceTooltip(target) {
       const key = target.dataset.referenceTooltip;
       const content = key === "spell-lookup"
@@ -21408,14 +21577,18 @@ ${actions}
           ? buildSpellLookupTooltip("all")
           : key === "class-lookup"
             ? buildClassFeatureLookupTooltip(target)
-            : referenceTooltipContents[key];
+            : key === "feat-lookup"
+              ? buildFeatLookupTooltip()
+              : referenceTooltipContents[key];
       if (!content) return;
 
       if (referenceTooltipHideTimer !== null) {
         window.clearTimeout(referenceTooltipHideTimer);
         referenceTooltipHideTimer = null;
       }
-      referenceTooltipSticky = key.startsWith("spell-lookup") || key === "class-lookup";
+      referenceTooltipSticky = key.startsWith("spell-lookup") ||
+        key === "class-lookup" || key === "feat-lookup";
+      referenceTooltip.classList.toggle("is-local-tooltip", !referenceTooltipSticky);
       referenceTooltip.classList.toggle("spell-lookup-tooltip", referenceTooltipSticky);
       referenceTooltip.classList.toggle(
         "spell-lookup-has-frame",
@@ -21424,6 +21597,7 @@ ${actions}
       referenceTooltip.style.width = "";
       referenceTooltip.style.height = "";
       referenceTooltip.innerHTML = content;
+      applyReferenceFrameScales();
       referenceTooltip.hidden = false;
       referenceTooltipTarget = target;
       positionReferenceTooltip(target);
@@ -21609,6 +21783,43 @@ ${actions}
       if (referenceTooltip.hidden) return;
       if (referenceTooltip.contains(event.target) || event.target.closest("[data-reference-tooltip]")) return;
       cancelReferenceTooltip();
+    });
+
+    referenceTooltip.addEventListener("click", (event) => {
+      const featCategoryTab = event.target.closest("[data-feat-category-tab]");
+      if (featCategoryTab) {
+        setFeatLookupCategory(featCategoryTab.dataset.featCategoryTab);
+        return;
+      }
+      const featPage = event.target.closest("[data-feat-page]");
+      if (featPage) {
+        setFeatLookupPage(featPage);
+        return;
+      }
+      const pageTab = event.target.closest("[data-lookup-page-url]");
+      if (pageTab) {
+        const frame = referenceTooltip.querySelector(".spell-lookup-frame");
+        if (!frame) return;
+        frame.src = pageTab.dataset.lookupPageUrl;
+        frame.title = pageTab.dataset.lookupPageTitle || "";
+        for (const tab of referenceTooltip.querySelectorAll("[data-lookup-page-url]")) {
+          tab.classList.toggle("is-active", tab === pageTab);
+        }
+        const titleNode = referenceTooltip.querySelector(".reference-title");
+        if (titleNode && pageTab.dataset.lookupPageTitle) {
+          titleNode.textContent = pageTab.dataset.lookupPageTitle;
+        }
+        const externalLink = referenceTooltip.querySelector(".spell-lookup-note a");
+        if (externalLink) externalLink.href = pageTab.dataset.lookupPageUrl;
+        return;
+      }
+
+      const button = event.target.closest("[data-iframe-zoom]");
+      if (!button) return;
+      const frame = referenceTooltip.querySelector(".spell-lookup-frame");
+      if (!frame) return;
+      const current = Number(frame.dataset.iframeScale) || 0.72;
+      setReferenceFrameScale(frame, current + Number(button.dataset.iframeZoom) * 0.1);
     });
 
     referenceTooltip.addEventListener("pointerenter", () => {
