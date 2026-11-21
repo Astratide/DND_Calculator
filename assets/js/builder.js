@@ -583,7 +583,7 @@
       "阿斯莫": { darkvision: "60尺", size: "中型或小型", speed: "30尺", resistance: "光耀、暗蚀", immunity: "", advantage: "" },
       "龙裔": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
       "矮人": { darkvision: "120尺", size: "中型", speed: "30尺", resistance: "毒素", immunity: "", advantage: "中毒" },
-      "精灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "", advantage: "魅惑" },
+      "精灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "睡眠", advantage: "魅惑" },
       "侏儒": { darkvision: "60尺", size: "小型", speed: "30尺", resistance: "", immunity: "", advantage: "智力、感知、魅力豁免" },
       "歌利亚": { darkvision: "—", size: "中型", speed: "35尺", resistance: "", immunity: "", advantage: "" },
       "半身人": { darkvision: "—", size: "小型", speed: "30尺", resistance: "", immunity: "", advantage: "恐慌" },
@@ -596,7 +596,7 @@
       "人马": { darkvision: "—", size: "中型", speed: "40尺", resistance: "", immunity: "", advantage: "" },
       "地底侏儒": { darkvision: "60尺", size: "小型", speed: "30尺", resistance: "", immunity: "", advantage: "智力、感知、魅力豁免" },
       "灰矮人": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "毒素", immunity: "", advantage: "中毒、魅惑、震慑" },
-      "雅灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "", advantage: "魅惑" },
+      "雅灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "睡眠", advantage: "魅惑" },
       "仙灵": { darkvision: "—", size: "小型", speed: "30尺，飞行30尺", resistance: "", immunity: "", advantage: "" },
       "费尔伯格人": { darkvision: "—", size: "中型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
       "元素裔": { darkvision: "60尺", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
@@ -611,12 +611,12 @@
       "牛头人": { darkvision: "—", size: "中型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
       "半羊人": { darkvision: "—", size: "中型", speed: "35尺", resistance: "", immunity: "", advantage: "法术豁免" },
       "海精灵": { darkvision: "60尺", size: "中型", speed: "30尺，游泳30尺", resistance: "寒冷", immunity: "", advantage: "魅惑" },
-      "影灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "暗蚀", immunity: "", advantage: "魅惑" },
+      "影灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "暗蚀", immunity: "睡眠", advantage: "魅惑" },
       "斑猫人": { darkvision: "60尺", size: "中型或小型", speed: "30尺，攀爬30尺", resistance: "", immunity: "", advantage: "" },
       "龟人": { darkvision: "—", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "力量豁免、体质豁免（龟壳防御）" },
       "梭螺鱼人": { darkvision: "60尺", size: "中型", speed: "30尺，游泳30尺", resistance: "寒冷", immunity: "", advantage: "" },
       "蛇人": { darkvision: "60尺", size: "中型或小型", speed: "30尺", resistance: "毒素", immunity: "", advantage: "法术豁免、中毒" },
-      "星界精灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "", advantage: "魅惑" },
+      "星界精灵": { darkvision: "60尺", size: "中型", speed: "30尺", resistance: "", immunity: "睡眠", advantage: "魅惑" },
       "自动侏儒": { darkvision: "—", size: "小型", speed: "30尺", resistance: "毒素", immunity: "疾病", advantage: "麻痹、中毒" },
       "诘弗人": { darkvision: "—", size: "中型", speed: "30尺，游泳30尺", resistance: "", immunity: "", advantage: "力量检定、力量豁免" },
       "鼯猴人": { darkvision: "—", size: "中型或小型", speed: "30尺，攀爬30尺", resistance: "", immunity: "", advantage: "" },
@@ -4499,6 +4499,63 @@ ${data.description}`;
       "水袋": "水袋具有4品脱容量。如果你喝水不足，你会遭受脱水的危害（见规则详述）。"
     };
 
+    const backpackWeaponDescriptions = {
+      "短棒": "简易近战武器：1d4钝击；缓速",
+      "匕首": "简易近战武器：1d4穿刺，灵巧，轻型，投掷（射程 20/60）；迅击",
+      "巨棒": "简易近战武器：1d8钝击，双手；推撞",
+      "手斧": "简易近战武器：1d6挥砍，轻型，投掷（射程 20/60）；侵扰",
+      "标枪": "简易近战武器：1d6穿刺，投掷（射程 30/120）；缓速",
+      "轻锤": "简易近战武器：1d4钝击，轻型，投掷（射程 20/60）；迅击",
+      "硬头锤": "简易近战武器：1d6钝击；削弱",
+      "长棍": "简易近战武器：1d6钝击，两用（1d8）；摔绊",
+      "镰刀": "简易近战武器：1d4挥砍，轻型；迅击",
+      "矛": "简易近战武器：1d6穿刺，投掷（射程 20/60），两用（1d8）；削弱",
+      "飞镖": "简易远程武器：1d4穿刺，灵巧，投掷（射程 20/60）；侵扰",
+      "轻弩": "简易远程武器：1d8穿刺，弹药（射程 80/320），装填，双手；缓速",
+      "短弓": "简易远程武器：1d6穿刺，弹药（射程 80/320），双手；侵扰",
+      "投石索": "简易远程武器：1d4钝击，弹药（射程 30/120）；缓速",
+      "战斧": "军用近战武器：1d8挥砍，两用（1d10）；摔绊",
+      "链枷": "军用近战武器：1d8钝击；削弱",
+      "长柄刀": "军用近战武器：1d10挥砍，重型，触及，双手；擦掠",
+      "巨斧": "军用近战武器：1d12挥砍，重型，双手；劈砍",
+      "巨剑": "军用近战武器：2d6挥砍，重型，双手；擦掠",
+      "戟": "军用近战武器：1d10挥砍，重型，触及，双手；劈砍",
+      "骑枪": "军用近战武器：1d10穿刺，重型，触及，双手；摔绊",
+      "长剑": "军用近战武器：1d8挥砍，两用（1d10）；削弱",
+      "巨锤": "军用近战武器：2d6钝击，重型，双手；摔绊",
+      "钉头锤": "军用近战武器：1d8穿刺；削弱",
+      "长矛": "军用近战武器：1d10穿刺，重型，触及，双手；推撞",
+      "刺剑": "军用近战武器：1d8穿刺，灵巧；侵扰",
+      "弯刀": "军用近战武器：1d6挥砍，灵巧，轻型；迅击",
+      "短剑": "军用近战武器：1d6穿刺，灵巧，轻型；侵扰",
+      "三叉戟": "军用近战武器：1d8穿刺，投掷（射程 20/60），两用（1d10）；摔绊",
+      "战镐": "军用近战武器：1d8穿刺，两用（1d10）；削弱",
+      "战锤": "军用近战武器：1d8钝击，两用（1d10）；推撞",
+      "鞭": "军用近战武器：1d4挥砍，灵巧，触及；缓速",
+      "吹箭筒": "军用远程武器：1穿刺，弹药（射程 25/100），装填；侵扰",
+      "手弩": "军用远程武器：1d6穿刺，弹药（射程 30/120），轻型，装填；侵扰",
+      "重弩": "军用远程武器：1d10穿刺，弹药（射程 100/400），重型，装填，双手；推撞",
+      "长弓": "军用远程武器：1d8穿刺，弹药（射程 150/600），重型，双手；缓速",
+      "火铳": "军用远程武器：1d12穿刺，弹药（射程 40/120），装填，双手；缓速",
+      "手铳": "军用远程武器：1d10穿刺，弹药（射程 30/90），装填；侵扰"
+    };
+
+    const backpackArmorDescriptions = {
+      "布甲": "轻甲：AC11+敏捷调整值，隐匿劣势",
+      "皮甲": "轻甲：AC11+敏捷调整值",
+      "镶钉皮甲": "轻甲：AC12+敏捷调整值",
+      "兽皮甲": "中甲：AC12+敏捷调整值（最多2）",
+      "链甲衫": "中甲：AC13+敏捷调整值（最多2）",
+      "鳞甲": "中甲：AC14+敏捷调整值（最多2），隐匿劣势",
+      "胸甲": "中甲：AC14+敏捷调整值（最多2）",
+      "半身板甲": "中甲：AC15+敏捷调整值（最多2），隐匿劣势",
+      "环甲": "重甲：AC14，隐匿劣势",
+      "链甲": "重甲：AC16，需力量13，隐匿劣势",
+      "板条甲": "重甲：AC17，需力量15，隐匿劣势",
+      "板甲": "重甲：AC18，需力量15，隐匿劣势",
+      "盾牌": "盾牌：AC+2"
+    };
+
     const toolData = {
       "炼金工具": { ability: "智力", weight: "8磅", price: "50GP", operation: "辨析一种物质（DC15），或生起一场火（DC15）", craft: "强酸、炽火胶、材料包、燃油、纸张、香水" },
       "酿酒工具": { ability: "智力", weight: "9磅", price: "20GP", operation: "检测饮品是否下毒（DC15），或辨识酒精（DC10）", craft: "抗毒剂" },
@@ -7254,6 +7311,7 @@ ${buildIframeZoomActions()}
 
     function createSpellbookRecord(title) {
       return {
+        prepared: "prepared",
         level: "",
         name: normalizeSpellbookText(title).trim(),
         school: "",
@@ -12444,7 +12502,10 @@ ${buildIframeZoomActions()}
         return;
       }
 
-      const descriptionText = adventuringGearDescriptions[select.value] || "";
+      const descriptionText = adventuringGearDescriptions[select.value] ||
+        backpackWeaponDescriptions[select.value] ||
+        backpackArmorDescriptions[select.value] ||
+        "";
       description.value = descriptionText;
       weight.value = data.weight;
       price.value = data.price;
