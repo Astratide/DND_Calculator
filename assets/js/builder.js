@@ -7910,32 +7910,51 @@ ${buildIframeZoomActions()}
     }
 
     async function fetchSpellSearchJson(url) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 15000);
-      try {
-        const response = await fetch(url, { signal: controller.signal });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-      } finally {
-        clearTimeout(timer);
+      let lastError = null;
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 12000);
+        try {
+          const response = await fetch(url, { signal: controller.signal });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return await response.json();
+        } catch (error) {
+          lastError = error;
+          await new Promise((resolve) => setTimeout(resolve, 300));
+        } finally {
+          clearTimeout(timer);
+        }
       }
+      throw lastError || new Error("搜索请求失败");
     }
 
     async function fetchSpellSection(group) {
       const cacheKey = `${group.name}\u0000${group.english}`;
       if (spellSearchDetailCache.has(cacheKey)) return spellSearchDetailCache.get(cacheKey);
-      const searchUrl = `${SPELL_SEARCH_API_BASE}/api/search?keyword=${encodeURIComponent(group.name)}&titleOnly=false&page=1&pageSize=50`;
-      const data = await fetchSpellSearchJson(searchUrl);
-      const results = Array.isArray(data?.results) ? data.results : [];
-      const ordered = [
-        ...results.filter((item) => String(item.path || "").includes("法术详述")),
-        ...results.filter((item) => !String(item.path || "").includes("法术详述"))
-      ];
-      for (const item of ordered) {
-        const section = extractSpellSection(item.content, group);
-        if (section) {
-          spellSearchDetailCache.set(cacheKey, section);
-          return section;
+      const queryVariants = [];
+      if (group.english) {
+        queryVariants.push(`${group.name}｜${group.english}`);
+        queryVariants.push(`${group.name}|${group.english}`);
+      }
+      queryVariants.push(group.name);
+      for (const query of queryVariants) {
+        try {
+          const searchUrl = `${SPELL_SEARCH_API_BASE}/api/search?keyword=${encodeURIComponent(query)}&titleOnly=false&page=1&pageSize=50`;
+          const data = await fetchSpellSearchJson(searchUrl);
+          const results = Array.isArray(data?.results) ? data.results : [];
+          const ordered = [
+            ...results.filter((item) => String(item.path || "").includes("法术详述")),
+            ...results.filter((item) => !String(item.path || "").includes("法术详述"))
+          ];
+          for (const item of ordered) {
+            const section = extractSpellSection(item.content, group);
+            if (section) {
+              spellSearchDetailCache.set(cacheKey, section);
+              return section;
+            }
+          }
+        } catch (error) {
+          // 当前关键词变体失败时继续尝试下一个变体。
         }
       }
       throw new Error("未找到法术详情");
