@@ -6941,3 +6941,71 @@ html[data-theme="dark"] .panel .spellbook-search-empty,
 html[data-theme="dark"] .panel .spellbook-search-status {
   color: #999 !important;
 }
+
+/* 购点法初始值步进器 */
+.pointbuy-stepper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 27px;
+  user-select: none;
+}
+
+.pointbuy-stepper-button {
+  flex: 0 0 24px;
+  width: 24px;
+  padding: 0;
+  color: #111;
+  background: transparent;
+  border: 0;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.92rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pointbuy-stepper-button:hover:not(:disabled) {
+  color: #800000;
+  background: #f1e7e7;
+}
+
+.pointbuy-stepper-button:focus-visible {
+  outline: 0.5px solid #800000;
+  outline-offset: -1px;
+}
+
+.pointbuy-stepper-button:disabled {
+  color: #bbb;
+  cursor: default;
+}
+
+.pointbuy-stepper-value {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 0.82rem;
+  font-weight: bold;
+}
+
+html[data-theme="dark"] .panel .pointbuy-stepper-button {
+  color: #eee !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+html[data-theme="dark"] .panel .pointbuy-stepper-button:hover:not(:disabled) {
+  color: #efb0b0 !important;
+  background: #3a3030 !important;
+}
+
+html[data-theme="dark"] .panel .pointbuy-stepper-button:disabled {
+  color: #666 !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .panel .pointbuy-stepper-value {
+  color: #eee !important;
+}

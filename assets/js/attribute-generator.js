@@ -212,22 +212,46 @@
       gapBefore.className = "attribute-gap-cell";
 
       const initialCell = document.createElement("td");
-      const select = document.createElement("select");
-      select.className = "attribute-score-select";
-      select.setAttribute("aria-label", `${ability.name}初始数值`);
-      for (const value of values) {
-        const option = document.createElement("option");
-        option.value = String(value);
-        option.textContent = String(value);
-        select.append(option);
-      }
-      select.value = String(abilityScores[ability.key]);
-      select.addEventListener("change", () => {
-        abilityScores[ability.key] = Number(select.value);
+      const stepper = document.createElement("div");
+      stepper.className = "pointbuy-stepper";
+
+      const decrease = document.createElement("button");
+      decrease.type = "button";
+      decrease.className = "pointbuy-stepper-button";
+      decrease.textContent = "−";
+      decrease.setAttribute("aria-label", `${ability.name}初始值减少`);
+      const valueLabel = document.createElement("span");
+      valueLabel.className = "pointbuy-stepper-value";
+      valueLabel.setAttribute("aria-live", "polite");
+      const increase = document.createElement("button");
+      increase.type = "button";
+      increase.className = "pointbuy-stepper-button";
+      increase.textContent = "+";
+      increase.setAttribute("aria-label", `${ability.name}初始值增加`);
+
+      const minValue = values[0];
+      const maxValue = values[values.length - 1];
+      const syncStepper = () => {
+        valueLabel.textContent = String(abilityScores[ability.key]);
+        decrease.disabled = abilityScores[ability.key] <= minValue;
+        increase.disabled = abilityScores[ability.key] >= maxValue;
+      };
+      const stepScore = (direction) => {
+        const currentIndex = values.indexOf(abilityScores[ability.key]);
+        if (currentIndex < 0) return;
+        const nextIndex = Math.max(0, Math.min(values.length - 1, currentIndex + direction));
+        if (nextIndex === currentIndex) return;
+        abilityScores[ability.key] = values[nextIndex];
+        syncStepper();
         updatePointBuy();
         publishInitialScores("pointbuy");
-      });
-      initialCell.append(select);
+      };
+      decrease.addEventListener("click", () => stepScore(-1));
+      increase.addEventListener("click", () => stepScore(1));
+
+      stepper.append(decrease, valueLabel, increase);
+      initialCell.append(stepper);
+      syncStepper();
 
       const backgroundCell = document.createElement("td");
       const backgroundWrap = document.createElement("div");

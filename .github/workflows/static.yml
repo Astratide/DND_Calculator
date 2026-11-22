@@ -36,8 +36,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: '.'          # 如果入口 index.html 不在根目录，改成 ./dist 等
+          name: github-pages # 显式指定，避免名称不匹配
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
