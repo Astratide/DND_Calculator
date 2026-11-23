@@ -2660,53 +2660,53 @@ ${data.description}`;
 你选择的一项属性提升2，或者你选择的两项属性各提升1。你无法依靠本专长令某个属性值超出20。
 复选 Repeatable。你可多次选择本专长。`,
       "新晋龙巫教徒(FR)": `新晋龙巫教徒 Cult of the Dragon Initiate
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。
 龙之舌Dragon's Tongue。你懂得龙语。若你选取此专长时已懂得龙语，你自《玩家手册》或本书第二章的语言表中选择一门语言习得以替代龙语。 
 龙之威Dragon's Terror。你能够以魔法动作将恐惧灌输给一名位于你30尺内的你可见的生物。目标必须成功通过一次感知豁免（DC等于8+你的感知调整值+你的熟练加值），否则陷入恐慌状态，持续至你的下个回合结束。若目标的此豁免成功或当其身上的此效应结束时，目标在24小时内免疫此效应。 
 饮惧为励Inspire by Fear。当你令一名生物陷入恐慌状态且恐惧源为你时，若你没有英雄激励，你可以获得之。此增益一经使用，直至你完成短休或长休都无法再次使用。`,
       "翠绿闲庭新羽(FR)": `翠绿闲庭新羽 Emerald Enclave Fledgling 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。 
 动物交谈Speak with Animals。你始终准备着法术动物交谈Speak with Animals，且能以你拥有的任意法术位施展该法术。你施展该法术的施法属性是智力、感知或魅力（在你选取此专长时选择）。当你将该法术作为仪式施展时，其持续时间为8小时。 
 双人轮打Tag Team。当你执行协助动作时，作为此动作的一部分，你能够与一名位于你5尺内的自愿盟友交换位置。此次移动不会引发借机攻击。若该盟友陷入失能状态，你无法使用此增益。`, 
       "竖琴手特工(FR)": `竖琴手特工 Harper Agent 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。 
 盗贼黑话Thieves' Cant。你懂得盗贼黑话。 
 乐器训练Instrument Training。你获得一项你选择乐器的熟练。 
 分神旋律Distracting Melody。当你执行协助动作辅助盟友的攻击检定时，你可以分散位于你30尺内而非5尺内敌人的注意力，只要该敌人能看见或听见你。`,
       "领主联盟特工(FR)": `领主联盟特工 Lords’ Alliance Agent 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。 
 激励打击Inspiring Strike。每回合一次，当你对生物造成重击时，你能够选择一名盟友，其需位于你30尺内，能看见或听见你且不具有英雄激励。该盟友获得英雄激励。 
 重获荣誉Reassert Honor。当一名你可见的敌人对你5尺内的盟友造成伤害时，你的下个回合结束前，你对该敌人的下次攻击检定具有优势。`,
       "紫龙新兵(FR)": `紫龙新兵 Purple Dragon Rook 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。 
 待人接物Entreat。你获得以下技能之一的熟练：洞悉、表演或游说。 
 振军战吼Rallying Cry。当你投掷先攻时，若你未陷入失能状态，你能够选择数量等于你的熟练加值的你可见且位于你30尺内的生物。这些生物获得英雄激励。 
 此增益一经使用，直至完成长休你都无法再次使用。`,
       "咒火火花(FR)": `咒火火花 Spellfire Spark 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。 
 魔法吸收Magic Absorption。每回合一次，当你受到来自法术或魔法效应的伤害时，你令你受到的总伤害减少1d4。你无法在陷入失能状态期间使用该增益。 
 咒火之焰Spellfire Flame。你习得戏法圣火术Sacred Flame 。该法术的施法属性是智力、感知或魅力（当你选取此专长时选择）。你也能够以附赠动作施展该戏法，次数等于你的熟练加值，当你完成长休时重获所有已消耗的使用次数。`,
       "新锻臂铠(FR)": `新锻臂铠 Tyro of the Gauntlet 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。 
 比肩而立Stand as One。当一名位于你5尺内的盟友将受到推离或拉近其的效应时，你能够以反应防止该盟友被推离或拉近。若盟友陷入失能状态，其无法获得此增益。 
 警惕Vigilant。当你执行预备动作时，在你的下个回合开始前对你进行的下次攻击检定具有劣势。`, 
 
       "散塔林会暴徒(FR)": `散塔林会暴徒 Zhentarim Ruffian 
-出处：《被遗忘的国度：费伦英雄》
+出处：《被遗忘国度：费伦英雄》
 起源专长 
 你获得以下增益。
 见缝插针Exploit Opening。当你为借机攻击进行伤害掷骰时，你能够投掷两次伤害骰并对目标使用其中一个结果。
@@ -4945,12 +4945,12 @@ ${data.description}`;
       "起源专长": {
         official: [
           { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/起源专长.htm" },
-          { label: "费伦英雄", source: "被遗忘的国度：费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/起源专长.htm" },
+          { label: "费伦英雄", source: "被遗忘国度：费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/费伦英雄/第一章/专长/起源专长.htm" },
           { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/起源专长.htm" },
-          { label: "阿斯代伦", source: "阿斯代伦的饥渴之书", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/起源专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦的饥渴之书", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/阿斯代伦/起源专长.htm" },
           { label: "鸦阁书", source: "鸦阁魔域：魔障深藏", url: "https://5echm.kagangtuya.top/topics/鸦阁魔域：魔障深藏/第一章/起源专长.htm" },
           { label: "鸦阁黑暗赠礼", source: "鸦阁魔域：魔障深藏", url: "https://5echm.kagangtuya.top/topics/鸦阁魔域：魔障深藏/第一章/黑暗赠礼.htm" },
-          { label: "洛温初光", source: "洛温：初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
+          { label: "洛温初光", source: "洛温：初光", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/洛温初光/专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/龙纹专长.htm" },
           { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/起源专长.htm" },
           { label: "外域专长(旧)", source: "印记城与外域", url: "https://5echm.kagangtuya.top/topics/印记城与外域/第一章/专长.htm" }
@@ -4967,10 +4967,10 @@ ${data.description}`;
       "通用专长": {
         official: [
           { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/通用专长.htm" },
-          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/通用专长.htm" },
+          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/费伦英雄/第一章/专长/通用专长.htm" },
           { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/通用专长.htm" },
-          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/通用专长.htm" },
-          { label: "洛温初光", source: "洛温初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/阿斯代伦/通用专长.htm" },
+          { label: "洛温初光", source: "洛温初光", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/洛温初光/专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/通用专长.htm" },
           { label: "种族专长(旧)", source: "珊娜萨的万事指南", url: "https://5echm.kagangtuya.top/topics/珊娜萨的万事指南/角色选项/种族专长.html" },
           { label: "塔莎专长(旧)", source: "塔莎的万事坩埚", url: "https://5echm.kagangtuya.top/topics/塔莎的万事坩埚/玩家选项/专长.html" },
@@ -4995,9 +4995,9 @@ ${data.description}`;
       "传奇恩惠专长": {
         official: [
           { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/传奇恩惠专长.htm" },
-          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/传奇恩惠.htm" },
+          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/费伦英雄/第一章/专长/传奇恩惠.htm" },
           { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/传奇恩惠专长.htm" },
-          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/传奇恩惠专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/阿斯代伦/传奇恩惠专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/传奇恩惠.htm" },
           { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/传奇恩惠.htm" }
         ],
@@ -5388,7 +5388,7 @@ ${buildIframeZoomActions()}
       FTD: "费资本的巨龙宝库",
       BPGG: "巨人之荣耀",
       DSDQ: "龙枪：龙后之影",
-      FR: "被遗忘的国度：费伦英雄",
+      FR: "被遗忘国度：费伦英雄",
       RHW: "鸦阁魔域：魔障深藏",
       AU: "启封奥秘",
       DMG14: "城主指南"
@@ -5500,7 +5500,7 @@ ${buildIframeZoomActions()}
         return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}龙枪：龙后之影/创立角色/${name}.htm`);
       }
       if (source === "FR") {
-        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}被遗忘的国度/费伦英雄/第一章/子职/${name}.htm`);
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}被遗忘国度/费伦英雄/第一章/子职/${name}.htm`);
       }
       if (source === "RHW") {
         const file = className === "游侠" && subclassName === "幽邃戌卫"
@@ -10599,7 +10599,28 @@ ${buildIframeZoomActions()}
 
       setCombatTotal(combatSpellDc, "dc", autoDc);
       setCombatTotal(combatSpellAttack, "attack", autoAttack);
+      updateSpellcastingSummary();
       alignPlusIndicators();
+    }
+
+    function updateSpellcastingSummary() {
+      const abilityOutput = document.getElementById("spellcasting-summary-ability");
+      const dcOutput = document.getElementById("spellcasting-summary-dc");
+      const attackOutput = document.getElementById("spellcasting-summary-attack");
+      if (!abilityOutput || !dcOutput || !attackOutput) return;
+
+      const selected = combatSpellAbility.options[combatSpellAbility.selectedIndex];
+      const abilityText = combatSpellAbility.value
+        ? (selected?.textContent || "—").trim()
+        : "—";
+      const dcText = combatSpellDc.value.trim() || "—";
+      const attackText = combatSpellAttack.value.trim() || "—";
+      abilityOutput.textContent = abilityText;
+      dcOutput.textContent = dcText === "—" ? "—" : `DC ${dcText}`;
+      attackOutput.textContent = attackText === "—" ? "—" : `D20 + ${attackText}`;
+      abilityOutput.classList.toggle("is-empty", abilityText === "—");
+      dcOutput.classList.toggle("is-empty", dcText === "—");
+      attackOutput.classList.toggle("is-empty", attackText === "—");
     }
 
     function updateDerivedStats() {
@@ -11196,6 +11217,10 @@ ${buildIframeZoomActions()}
 
     function scheduleReferenceTooltipHide() {
       if (referenceTooltipSticky) return;
+      if (referenceTooltipTimer !== null) {
+        window.clearTimeout(referenceTooltipTimer);
+        referenceTooltipTimer = null;
+      }
       if (referenceTooltipHideTimer !== null) {
         window.clearTimeout(referenceTooltipHideTimer);
       }

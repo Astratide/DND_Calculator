@@ -1071,7 +1071,10 @@
         </div>
 
                         <div class="equipment-section">
-          <h3 class="builder-section-title">装备 Equipment</h3>
+          <div class="equipment-section-head">
+            <h3 class="builder-section-title">装备 Equipment</h3>
+            <button class="equipment-reference reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="万器大全 Equipment" data-lookup-source="5e不全书" data-lookup-url="https://5echm.kagangtuya.top/topics/速查/5E万器大全.htm" aria-label="查看万器大全" title="查看万器大全">万器大全</button>
+          </div>
 
           <div class="equipment-scroll">
             <table class="equipment-table equipment-armor-table" aria-label="护甲与盾牌">
@@ -1248,6 +1251,22 @@
 
       <div class="panel spell-panel">
         <h2 class="panel-title">法术 Spellcasting</h2>
+        <table class="spellcasting-quickstats" aria-label="施法属性摘要">
+          <thead>
+            <tr>
+              <th scope="col">施法属性</th>
+              <th scope="col">法术豁免DC</th>
+              <th scope="col">法术攻击加值</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="spellcasting-stat-value is-ability"><output id="spellcasting-summary-ability" class="is-empty">—</output></td>
+              <td class="spellcasting-stat-value"><output id="spellcasting-summary-dc" class="is-empty">—</output></td>
+              <td class="spellcasting-stat-value"><output id="spellcasting-summary-attack" class="is-empty">—</output></td>
+            </tr>
+          </tbody>
+        </table>
         <div class="spell-summary">
           <div class="spell-summary-item spell-caster-item">
             <span id="spell-caster-label">施法者等级</span>
@@ -1332,7 +1351,10 @@
       </div>
 
       <div class="panel backpack-panel">
-        <h2 class="panel-title">背包 Backpack</h2>
+        <div class="backpack-panel-head">
+          <h2 class="panel-title">背包 Backpack</h2>
+          <button class="equipment-reference reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="class-lookup" data-lookup-title="万器大全 Equipment" data-lookup-source="5e不全书" data-lookup-url="https://5echm.kagangtuya.top/topics/速查/5E万器大全.htm" aria-label="查看万器大全" title="查看万器大全">万器大全</button>
+        </div>
         <div class="backpack-toolbar">
           <button id="backpack-add-gear" class="backpack-add" type="button">+ 冒险装备</button>
           <button id="backpack-add-tool" class="backpack-add" type="button">+ 工具</button>
