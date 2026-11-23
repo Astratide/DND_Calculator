@@ -7232,3 +7232,139 @@ html[data-theme="dark"] .panel table.spellcasting-quickstats tbody td.spellcasti
 html[data-theme="dark"] .panel table.spellcasting-quickstats tbody td.spellcasting-stat-value.is-ability output {
   color: #111 !important;
 }
+
+/* 统一黑夜模式下的 section 标题与标题帮助按钮 */
+html[data-theme="dark"] .panel .feat-section-title .faith-label {
+  color: #f0a0a0 !important;
+}
+
+html[data-theme="dark"] .panel .section-title-help {
+  color: #f0a0a0 !important;
+  background: transparent !important;
+  border-color: #f0a0a0 !important;
+}
+
+/* 修正值/盾牌 AC 的灰色加号改为正常流布局，避免缩放下错位 */
+.inline-plus-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+}
+
+.inline-plus-wrap > .correction-plus,
+.inline-plus-wrap > .skill-correction-plus,
+.inline-plus-wrap > .equipment-shield-plus,
+.inline-plus-wrap > .equipment-bonus-plus {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  flex: 0 0 auto;
+  margin: 0;
+  transform: none !important;
+}
+
+.inline-plus-wrap > input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center !important;
+}
+
+/* 内容缩放后的有效宽度响应式布局 */
+body.content-compact .skill-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+body.content-narrow .skill-grid {
+  grid-template-columns: 1fr;
+}
+
+body.content-compact .equipment-armor-table {
+  min-width: 760px;
+}
+
+body.content-compact .equipment-weapon-table {
+  min-width: 900px;
+}
+
+body.content-compact .magic-equipment-table {
+  min-width: 800px;
+}
+
+/* 六维属性背景/成长加号改为正常流布局，随内容缩放保持稳定 */
+.ability-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+}
+
+.ability-input-wrap > .ability-plus {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  flex: 0 0 auto;
+  margin: 0;
+  transform: none !important;
+}
+
+.ability-input-wrap > input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  padding-left: 0 !important;
+  text-align: center;
+}
+
+/* 加号在左边框与数值之间的空隙中居中 */
+.ability-input-wrap {
+  display: block;
+  position: relative;
+}
+
+.ability-input-wrap > .ability-plus {
+  position: absolute !important;
+  top: 50% !important;
+  left: 4px;
+  flex: none;
+  margin: 0;
+  transform: translateY(-50%) !important;
+}
+
+.ability-input-wrap > input {
+  width: 100%;
+  min-width: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+.inline-plus-wrap {
+  display: block;
+  position: relative;
+}
+
+.inline-plus-wrap > .correction-plus,
+.inline-plus-wrap > .skill-correction-plus,
+.inline-plus-wrap > .equipment-shield-plus,
+.inline-plus-wrap > .equipment-bonus-plus {
+  position: absolute !important;
+  top: 50% !important;
+  left: 3px;
+  flex: none;
+  margin: 0;
+  transform: translateY(-50%) !important;
+}
+
+.inline-plus-wrap > input {
+  width: 100%;
+  min-width: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center !important;
+}

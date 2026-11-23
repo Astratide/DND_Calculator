@@ -44,6 +44,7 @@
     const saveProfOutput = document.getElementById("builder-save-prof");
     const abilityTooltip = document.getElementById("ability-tooltip");
     const referenceTooltip = document.getElementById("reference-tooltip");
+    if (referenceTooltip?.closest("main")) document.body.append(referenceTooltip);
     const combatHp = document.getElementById("combat-hp");
     const combatHpGrowth = document.getElementById("combat-hp-growth");
     const combatHpGrowthPlus = document.getElementById("combat-hp-growth-plus");
@@ -6258,6 +6259,49 @@ ${buildIframeZoomActions()}
       }
     }
 
+    function wrapInlinePlusFields() {
+      const cells = document.querySelectorAll(
+        ".combat-correction-cell, .equipment-shield-ac-cell, .equipment-bonus-cell"
+      );
+      for (const cell of cells) {
+        if (cell.querySelector(".inline-plus-wrap")) continue;
+        const plus = cell.querySelector(
+          ".correction-plus, .equipment-shield-plus, .equipment-bonus-plus"
+        );
+        const input = cell.querySelector("input");
+        if (!plus || !input) continue;
+        const wrap = document.createElement("span");
+        wrap.className = "inline-plus-wrap";
+        cell.insertBefore(wrap, plus);
+        wrap.append(plus, input);
+      }
+    }
+
+    function syncContentResponsiveLayout() {
+      const main = document.querySelector("main.page-width");
+      if (!main) return;
+      const width = main.clientWidth;
+      document.body.classList.toggle("content-compact", width < 760);
+      document.body.classList.toggle("content-narrow", width < 560);
+      requestAnimationFrame(() => alignPlusIndicators());
+    }
+
+    function setupContentResponsiveLayout() {
+      const main = document.querySelector("main.page-width");
+      syncContentResponsiveLayout();
+      window.addEventListener("resize", syncContentResponsiveLayout);
+      document.addEventListener("dnd:content-font-size-changed", syncContentResponsiveLayout);
+      if (typeof ResizeObserver === "function" && main) {
+        new ResizeObserver(syncContentResponsiveLayout).observe(main);
+      }
+      if (main) {
+        main.addEventListener("input", () => requestAnimationFrame(alignPlusIndicators));
+        main.addEventListener("change", () => requestAnimationFrame(alignPlusIndicators));
+      }
+      requestAnimationFrame(syncContentResponsiveLayout);
+      requestAnimationFrame(alignPlusIndicators);
+    }
+
     function addEquipmentPlusButton(table, label, handler) {
       const scroll = table.closest(".equipment-scroll");
       if (!scroll || scroll.querySelector(".equipment-table-actions")) return;
@@ -6326,13 +6370,27 @@ ${buildIframeZoomActions()}
       const style = getComputedStyle(input);
       context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
 
-      const textWidth = context.measureText(input.value.trim()).width;
       const inputRect = input.getBoundingClientRect();
+      const visualScale = input.offsetWidth ? inputRect.width / input.offsetWidth : 1;
+      const textWidth = context.measureText(input.value.trim()).width * visualScale;
       const parentRect = plus.parentElement.getBoundingClientRect();
       const plusWidth = plus.getBoundingClientRect().width || 6;
       const textCenter = inputRect.left + inputRect.width / 2;
-      const left = textCenter - textWidth / 2 - plusWidth - 3 - parentRect.left;
-      plus.style.left = `${Math.max(1, left)}px`;
+      const textStart = textCenter - textWidth / 2;
+      const cell = input.closest("td") || plus.parentElement;
+      const cellStyle = getComputedStyle(cell);
+      const cellRect = cell.getBoundingClientRect();
+      const borderLeft = (Number.parseFloat(cellStyle.borderLeftWidth) || 0);
+      const leftEdge = cellRect.left + borderLeft;
+      const gap = Math.max(0, textStart - leftEdge);
+      const desiredLeft = leftEdge + gap / 2 - plusWidth / 2 - parentRect.left;
+      const maximumLeft = textStart - plusWidth - 2 - parentRect.left;
+      const visualLeft = Math.max(1, Math.min(desiredLeft, maximumLeft));
+      plus.style.setProperty(
+        "left",
+        `${visualLeft / (visualScale || 1)}px`,
+        "important"
+      );
     }
 
     function alignPlusIndicators() {
@@ -12176,6 +12234,8 @@ ${buildIframeZoomActions()}
       row.querySelector(".magic-equipment-name")?.focus();
     });
 
+    wrapInlinePlusFields();
+    setupContentResponsiveLayout();
     populateArmorNames();
     updateArmorDefaults();
 

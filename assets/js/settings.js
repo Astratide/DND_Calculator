@@ -65,6 +65,7 @@
     root.style.setProperty("--content-zoom", (value / 16).toFixed(3));
     fontRange.value = String(value);
     fontOutput.textContent = `${value}px`;
+    document.dispatchEvent(new CustomEvent("dnd:content-font-size-changed"));
     if (persist) {
       try {
         localStorage.setItem(FONT_KEY, String(value));
