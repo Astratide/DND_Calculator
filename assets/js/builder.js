@@ -4946,12 +4946,12 @@ ${data.description}`;
       "起源专长": {
         official: [
           { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/起源专长.htm" },
-          { label: "费伦英雄", source: "被遗忘国度：费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/费伦英雄/第一章/专长/起源专长.htm" },
+          { label: "费伦英雄", source: "被遗忘的国度：费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/起源专长.htm" },
           { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/起源专长.htm" },
-          { label: "阿斯代伦", source: "阿斯代伦的饥渴之书", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/阿斯代伦/起源专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦的饥渴之书", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/起源专长.htm" },
           { label: "鸦阁书", source: "鸦阁魔域：魔障深藏", url: "https://5echm.kagangtuya.top/topics/鸦阁魔域：魔障深藏/第一章/起源专长.htm" },
           { label: "鸦阁黑暗赠礼", source: "鸦阁魔域：魔障深藏", url: "https://5echm.kagangtuya.top/topics/鸦阁魔域：魔障深藏/第一章/黑暗赠礼.htm" },
-          { label: "洛温初光", source: "洛温：初光", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/洛温初光/专长.htm" },
+          { label: "洛温初光", source: "洛温：初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/龙纹专长.htm" },
           { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/起源专长.htm" },
           { label: "外域专长(旧)", source: "印记城与外域", url: "https://5echm.kagangtuya.top/topics/印记城与外域/第一章/专长.htm" }
@@ -4968,10 +4968,10 @@ ${data.description}`;
       "通用专长": {
         official: [
           { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/通用专长.htm" },
-          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/费伦英雄/第一章/专长/通用专长.htm" },
+          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/通用专长.htm" },
           { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/通用专长.htm" },
-          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/阿斯代伦/通用专长.htm" },
-          { label: "洛温初光", source: "洛温初光", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/洛温初光/专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/通用专长.htm" },
+          { label: "洛温初光", source: "洛温初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/通用专长.htm" },
           { label: "种族专长(旧)", source: "珊娜萨的万事指南", url: "https://5echm.kagangtuya.top/topics/珊娜萨的万事指南/角色选项/种族专长.html" },
           { label: "塔莎专长(旧)", source: "塔莎的万事坩埚", url: "https://5echm.kagangtuya.top/topics/塔莎的万事坩埚/玩家选项/专长.html" },
@@ -4996,9 +4996,9 @@ ${data.description}`;
       "传奇恩惠专长": {
         official: [
           { label: "核心书", source: "玩家手册", url: "https://5echm.kagangtuya.top/topics/玩家手册2024/专长/传奇恩惠专长.htm" },
-          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/费伦英雄/第一章/专长/传奇恩惠.htm" },
+          { label: "费伦英雄", source: "费伦英雄", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/费伦英雄/第一章/专长/传奇恩惠.htm" },
           { label: "启封奥秘", source: "启封奥秘", url: "https://5echm.kagangtuya.top/topics/启封奥秘/第一章/专长/传奇恩惠专长.htm" },
-          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘国度/阿斯代伦/传奇恩惠专长.htm" },
+          { label: "阿斯代伦", source: "阿斯代伦", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/阿斯代伦/传奇恩惠专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/传奇恩惠.htm" },
           { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/传奇恩惠.htm" }
         ],
@@ -5389,7 +5389,7 @@ ${buildIframeZoomActions()}
       FTD: "费资本的巨龙宝库",
       BPGG: "巨人之荣耀",
       DSDQ: "龙枪：龙后之影",
-      FR: "被遗忘国度：费伦英雄",
+      FR: "被遗忘的国度：费伦英雄",
       RHW: "鸦阁魔域：魔障深藏",
       AU: "启封奥秘",
       DMG14: "城主指南"
@@ -5501,7 +5501,7 @@ ${buildIframeZoomActions()}
         return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}龙枪：龙后之影/创立角色/${name}.htm`);
       }
       if (source === "FR") {
-        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}被遗忘国度/费伦英雄/第一章/子职/${name}.htm`);
+        return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}被遗忘的国度/费伦英雄/第一章/子职/${name}.htm`);
       }
       if (source === "RHW") {
         const file = className === "游侠" && subclassName === "幽邃戌卫"
