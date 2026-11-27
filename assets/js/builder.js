@@ -31,6 +31,8 @@
     const builderPanel = document.getElementById("panel-builder");
     const raceTraitsBox = document.getElementById("builder-race-traits");
     const backgroundSelect = document.getElementById("builder-background");
+    const backgroundIdentityField = document.getElementById("builder-background-identity")?.closest(".builder-identity-field") || null;
+    const backgroundIdentitySelect = document.getElementById("builder-background-identity");
     const backgroundTraitsBox = document.getElementById("builder-background-traits");
     const customBackgroundEditor = document.getElementById("builder-custom-background-editor");
     const summary = document.getElementById("builder-summary");
@@ -215,7 +217,15 @@
       "游侠", "游荡者", "术士", "魔契师", "法师", "奇械师"
     ];
     const thirdPartyClassNames = ["铳士", "怪物猎人", "拳斗士", "血族"];
+    const rohClassNames = [];
     const classNames = [...coreClassNames, ...thirdPartyClassNames];
+    const rohRaceValues = new Set();
+    const rohBackgroundNames = new Set();
+    const rohRaceCache = new Map();
+    const rohClassTraitCache = new Map();
+    let rohExtensionActive = false;
+    let rohExtensionData = null;
+    let rohClassTraitRequest = 0;
     let customCoreTraits = {
       ability: "",
       skills: "",
@@ -627,7 +637,7 @@
       "洁英": { darkvision: "120尺", size: "小型", speed: "30尺", resistance: "", immunity: "", advantage: "恐慌" },
       "洛温幻身灵": { darkvision: "120尺", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
       "霜身": { darkvision: "60尺", size: "中型或小型", speed: "30尺", resistance: "寒冷", immunity: "", advantage: "" },
-      "幻身灵": { darkvision: "—", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
+      "幻身灵": { darkvision: "—", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "魅力检定（变形期间）" },
       "离梦人": { darkvision: "—", size: "中型", speed: "30尺", resistance: "心灵", immunity: "", advantage: "感知、魅力豁免" },
       "科拉瓦": { darkvision: "60尺", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "魅惑" },
       "化兽者": { darkvision: "60尺", size: "中型或小型", speed: "30尺", resistance: "", immunity: "", advantage: "" },
@@ -925,7 +935,7 @@
 <b>速度Speed。</b>你的步行速度为30尺。<br>
 <b>黑暗视觉Darkvision。</b>在微光光照下，你身边60尺内可以视为等同于明亮光照。而在黑暗中，该范围内可视为等同于微光光照。你无法在黑暗中分辨颜色，只能看到有灰度的黑白画面。<br>
 <b>土行Earth Walk。</b>在使用步行速度在地面或地板上移动的情况下，你在穿越困难地形时可以不消耗额外的移动力。<br>
-<b>混入大地Merge with Stone。</b>你知晓戏法<b class="spell">剑刃防护Blade Ward</b>。你可以正常地施展该戏法，也可以使用附赠动作施展该戏法等同于你熟练加值次；当你完成一次长休时，你重新获得所有已消耗的附赠施展次数。<br>从5级开始，你可以使用该特质施展<b class="spell">行动无踪Pass without Trace</b>，且无需材料成分。使用了该特质施展了该法术后，直到你完成长休前都不能再次使用该特质施展该法术。你也能用你拥有的二环或更高环阶的法术位来施展这些法术。<br>当你使用该特质施展这些法术时，智力，感知或魅力是你的施法属性（当你选择该种族时进行决定）。<br><br>
+<b>混入大地Merge with Stone。</b>你知晓戏法<b class="spell">剑刃防护Blade Ward</b>。你可以正常地施展该戏法，也可以使用附赠动作施展该戏法等同于你熟练加值次；当你完成一次长休时，你重新获得所有已消耗的附赠施展次数。<br>从5级开始，你可以使用该特质施展<b class="spell">行动无踪Pass without Trace</b>，且无需材料成分。使用了该特质施展了该法术后，直到你完成长休前都不能再次使用该特质施展该法术。你也能用你拥有的二环或更高环阶的法术位来施展这些法术。<br>当你使用该特质施展这些法术时，智力，感知或魅力是你的施法属性（当你选择该种族时进行决定）。<br>
 <b>火元素裔特质 Fire Genasi Traits</b><br>作为一位火元素裔，你拥有以下角色特质：<br>
 <b>生物种类Creature Type。</b>你是类人生物。<br>
 <b>体型Size。</b>你的体型为中型或小型。在你选择该种族时选择体型。<br>
@@ -1124,8 +1134,8 @@
 <b>星界出神 Astral Trance。</b>你不需要睡眠，魔法效应亦无法使你陷入睡眠。你能花费4小时进行出神般的冥想来完成一次长休，且整个冥想过程中你都能保持清醒。<br>
 当你完成出神时，你获得一个自选技能的熟练项，与一件自选武器或自选工具的熟练项（从《玩家手册》中选择它们）。你通过抽取共享的精灵记忆及星光位面的实体经历，神秘地获得了这些熟练，这个好处会一直持续到你完成下一次长休。`,
 "自动侏儒": `
-<b class="maroon">自动侏儒特质 Autognome Traits</b><br>
-\n <br><b>生物类型 Creature Type。</b> 你是构装生物。 <br>
+<b class="maroon">自动侏儒特质 Autognome Traits</b><br><br>
+<b>生物类型 Creature Type。</b> 你是构装生物。 <br>
 <b>体型 Size。</b> 你的体型为小型。<br>
 <b>速度 Speed。</b>你的步行速度为30尺。<br>
 <b>装甲外壳 Armored Casing。</b>你的身体有着由薄金属或其他的耐用材料制成的外壳。若你未穿着护甲，你的基础护甲等级变为 13+你的敏捷调整值。 <br>
@@ -1133,9 +1143,11 @@
 <b>哨兵式休息 Sentry's  Rest。</b> 当你进行长休时，你需要花费6小时处于一种静止的、非激活的状态，以代替睡眠。这种状态下，你会表现的十分迟缓，但不会失去意识。 <br>
 <b>专业设计 Specialized Design。</b> 你获得两项自选的工具熟练，从《玩家手册》中进行选择。`,
 "诘弗人": `
-<b class="maroon">诘弗人特质 Giff Traits</b><br>
-\n\n <br>\n<b>生物类型 Creature Type。</b> 你是类人生物。 <br>\n<b>\n  体型 Size。</b> 你的体型为中型。 \n<br>\n<b>速度 Speed。</b>\n你的步行速度为30尺，你拥有与你步行速度相同的游泳速度。<br><b> 星界火花 Astral Spark。</b>
-你与星光位面的精神连接让你拥有一簇神力火花的神秘权能，并通过你的武器来引导之。当你使用简易或军用武器命中一个目标时，你能对目标额外造成等同于你熟练加值点的力场伤害。 <br>
+<b class="maroon">诘弗人特质 Giff Traits</b><br><br>
+<b>生物类型 Creature Type。</b> 你是类人生物。 <br>
+<b>体型 Size。</b> 你的体型为中型。<br>
+<b>速度 Speed。</b>你的步行速度为30尺，你拥有与你步行速度相同的游泳速度。<br>
+<b> 星界火花 Astral Spark。</b>你与星光位面的精神连接让你拥有一簇神力火花的神秘权能，并通过你的武器来引导之。当你使用简易或军用武器命中一个目标时，你能对目标额外造成等同于你熟练加值点的力场伤害。 <br>
 你能使用此特质的次数等同于你的熟练加值，但每回合中只能使用一次。当你完成一次长休后，你重获全部已消耗的使用次数。<br>
 <b>枪械精通 Firearms Mastery。</b>你和枪械有一种神秘的联系，这背后的渊源可追寻至诘弗人那钟情枪械的神祇们。因为祂们，你拥有所有枪械的熟练项，并无视任何枪械的<b>装填loading</b>属性。此外，使用枪械攻击最大射程内的敌人时，你的远程武器攻击检定不会因为超过常规射程具有劣势。 <br>
 <b>河马体格 Hippo Build。</b>你在进行基于力量的属性检定与力量豁免时具有优势。此外，当决定你的载货量和推，拉，抬的重量时，你的体型视为比当前大一级。`,
@@ -1178,7 +1190,7 @@
 在洛温，精灵们将美奉为至高信条——尽管每位精灵对美的定义都显得随心所欲。洛温的精灵借它们那早已陨落的帝国，掌管这片土地上的其他生物。<br>这些精灵将帝国的陨落归咎于外来威胁，尤其是非瑞克西亚Phyrexian的入侵（见介绍章"洛温-暗影荒原的历史"）。然而此次入侵只是帝国毁灭的丧钟，其人民的自大与对其他种族的狂妄早已为帝国衰败埋下祸患。<br>
 <b>暗影荒原的精灵 In Shadowmoor</b><br>
 暗影荒原的精灵的角又长又卷，还有着粗糙剌手的纹理。它们的尖耳朵要比洛温对立面的同族还要长。<br>
-像洛温的精灵一样，暗影荒原的精灵们守护美——尽管一位暗影荒原精灵对"美"的定义会很抽象。许多精灵相信，美会随个人所为而增辉或蒙尘；他们尤其将英雄气概与自我牺牲视为美的最高境界。 <br>寻华师是研究与探索洛温的暗影荒原精灵。它们每个人都携带着薄暮圣物匣 Reliquary of Twilight（见介绍章）。在暗影荒原，美境卫——那些为追寻美而在自己位面游历的精灵——与寻华师同为族群中最受信赖与尊崇的成员。<br><br>
+像洛温的精灵一样，暗影荒原的精灵们守护美——尽管一位暗影荒原精灵对"美"的定义会很抽象。许多精灵相信，美会随个人所为而增辉或蒙尘；他们尤其将英雄气概与自我牺牲视为美的最高境界。 <br>寻华师是研究与探索洛温的暗影荒原精灵。它们每个人都携带着薄暮圣物匣 Reliquary of Twilight（见介绍章）。在暗影荒原，美境卫——那些为追寻美而在自己位面游历的精灵——与寻华师同为族群中最受信赖与尊崇的成员。<br>
 <b>扮演精灵 Playing an Elf</b>
 <br>当你创建一名来自洛温或暗影荒原的精灵玩家角色时，使用精灵种族（见《玩家手册》）。对于该角色的精灵血系特性，从下方的精灵血系表中选择其中一个血系。 <br>
 <b>精灵血系Elves Lineages</b><br>
@@ -1886,6 +1898,7 @@
           select.appendChild(option);
         }
       };
+      if (rohClassNames.length) appendGroup("—ROH职业—", rohClassNames);
       appendGroup("—核心职业—", coreClassNames);
       appendGroup("—第三方职业—", thirdPartyClassNames);
       appendGroup("—其他—", []);
@@ -1970,11 +1983,14 @@
       placeholder.textContent = level !== null && level >= 3 ? "请选择" : "—";
       subclassField.appendChild(placeholder);
 
-      for (const [name, source = ""] of subclassEntries) {
+      for (const [name, source = "", disabled = false] of subclassEntries) {
         const option = document.createElement("option");
         option.value = name;
+        option.disabled = Boolean(disabled);
         option.dataset.baseLabel = name;
-        option.dataset.fullLabel = subclassOptionLabel(name, source);
+        option.dataset.fullLabel = disabled
+          ? `${subclassOptionLabel(name, source)}（暂不可选）`
+          : subclassOptionLabel(name, source);
         option.textContent = option.dataset.fullLabel;
         subclassField.appendChild(option);
       }
@@ -2016,8 +2032,8 @@
     }
 
     function highlightTerms(root) {
-      const test = /英雄激励|黑暗视觉|附赠动作|长休|明亮光照|临时生命值|恐慌|中毒|抗性|优势|躲藏|疾走/;
-      const split = /(英雄激励|黑暗视觉|附赠动作|长休|明亮光照|临时生命值|恐慌|中毒|抗性|优势|躲藏|疾走)/g;
+      const test = /英雄激励|黑暗视觉|附赠动作|长休|明亮光照|临时生命值|易伤|劣势|免疫|失能|目盲|耳聋|石化|昏迷|麻痹|魅惑|恐慌|中毒|抗性|优势|躲藏|疾走/;
+      const split = /(英雄激励|黑暗视觉|附赠动作|长休|明亮光照|临时生命值|易伤|劣势|免疫|失能|目盲|耳聋|石化|昏迷|麻痹|魅惑|恐慌|中毒|抗性|优势|躲藏|疾走)/g;
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
         acceptNode(node) {
           if (!node.nodeValue || !test.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
@@ -2059,8 +2075,16 @@
       return raceSelect.value === CUSTOM_VALUE;
     }
 
+    function rohRaceDisplayName(name) {
+      return rohRaceValues.has(name)
+        ? name.replace(/[（(][^）)]*[）)]/g, "").trim()
+        : name;
+    }
+
     function currentRaceName() {
-      return isCustomRace() ? (customRaceInput.value.trim() || "自定义种族") : raceSelect.value;
+      return isCustomRace()
+        ? (customRaceInput.value.trim() || "自定义种族")
+        : rohRaceDisplayName(raceSelect.value);
     }
 
     function syncRaceCustomUI() {
@@ -2392,6 +2416,30 @@
 
     function renderBackgroundTraits() {
       const value = backgroundSelect.value;
+      const identities = value && value !== "自定义背景"
+        ? (backgroundData[value]?.identities || [])
+        : [];
+      const previousIdentity = backgroundIdentitySelect?.value || "";
+
+      if (backgroundIdentitySelect) {
+        backgroundIdentitySelect.replaceChildren();
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "请选择";
+        backgroundIdentitySelect.append(placeholder);
+        for (const identity of identities) {
+          const option = document.createElement("option");
+          option.value = identity.title || "";
+          option.textContent = identity.title || "";
+          backgroundIdentitySelect.append(option);
+        }
+        if ([...backgroundIdentitySelect.options].some((option) => option.value === previousIdentity)) {
+          backgroundIdentitySelect.value = previousIdentity;
+        }
+      }
+      if (backgroundIdentityField) {
+        backgroundIdentityField.hidden = identities.length < 2;
+      }
 
       if (!value) {
         backgroundTraitsBox.hidden = true;
@@ -2414,16 +2462,36 @@
 
       const abilities = Array.isArray(data.abilities) ? data.abilities.join("、") : data.abilities;
       const skills = Array.isArray(data.skills) ? data.skills.join("、") : data.skills;
+      const selectedIdentity = backgroundIdentitySelect?.value || "";
+      const visibleIdentities = selectedIdentity
+        ? identities.filter((identity) => identity.title === selectedIdentity)
+        : identities;
 
       customBackgroundEditor.hidden = true;
       backgroundTraitsBox.hidden = false;
+      const description = String(data.description || "")
+        .replace(/阵营身份\s*[:：]/g, "<b>阵营身份：</b>")
+        .replace(/\n/g, "<br>");
+      const identityHtml = visibleIdentities.map((identity) => {
+        const body = String(identity.text || "")
+          .replace(/\n{2,}/g, "\n")
+          .trim()
+          .replace(/\n/g, "<br>");
+        return `<div class="background-identity-card">
+<div class="background-identity-title">${escapePlainText(identity.title || "")}</div>
+<div class="background-identity-body">${escapePlainText(body).replace(/&lt;br&gt;/g, "<br>")}</div>
+</div>`;
+      }).join("");
+      const reference = data.url
+        ? `<br><a href="${data.url}" target="_blank" rel="noopener">ROH背景速查</a>`
+        : "";
       backgroundTraitsBox.innerHTML = `<b class="maroon">${value} ${data.english}</b><br>
 <b>属性值：</b>${abilities}<br>
 <b>起源专长：</b>${data.feat}<br>
 <b>技能熟练：</b>${skills}<br>
 <b>工具熟练：</b>${data.tool}<br>
 <b>装备：</b>${data.equipment}<br><br>
-${data.description}`;
+${description}${identityHtml}${reference}`;
       highlightTerms(backgroundTraitsBox);
     }
 
@@ -4566,6 +4634,78 @@ ${data.description}`;
       "水袋": "水袋具有4品脱容量。如果你喝水不足，你会遭受脱水的危害（见规则详述）。"
     };
 
+    const rohAdventuringGearData = {
+      "手表": { weight: "—", price: "1GP" },
+      "指南针": { weight: "—", price: "5GP" },
+      "提神剂": { weight: "—", price: "5GP" },
+      "信号枪": { weight: "1磅", price: "5GP" },
+      "记事本": { weight: "—", price: "5GP" },
+      "文件夹": { weight: "—", price: "1SP" },
+      "面具": { weight: "—", price: "1SP" },
+      "指虎": { weight: "—", price: "1SP" },
+      "证件": { weight: "—", price: "—" },
+      "香烟": { weight: "—", price: "1GP" },
+      "打火机": { weight: "—", price: "1SP" },
+      "公文包": { weight: "0.5磅", price: "1GP" },
+      "护目镜": { weight: "—", price: "5SP" },
+      "放大镜（现代）": { weight: "—", price: "5SP" },
+      "望远镜（现代）": { weight: "0.5磅", price: "10GP" },
+      "灭火器": { weight: "2磅", price: "2GP" },
+      "降落伞": { weight: "2磅", price: "50GP" },
+      "微型监控装置": { weight: "0.5磅", price: "100GP" },
+      "夜视仪": { weight: "—", price: "50GP" },
+      "手电筒": { weight: "0.5磅", price: "2GP" },
+      "强光手电筒": { weight: "0.5磅", price: "10GP" },
+      "耳麦": { weight: "—", price: "5SP" },
+      "通讯仪": { weight: "0.5磅", price: "10GP" },
+      "移动终端": { weight: "0.5磅", price: "50GP" },
+      "笔记本终端": { weight: "3磅", price: "100GP" },
+      "便携基站": { weight: "5磅", price: "500GP" },
+      "源石电池": { weight: "—", price: "5GP" },
+      "源石探测仪": { weight: "1磅", price: "50GP" },
+      "金属探测仪": { weight: "1磅", price: "50GP" },
+      "防护面罩": { weight: "1磅", price: "10GP" },
+      "防护服": { weight: "5磅", price: "100GP" },
+      "轮椅": { weight: "40磅", price: "50GP" },
+      "微型无人机": { weight: "5磅", price: "500GP" }
+    };
+
+    const rohAdventuringGearDescriptions = {
+      "手表": "现代世设下的手表，或有时以怀表的形式出现，为角色提供了更加快捷的检查当前时间的办法。佩戴手表时，你总是知道当前的时间以及日期。运动手表还具有防水、计时、闹钟、夜光功能，价格翻倍。",
+      "指南针": "在没有受到磁场干扰时，指南针总是指向磁北的方向。如果你在地图所绘制的地点参考了一张准确的地图，同时使用了指南针，你为寻找前进方向而作的感知（求生）检定获得+5加值。",
+      "提神剂": "提神剂通常装在4盎司的小瓶里。以动作使用后的一小时里，你仅一次可以使得自己为维持专注而作的体质豁免获得+1d4加值。生物每日只能从提神剂上受益一次。",
+      "信号枪": "信号枪配备3发型号弹。你可以替换攻击动作中的一次攻击来发射信号弹：对30尺内生物迫使其进行DC15敏捷豁免，失败受到1d4火焰伤害并开始燃烧；也可点燃可燃物体，或向天空发射形成3里内可见的火团，持续10分钟。",
+      "记事本": "记事本由50页空白纸张组成，通常配有一根圆珠笔或铅笔。",
+      "文件夹": "文件夹可以存放20张纸张。大部分文件夹已经存放好了写满内容的纸张。",
+      "面具": "面具是用来遮掩身份的饰品。在参与假面舞会或进行违法犯罪活动时经常会用到。在不合适的场合穿戴面具会让你看起来更可疑。",
+      "指虎": "指虎是用来强化徒手打击的着装物，但不被视为武器。你可以附赠动作着装或卸下指虎。佩戴期间，你的徒手打击伤害提升至1d4+力量调整值。",
+      "证件": "某类证件或证书是为了证明你切实具有该身份而被制作。如果你不真的具有对应身份，你无法通过正规渠道买到证件。在合适的场合出示证件，其他类人生物更容易相信你的身份并对你转变态度。",
+      "香烟": "香烟以10个一组装在小盒子里。点燃烟后，你可以花费10分钟吸烟。在吸烟期间和完成吸烟之后的一小时内，你接下来首次为抵抗恐慌状态而作的豁免检定获得+1加值。",
+      "打火机": "你可以使用附赠动作来用它点燃任何具有燃料的东西，例如蜡烛、油灯、提灯或火把。打火机也经常被用来点燃香烟。",
+      "公文包": "一个公文包最多能装入10磅重且不超过5寸宽的东西。公文包也可以作为卷轴匣或地图匣使用。在合适的场合拿着公文包会让你在其他类人生物眼中看起来更无害。",
+      "护目镜": "墨镜、雪镜、护目镜等佩戴在眼睛前的装备可以改变透过的光强和光谱。穿戴护目镜时，你为对抗任何会通过强光造成目盲状态的豁免检定具有+5加值。",
+      "放大镜（现代）": "现代世设下的放大镜相比通常5E环境更便宜（价格为原来的百分之一）。使用放大镜时，你为鉴定或检查精密物品所作的任何属性检定具有优势。用放大镜点火需要强光、火绒和约5分钟。",
+      "望远镜（现代）": "现代世设下的望远镜相比通常5E环境更便宜（价格为原来的百分之一）。通过望远镜看到的物件要比原先尺寸大上2-10倍。在天气好时，可以清晰观测到约百米处墙上的昆虫、几百米外人的面貌、数十公里外行驶的车辆。",
+      "灭火器": "灭火器有10发充能。你可以用一个操作动作，并消耗1发充能来扑灭一块5尺立方区域内的火势。",
+      "降落伞": "如果你在穿戴这个装置时坠落，你可以使用一个反应来展开降落伞，使你的坠落速度变为每轮60尺，并且不会受到坠落伤害。当你离地面10尺远时，进行一次DC15的敏捷（特技）检定，若失败则降落伞失灵，你开始正常坠落。",
+      "微型监控装置": "微型监控装置可以伪装成录音笔、监听器或针孔摄像头等。具有4发充能，以操作动作更换电池恢复充能。以操作动作开启或关闭，每累计开启1小时消耗1发充能；开启期间可以录制影像、音频或以附赠动作拍摄照片。",
+      "夜视仪": "夜视仪具有4发充能，以操作动作更换电池恢复充能。以附赠动作开启或关闭，每累计开启1小时消耗1发充能；开启期间佩戴者获得120尺黑暗视觉，并且为寻找不免疫力竭的生物而作的基于视力的察觉检定具有优势。",
+      "手电筒": "手电筒具有10发充能，以操作动作更换电池恢复充能。以附赠动作开启或关闭，每累计开启1小时消耗1发充能；开启期间发出60尺锥形明亮光照和额外60尺微光光照。持用开启的手电筒时，你的隐匿检定自动失败。",
+      "强光手电筒": "强光手电筒具有2发充能，以操作动作更换电池恢复充能。以附赠动作开启或关闭，每累计开启1小时消耗1发充能；开启期间发出120尺锥形明亮光照。持用时隐匿检定自动失败。此外可用操作动作照射生物，迫使其进行DC10体质豁免，失败陷入目盲直到其下回合结束。",
+      "耳麦": "耳麦可以装配在通讯仪或任意终端上。只要对应设备开启，你就能在不取出设备、不占用空手的情况下使用其发送或接受音频信息。",
+      "通讯仪": "通讯仪不依赖信号环境运作，具有10发充能。你可以附赠动作开启或关闭，每累计开启1小时消耗1发充能。开启期间，若知晓目标终端或通讯仪的通讯码，你可以通过操作动作发送文字或音频信息，目标在1200尺内可接收。",
+      "移动终端": "移动终端具有10发充能，连接充电插座时每累计充电1小时恢复2发充能。你可以附赠动作开启或关闭，每累计开启1小时消耗1发充能；开启期间可搜索信号、摄录音像、上网冲浪或联系他人。",
+      "笔记本终端": "笔记本终端具有5发充能，连接充电插座时每累计充电1小时恢复2发充能。需要两手并用并且坐着操作。开启期间可搜索信号、上网冲浪、联系他人，或强化基站以创建一个半径1里的信号环境。",
+      "便携基站": "便携基站具有10发充能，以动作更换电池恢复充能。以操作动作开启或关闭，每累计开启1小时消耗1发充能。开启期间可选择建立信号、干扰信号或探测信号，覆盖源自基站1里内的区域。",
+      "源石电池": "电池能作为手电筒、终端、载具的供能使用，包括高容、中容、低容三种规格，价格相同。更换电池可为夜视仪、手电筒、终端、便携基站或无人机恢复充能；载具需要5个一组串联为电池组。",
+      "源石探测仪": "源石探测仪具有5发充能，以操作动作更换电池恢复充能。以附赠动作开启或关闭，每累计开启1小时消耗1发充能；开启期间寻找并揭露120尺内的源石污染环境、源石供能设备以及魔法效应，并知道其位置、等级、大小或环阶。",
+      "金属探测仪": "金属探测仪具有5发充能，以操作动作更换电池恢复充能。以附赠动作开启或关闭，每累计开启1小时消耗1发充能；开启期间寻找并揭露10尺内的任何金属制品，并知道其位置和体积。",
+      "防护面罩": "防护面罩保护穿戴者免于吸入空气中的污染物和有毒气体。佩戴期间，你不因进入或停留于中度（3级）或以下的源石污染区域而受到源石暗蚀伤害，也免疫于吸入性有毒物质造成的效应。滤芯在停留超过4小时后失效。",
+      "防护服": "防护服是一种轻型防护装备，通常由耐磨的合成纤维和聚合剂制成。穿戴后与你的护甲贴合，为你提供任何源石性伤害的抗性。累计受到20点源石性伤害后（抗性之前结算），防护服会破损。",
+      "轮椅": "轮椅是一种中型类载具物件。乘坐时，如果你有至少一只空手，基础移动速度若低于25尺则提升至25尺；最多搭载400磅，超过200磅时速度减半。乘坐时无法使用步行以外的移动速度，基于力量或敏捷的属性和豁免检定具有劣势。",
+      "微型无人机": "微型无人机是微型物件，具有5HP和12AC，可承载至多2磅物件或远程武器。具有2发充能，以操作动作开启或关闭，每累计开启1小时消耗1发充能。开启后获得陆行、空行或水行速度（30尺）以及120尺黑暗视觉，并与你共享先攻。"
+    };
+
     const backpackWeaponDescriptions = {
       "短棒": "简易近战武器：1d4钝击；缓速",
       "匕首": "简易近战武器：1d4穿刺，灵巧，轻型，投掷（射程 20/60）；迅击",
@@ -4731,6 +4871,19 @@ ${data.description}`;
       "深渊语", "天界语", "深潜语", "德鲁伊语", "炼狱语",
       "原初语", "木族语", "盗贼黑话", "地底通用语"
     ];
+    const rohLanguages = [
+      "大炎语", "萨卡兹语", "拉特兰语", "维多利亚语", "哥伦比亚语",
+      "莱塔尼亚语", "东国语", "萨尔贡语", "伊比利亚语", "乌萨斯语",
+      "谢拉格语", "阿戈尔语", "杜林语", "卡西米尔语", "米诺斯语",
+      "雷姆必拓语", "萨米语", "玻利瓦尔语", "叙拉古语", "高卢语"
+    ];
+    const rohTools = ["医疗工具", "机械工具", "电气工具", "黑客工具"];
+    Object.assign(toolData, {
+      "医疗工具": { ability: "感知", weight: "—", price: "—", operation: "稳定伤势、诊断疾病（DC15）", craft: "—" },
+      "机械工具": { ability: "智力", weight: "—", price: "—", operation: "维修机械或拆解装置（DC15）", craft: "—" },
+      "电气工具": { ability: "智力", weight: "—", price: "—", operation: "检修电气设备或分析电路（DC15）", craft: "—" },
+      "黑客工具": { ability: "智力", weight: "—", price: "—", operation: "入侵终端或破解电子锁（DC15）", craft: "—" }
+    });
 
     const spellSlotsByCasterLevel = {
       0: [],
@@ -4900,6 +5053,7 @@ ${data.description}`;
       "术士": "术士法术速查.html"
     };
     const SPELL_LOOKUP_ALL_PAGE = "5E万法大全.html";
+    const ROH_SPELL_LOOKUP_URL = "https://astratide.github.io/ROH-online/topics/第五章：施法规则/法术速查.html";
 
     function isSpellcastingClassEntry(name, subclass) {
       const spellcastingClasses = new Set([
@@ -5198,12 +5352,17 @@ ${noteHtml}
 
     function buildSpellLookupTooltip(mode) {
       const allSpells = mode === "all";
+      const rohSpells = mode === "roh";
       const selection = getSpellLookupSelection();
-      const label = allSpells ? "5E 万法大全" : selection.label;
+      const label = rohSpells ? "ROH 万法大全" : allSpells ? "5E 万法大全" : selection.label;
       const lookupClass = selection.lookupClass;
-      const page = allSpells ? SPELL_LOOKUP_ALL_PAGE : SPELL_LOOKUP_PAGES[lookupClass];
+      const page = allSpells
+        ? SPELL_LOOKUP_ALL_PAGE
+        : rohSpells
+          ? ""
+          : SPELL_LOOKUP_PAGES[lookupClass];
 
-      if (!allSpells && (!selection.className || !page)) {
+      if (!allSpells && !rohSpells && (!selection.className || !page)) {
         return `<div class="spell-lookup-head">
 <span class="reference-title">法术速查 Spell Lookup</span>
 <span class="spell-lookup-actions">
@@ -5215,7 +5374,10 @@ ${noteHtml}
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
       }
 
-      const url = encodeURI(`${SPELL_LOOKUP_BASE}${page}`);
+      const url = rohSpells
+        ? encodeURI(ROH_SPELL_LOOKUP_URL)
+        : encodeURI(`${SPELL_LOOKUP_BASE}${page}`);
+      const sourceNote = rohSpells ? "ROH" : "5e不全书";
       return `<div class="spell-lookup-head">
 <span class="reference-title">${escapePlainText(label)} · 法术速查 Spell Lookup</span>
 <span class="spell-lookup-actions">
@@ -5225,7 +5387,7 @@ ${buildIframeZoomActions()}
 </span>
 </div>
 <div class="spell-lookup-frame-wrap"><iframe class="spell-lookup-frame" src="${url}" title="${escapePlainText(label)}法术速查" loading="eager" referrerpolicy="no-referrer"></iframe></div>
-<div class="spell-lookup-note">此速查来自 5e不全书，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
+<div class="spell-lookup-note">此速查来自 ${sourceNote}，需要联网加载。若内容未显示，请点击此处——><a href="${url}" target="_blank" rel="noopener noreferrer">“在新窗口打开”</a>。</div>
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
     }
 
@@ -5520,12 +5682,28 @@ ${buildIframeZoomActions()}
       return entry.classPath;
     }
 
+    function getRohClassEntry(className) {
+      if (!rohExtensionActive || !rohExtensionData) return null;
+      return rohExtensionData.classes?.[className] || null;
+    }
+
+    function getRohLookupUrl(className, subclassName = "") {
+      const entry = getRohClassEntry(className);
+      if (!entry) return null;
+      if (subclassName) {
+        return entry.subclasses.find((item) => item.name === subclassName)?.url || null;
+      }
+      return entry.url;
+    }
+
     function getSubclassSourceCode(className, subclassName) {
       const entry = (subclassCatalog[className] || []).find(([name]) => name === subclassName);
       return entry?.[1] || "";
     }
 
     function buildSubclassLookupUrl(className, subclassName) {
+      const rohUrl = getRohLookupUrl(className, subclassName);
+      if (rohUrl) return rohUrl;
       const thirdPartyPath = getThirdPartyLookup(className, subclassName);
       if (thirdPartyPath) {
         return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}${thirdPartyPath}`);
@@ -5585,6 +5763,7 @@ ${buildIframeZoomActions()}
     }
 
     function getClassFeatureLookupSource(className, subclassName, needsSubclass) {
+      if (getRohClassEntry(className)) return rohExtensionData.source || "罗德岛外勤指南";
       const thirdParty = THIRD_PARTY_LOOKUP[className];
       if (thirdParty) return thirdParty.source;
       if (!needsSubclass) return CLASS_FEATURE_LOOKUP_SOURCE;
@@ -5594,6 +5773,8 @@ ${buildIframeZoomActions()}
 
     function buildClassFeatureLookupUrl(className, subclassName = "") {
       if (!className || className === CUSTOM_VALUE) return "";
+      const rohUrl = getRohLookupUrl(className, subclassName);
+      if (rohUrl) return rohUrl;
       const thirdPartyPath = getThirdPartyLookup(className, subclassName);
       if (thirdPartyPath) {
         return encodeURI(`${CLASS_FEATURE_LOOKUP_BASE}${thirdPartyPath}`);
@@ -6790,6 +6971,39 @@ ${buildIframeZoomActions()}
       }
     }
 
+    function convertRohSyntaxBlock(node) {
+      const clone = node.cloneNode(true);
+      const table = clone.querySelector("table");
+      const nameNode = table?.querySelector("b") || clone.querySelector("b");
+      const name = (nameNode?.textContent || "").replace(/\s+/g, " ").trim();
+      const metadata = [...clone.querySelectorAll(".cost, .trigger, .time")]
+        .map((item) => (item.textContent || "").replace(/\s+/g, " ").trim())
+        .filter(Boolean);
+      table?.remove();
+      clone.querySelectorAll(".skill, img, script, style").forEach((item) => item.remove());
+
+      const card = document.createElement("div");
+      card.className = "feature-syntax-card";
+      if (name) {
+        const title = document.createElement("span");
+        title.className = "feature-syntax-title";
+        title.textContent = name;
+        card.append(title, document.createElement("br"));
+      }
+      if (metadata.length) {
+        const meta = document.createElement("span");
+        meta.className = "feature-syntax-meta";
+        meta.textContent = metadata.join(" ｜ ");
+        card.append(meta, document.createElement("br"));
+      }
+      const body = convertPastedHtml(clone.innerHTML);
+      if (body.firstChild) card.append(body);
+      if (!card.childNodes.length) return null;
+      const fragment = document.createDocumentFragment();
+      fragment.append(card);
+      return fragment;
+    }
+
     function convertPastedNode(node, unwrapCurrent = false) {
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.nodeValue
@@ -6810,6 +7024,19 @@ ${buildIframeZoomActions()}
 
       if (skipTags.has(tag)) return null;
       if (tag === "BR") return document.createElement("br");
+      if (tag === "SUP" || tag === "SUB") {
+        const script = document.createElement(tag.toLowerCase());
+        appendConvertedChildren(script, node);
+        return script.childNodes.length ? script : null;
+      }
+
+      const classes = (node.getAttribute("class") || "")
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+      if (tag === "DIV" && classes.includes("syntax")) {
+        return convertRohSyntaxBlock(node);
+      }
 
       if (RICH_TABLE_TAGS.has(tag)) {
         const tableElement = document.createElement(tag.toLowerCase());
@@ -6868,11 +7095,6 @@ ${buildIframeZoomActions()}
         if (block.childNodes.length) block.append(document.createElement("br"));
         return block.childNodes.length ? block : null;
       }
-
-      const classes = (node.getAttribute("class") || "")
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
 
       if (!unwrapCurrent) {
         const isItalic = tag === "I" || tag === "EM";
@@ -6995,6 +7217,11 @@ ${buildIframeZoomActions()}
         const replacement = document.createElement("b");
         while (bold.firstChild) replacement.append(bold.firstChild);
         bold.replaceWith(replacement);
+      }
+      for (const element of container.querySelectorAll("[style]")) {
+        element.style.removeProperty("font-size");
+        element.style.removeProperty("font-family");
+        element.style.removeProperty("line-height");
       }
       return container.innerHTML;
     }
@@ -7981,7 +8208,7 @@ ${buildIframeZoomActions()}
     const SPELL_SEARCH_RESULT_LIMIT = 12;
     const SPELL_SEARCH_SOURCE_PRIORITY = [
       "PHB24", "PHB14", "XGE", "TCE", "FTD", "BMT", "GGR", "AI", "EGW",
-      "SCC", "AAG", "SO", "FR", "EFA", "AU", "夸力许", "冰风谷"
+      "SCC", "AAG", "SO", "FR", "EFA", "AU", "夸力许", "冰风谷", "ROH"
     ];
     const spellSearchDetailCache = new Map();
     let spellSearchGroupsCache = null;
@@ -8008,6 +8235,7 @@ ${buildIframeZoomActions()}
             school: entry.s || "",
             classes: entry.c || "",
             source: entry.src || "",
+            url: entry.u || "",
             versions: []
           };
           groups.set(key, group);
@@ -8142,6 +8370,38 @@ ${buildIframeZoomActions()}
       throw new Error("未找到法术详情");
     }
 
+    async function fetchRohSpellRecord(group) {
+      const cacheKey = `ROH\u0000${group.name}\u0000${group.english}`;
+      if (spellSearchDetailCache.has(cacheKey)) return spellSearchDetailCache.get(cacheKey);
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+      try {
+        const response = await fetch(group.url, { signal: controller.signal });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const html = await response.text();
+        const records = parseSpellbookHtml(html);
+        const normalize = (value) => String(value || "").replace(/[\s丨|｜:：]/g, "").toLowerCase();
+        const targetName = normalize(group.name);
+        const targetEnglish = normalize(group.english);
+        const record = records.find((item) => {
+          const name = normalize(item.name);
+          return name === targetName ||
+            (targetEnglish && name.includes(targetEnglish)) ||
+            (targetName && name.includes(targetName));
+        });
+        if (!record) throw new Error("ROH 法术详情解析失败");
+        record.name = group.name || record.name;
+        record.level = record.level || group.level;
+        record.school = record.school || group.school;
+        record.classes = record.classes || group.classes;
+        record.source = record.source || "ROH";
+        spellSearchDetailCache.set(cacheKey, record);
+        return record;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
     function setupSpellbookSearch() {
       const input = document.getElementById("spellbook-search-input");
       const resultsBox = document.getElementById("spellbook-search-results");
@@ -8167,10 +8427,15 @@ ${buildIframeZoomActions()}
         hideResults();
         setStatus(`正在获取「${group.name}」…`);
         try {
-          const section = await fetchSpellSection(group);
+          let record;
+          if (group.url) {
+            record = await fetchRohSpellRecord(group);
+          } else {
+            const section = await fetchSpellSection(group);
+            const records = parseSpellbookPlainText(section);
+            record = records[0];
+          }
           if (requestId !== spellSearchRequestId) return;
-          const records = parseSpellbookPlainText(section);
-          const record = records[0];
           if (!record) throw new Error("法术解析失败");
           record.name = group.name || record.name;
           record.level = record.level || group.level;
@@ -8970,10 +9235,11 @@ ${buildIframeZoomActions()}
       const allowedTags = new Set([
         "SPAN", "BR", "UL", "OL", "LI", "B", "STRONG", "I", "EM", "U",
         "S", "STRIKE", "DIV", "P", "BLOCKQUOTE", "H1", "H2", "H3", "H4", "H5", "H6",
-        "FONT", ...RICH_TABLE_TAGS
+        "SUP", "SUB", "FONT", ...RICH_TABLE_TAGS
       ]);
       const allowedClasses = new Set([
-        "custom-title", "custom-term", "custom-spell", "custom-bold", "term-green"
+        "custom-title", "custom-term", "custom-spell", "custom-bold", "term-green",
+        "feature-syntax-card", "feature-syntax-title", "feature-syntax-meta"
       ]);
       const blockedTags = new Set([
         "SCRIPT", "STYLE", "IFRAME", "OBJECT", "EMBED", "IMG", "SVG", "MATH"
@@ -9268,6 +9534,7 @@ ${buildIframeZoomActions()}
           select.appendChild(option);
         }
       };
+      if (rohExtensionActive) appendGroup("——ROH工具——", rohTools);
       appendGroup("—工匠工具—", artisanToolNames);
       appendGroup("—其他工具—", otherToolNames);
     }
@@ -9310,8 +9577,22 @@ ${buildIframeZoomActions()}
           select.appendChild(option);
         }
       };
-      appendLanguageGroup("—标准语言—", standardLanguages);
-      appendLanguageGroup("—稀有语言—", rareLanguages);
+      if (rohExtensionActive) appendLanguageGroup("——ROH语言——", rohLanguages);
+      appendLanguageGroup("——标准语言——", standardLanguages);
+      appendLanguageGroup("——稀有语言——", rareLanguages);
+    }
+
+    function refreshLanguageToolSelects() {
+      for (const select of document.querySelectorAll(".language-tool-select")) {
+        const previous = select.value;
+        const isLanguage = select.getAttribute("aria-label") === "语言";
+        select.replaceChildren();
+        if (isLanguage) populateLanguageSelect(select);
+        else populateLanguageToolSelect(select);
+        if ([...select.options].some((option) => option.value === previous)) {
+          select.value = previous;
+        }
+      }
     }
 
     function createLanguageControl(initialValue = "") {
@@ -11712,7 +11993,9 @@ ${buildIframeZoomActions()}
         ? buildSpellLookupTooltip("main")
         : key === "spell-lookup-all"
           ? buildSpellLookupTooltip("all")
-          : key === "class-lookup"
+          : key === "spell-lookup-roh"
+            ? buildSpellLookupTooltip("roh")
+            : key === "class-lookup"
             ? buildClassFeatureLookupTooltip(target)
             : key === "feat-lookup"
               ? buildFeatLookupTooltip()
@@ -12045,8 +12328,12 @@ ${buildIframeZoomActions()}
       updateSummary();
     });
     backgroundSelect.addEventListener("change", () => {
+      if (backgroundIdentitySelect) backgroundIdentitySelect.value = "";
       renderBackgroundTraits();
       updateTraitRandomState();
+    });
+    backgroundIdentitySelect?.addEventListener("change", () => {
+      renderBackgroundTraits();
     });
     alignmentSelect.addEventListener("change", updateTraitRandomState);
     for (const button of document.querySelectorAll(".trait-random")) {
@@ -12300,7 +12587,547 @@ ${buildIframeZoomActions()}
       row.querySelector(".magic-equipment-name")?.focus();
     });
 
+    const ROH_RACE_PAGE_BASE = "https://astratide.github.io/ROH-online/topics/第三章：种族一览/";
+    let rohExtensionPromise = null;
+
+    function loadRohExtensionScript() {
+      if (window.ROH_EXTENSION) return Promise.resolve(window.ROH_EXTENSION);
+      if (rohExtensionPromise) return rohExtensionPromise;
+      rohExtensionPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "assets/js/roh-extension.js";
+        script.async = true;
+        script.dataset.rohExtension = "1";
+        script.addEventListener("load", () => {
+          if (window.ROH_EXTENSION) resolve(window.ROH_EXTENSION);
+          else reject(new Error("ROH 扩展脚本加载后未提供数据"));
+        });
+        script.addEventListener("error", () => reject(new Error("ROH 扩展脚本加载失败")));
+        document.head.append(script);
+      }).catch((error) => {
+        rohExtensionPromise = null;
+        throw error;
+      });
+      return rohExtensionPromise;
+    }
+
+    function fetchRohHtml(url) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+      return fetch(url, { signal: controller.signal })
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.text();
+        })
+        .finally(() => clearTimeout(timer));
+    }
+
+    function refreshRohClassSelects() {
+      const selects = [
+        classSelect,
+        multiClassSelect,
+        ...document.querySelectorAll(".profession-row-class")
+      ];
+      for (const select of selects) {
+        populateClassSelect(select, select === classSelect ? "请选择" : "—");
+        if (select !== classSelect) {
+          select.querySelector(`option[value="${CUSTOM_VALUE}"]`)?.remove();
+        }
+      }
+    }
+
+    function parseRohClassTraits(html) {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const table = doc.querySelector("table.basic") || doc.querySelector("table");
+      const result = {
+        ability: "—",
+        hitDie: "—",
+        saves: "—",
+        skillsHtml: "—",
+        weapons: "—",
+        tools: "—",
+        armor: "—",
+        equipment: "—"
+      };
+      if (!table) return result;
+      const labels = {
+        "主要属性": "ability",
+        "生命值骰": "hitDie",
+        "豁免熟练": "saves",
+        "技能熟练": "skillsHtml",
+        "武器熟练": "weapons",
+        "工具熟练": "tools",
+        "护甲受训": "armor",
+        "起始装备": "equipment"
+      };
+      for (const row of table.querySelectorAll("tr")) {
+        const cells = row.querySelectorAll("td");
+        if (cells.length < 2) continue;
+        const label = cells[0].textContent.replace(/\s+/g, "").trim();
+        const key = Object.keys(labels).find((item) => label.includes(item));
+        if (!key) continue;
+        if (key === "技能熟练") {
+          const cellClone = cells[1].cloneNode(true);
+          normalizeRohInlineClasses(cellClone);
+          result[labels[key]] = sanitizeBuilderHtml(cellClone.innerHTML);
+        } else {
+          result[labels[key]] = cells[1].textContent.trim();
+        }
+      }
+      return result;
+    }
+
+    function loadRohClassTraits(className) {
+      const entry = getRohClassEntry(className);
+      if (!entry) return;
+      if (rohClassTraitCache.has(className)) return;
+      const promise = fetchRohHtml(entry.url)
+        .then((html) => {
+          const traits = parseRohClassTraits(html);
+          classCoreTraits[className] = traits;
+          const hitDie = Number((traits.hitDie.match(/D(\d+)/i) || [])[1]);
+          if (Number.isFinite(hitDie) && hitDie > 0) hitDieMap[className] = hitDie;
+          rohClassTraitCache.set(className, traits);
+          if (classSelect.value === className) {
+            renderCoreTraits();
+            updateCombatStats();
+          }
+        })
+        .catch(() => {
+          classCoreTraits[className] = {
+            ability: "—", hitDie: "—", saves: "—", skillsHtml: "—",
+            weapons: "—", tools: "—", armor: "—", equipment: "—"
+          };
+          if (classSelect.value === className) renderCoreTraits();
+        });
+      rohClassTraitCache.set(className, promise);
+    }
+
+    function normalizeRohSize(text) {
+      const raw = String(text || "").replace(/（[^）]*）/g, "").replace(/\([^)]*\)/g, "").trim();
+      if (/中型/.test(raw) && /小型/.test(raw)) return "中型或小型";
+      if (/中型/.test(raw)) return "中型";
+      if (/小型/.test(raw)) return "小型";
+      return "";
+    }
+
+    function parseRohRaceCombat(text, baseText = text) {
+      const cleanBase = String(baseText || "").replace(/\s+/g, " ");
+      const cleanFull = String(text || "").replace(/\s+/g, " ");
+      const sizeMatch = cleanBase.match(/体型\s*[:：]\s*([^。；\n]+)/);
+      const size = normalizeRohSize(sizeMatch?.[1] || "");
+      const speedMatch = cleanBase.match(/速度\s*[:：]\s*([^。；\n]+)/);
+      const speedNumber = speedMatch?.[1].match(/(\d+)\s*尺/)?.[1] || "";
+      let speed = speedNumber ? `${speedNumber}尺` : "";
+      if (speedNumber && /飞行/.test(cleanBase)) speed += `，飞行${speedNumber}尺`;
+      if (speedNumber && /游泳/.test(cleanBase)) speed += `，游泳${speedNumber}尺`;
+      if (speedNumber && /攀爬/.test(cleanBase)) speed += `，攀爬${speedNumber}尺`;
+      const darkMatch = cleanBase.match(/(\d+)\s*尺[^。]*?黑暗视觉/) ||
+        cleanBase.match(/黑暗视觉[^。]*?(\d+)\s*尺/);
+      const darkvision = darkMatch ? `${darkMatch[1]}尺` : "—";
+      const resistances = new Set();
+      for (const match of cleanBase.matchAll(/(?:具有|拥有|获得|对)([^。；\n]{1,30}?)伤害(?:的)?抗性/g)) {
+        const value = match[1].replace(/^对/, "").trim();
+        if (value) resistances.add(value);
+      }
+      const conditionTokens = ["中毒", "魅惑", "恐慌", "麻痹", "疾病", "目盲", "耳聋", "石化", "昏迷"];
+      const damageTokens = ["强酸", "寒冷", "火焰", "闪电", "雷鸣", "毒素", "光耀", "暗蚀", "心灵", "力场", "穿刺", "挥砍", "钝击"];
+      const immunities = new Set();
+      for (const match of cleanFull.matchAll(/免疫(?:于)?([^。；\n]{0,60})/g)) {
+        const raw = match[1];
+        const conditions = conditionTokens.filter((token) => raw.includes(token));
+        if (conditions.length) {
+          conditions.forEach((token) => immunities.add(token));
+          continue;
+        }
+        const damage = damageTokens.find((token) => raw.includes(token));
+        if (damage) immunities.add(damage);
+      }
+      const advantages = new Set();
+      for (const match of cleanBase.matchAll(/(?:为避免或结束|为中止或避免|中止或避免|避免或结束)([^。；\n]{1,20}?)状态[^。；\n]*?优势/g)) {
+        if (match[1]) advantages.add(match[1].replace(/^陷入/, ""));
+      }
+      for (const match of cleanBase.matchAll(/(?:在|对)([^。；\n]{1,20}?)豁免[^。；\n]*?优势/g)) {
+        if (match[1]) advantages.add(match[1]);
+      }
+      return {
+        darkvision,
+        size,
+        speed,
+        resistance: [...resistances].join("、"),
+        immunity: [...immunities].join("、"),
+        advantage: [...advantages].join("、")
+      };
+    }
+
+    function normalizeRohInlineClasses(root) {
+      root.querySelectorAll(".green").forEach((node) => node.classList.add("term-green"));
+      root.querySelectorAll(".spell").forEach((node) => node.classList.add("custom-spell"));
+      root.querySelectorAll(".navy").forEach((node) => node.classList.add("custom-title"));
+    }
+
+    function extractRohRaceTraits(html, raceName) {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const traitContainer = doc.createElement("div");
+      const fullContainer = doc.createElement("div");
+      const heading = [...doc.querySelectorAll("h2")]
+        .find((node) => /特质|Traits/i.test(node.textContent || ""));
+      let inFeatSection = false;
+      if (heading) {
+        for (let node = heading.nextSibling; node; node = node.nextSibling) {
+          if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "H2") break;
+          if (node.nodeType === Node.COMMENT_NODE) continue;
+          const clone = node.cloneNode(true);
+          fullContainer.append(clone.cloneNode(true));
+          if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "H3" &&
+              /种族专长|Race Feats/i.test(node.textContent || "")) {
+            inFeatSection = true;
+          }
+          if (!inFeatSection) traitContainer.append(clone);
+        }
+      } else {
+        for (const node of doc.body.children) {
+          traitContainer.append(node.cloneNode(true));
+          fullContainer.append(node.cloneNode(true));
+        }
+      }
+      traitContainer.querySelectorAll("script, style, link, nav").forEach((node) => node.remove());
+      normalizeRohInlineClasses(traitContainer);
+      const content = sanitizeBuilderHtml(traitContainer.innerHTML);
+      return {
+        html: `<b class="maroon">${escapePlainText(raceName)}特质</b><br>${content}`,
+        text: fullContainer.textContent,
+        baseText: traitContainer.textContent
+      };
+    }
+
+    function applyRohRaceData(race, data) {
+      raceTraits[race] = data.html;
+      raceCombatDefaults[race] = data.combat;
+      if (raceSelect.value === race) {
+        renderRaceTraits();
+        updateRaceCombatDefaults();
+      }
+    }
+
+    function loadRohRace(race) {
+      if (!rohRaceValues.has(race)) return;
+      if (rohRaceCache.has(race)) {
+        const cached = rohRaceCache.get(race);
+        if (cached?.then) {
+          cached.then((data) => applyRohRaceData(race, data)).catch(() => {});
+        } else {
+          applyRohRaceData(race, cached);
+        }
+        return;
+      }
+      const raceEntry = rohExtensionData.races.find((item) => item.name === race);
+      if (!raceEntry) return;
+      raceTraits[race] = `<b class="maroon">${escapePlainText(rohRaceDisplayName(race))}特质</b><br><span class="grey">正在从 ROH 外部页面载入…</span>`;
+      if (raceSelect.value === race) renderRaceTraits();
+      const url = `${ROH_RACE_PAGE_BASE}${encodeURIComponent(`种族-${raceEntry.page}.html`)}`;
+      const promise = fetchRohHtml(url)
+        .then((html) => {
+          const extracted = extractRohRaceTraits(html, rohRaceDisplayName(race));
+          if (!extracted.html || extracted.html.length < 30) {
+            throw new Error("ROH 种族页面没有找到特质段");
+          }
+          const data = {
+            html: extracted.html,
+            combat: parseRohRaceCombat(extracted.text, extracted.baseText)
+          };
+          rohRaceCache.set(race, data);
+          applyRohRaceData(race, data);
+          return data;
+        })
+        .catch(() => {
+          const data = {
+            html: `<b class="maroon">${escapePlainText(rohRaceDisplayName(race))}特质</b><br><span class="grey">无法加载 ROH 外部页面中的种族特质。</span>`,
+            combat: { darkvision: "—", size: "", speed: "", resistance: "", immunity: "", advantage: "" }
+          };
+          rohRaceCache.set(race, data);
+          applyRohRaceData(race, data);
+          return data;
+        });
+      rohRaceCache.set(race, promise);
+    }
+
+    function addRohRaceOptions() {
+      const group = document.createElement("option");
+      group.value = "";
+      group.disabled = true;
+      group.dataset.rohRaceGroup = "1";
+      group.textContent = "——ROH种族——";
+      const coreGroup = [...raceSelect.options]
+        .find((option) => option.disabled && option.textContent.includes("核心种族"));
+      raceSelect.insertBefore(group, coreGroup || null);
+      for (const race of rohExtensionData.races) {
+        const option = document.createElement("option");
+        option.value = race.name;
+        option.textContent = race.name;
+        option.dataset.rohRace = "1";
+        raceSelect.insertBefore(option, coreGroup || null);
+        rohRaceValues.add(race.name);
+        if (!raceTraits[race.name]) raceTraits[race.name] = "";
+        if (!raceCombatDefaults[race.name]) {
+          raceCombatDefaults[race.name] = {
+            darkvision: "—", size: "", speed: "", resistance: "", immunity: "", advantage: ""
+          };
+        }
+      }
+    }
+
+    function removeRohRaceOptions() {
+      raceSelect.querySelectorAll("[data-roh-race], [data-roh-race-group]").forEach((node) => node.remove());
+      rohRaceValues.clear();
+    }
+
+    function deactivateRohExtension() {
+      if (rohExtensionActive || rohExtensionData) {
+        if (rohRaceValues.has(raceSelect.value)) {
+          raceSelect.value = "";
+          renderRaceTraits();
+          updateRaceCombatDefaults();
+        }
+        if (rohClassNames.includes(classSelect.value)) {
+          classSelect.value = "";
+          updateSubclassFor(classSelect, levelInput, subclassSelect, false);
+        }
+        if (rohClassNames.includes(multiClassSelect.value)) {
+          multiClassSelect.value = "";
+          updateSubclassFor(multiClassSelect, multiLevelInput, multiSubclassSelect, false);
+        }
+        if (rohBackgroundNames.has(backgroundSelect.value)) {
+          backgroundSelect.value = "";
+          renderBackgroundTraits();
+        }
+      }
+      rohExtensionActive = false;
+      rohClassNames.length = 0;
+      delete subraceMap["精灵(ROH)"];
+      removeRohRaceOptions();
+      removeRohRaceFeats();
+      removeRohBackgrounds();
+      removeRohSpellIndex();
+      refreshRohClassSelects();
+      refreshLanguageToolSelects();
+      refreshBackpackGearSelects();
+      updateSummary();
+    }
+
+    function addRohBackgrounds(data) {
+      const backgroundDataForRoh = data.backgrounds;
+      if (!backgroundDataForRoh) return;
+      for (const option of backgroundSelect.querySelectorAll("[data-roh-background], [data-roh-background-group]")) {
+        option.remove();
+      }
+      const coreGroup = [...backgroundSelect.options]
+        .find((option) => option.disabled && option.textContent.includes("核心背景"));
+      const appendBackgroundGroup = (label, items) => {
+        if (!items?.length) return;
+        const group = document.createElement("option");
+        group.value = "";
+        group.disabled = true;
+        group.dataset.rohBackgroundGroup = "1";
+        group.textContent = label;
+        backgroundSelect.insertBefore(group, coreGroup || null);
+        for (const item of items) {
+          rohBackgroundNames.add(item.label);
+          backgroundData[item.label] = {
+            english: item.english || "",
+            abilities: item.abilities || "—",
+            feat: item.feat || "—",
+            skills: item.skills || "—",
+            tool: item.tool || "—",
+            equipment: item.equipment || "—",
+            description: item.description || "",
+            identities: item.identities || [],
+            url: item.url || ""
+          };
+          const option = document.createElement("option");
+          option.value = item.label;
+          option.textContent = item.label;
+          option.dataset.rohBackground = "1";
+          backgroundSelect.insertBefore(option, coreGroup || null);
+        }
+      };
+      appendBackgroundGroup("——通用背景——", backgroundDataForRoh.general);
+      appendBackgroundGroup("——阵营背景——", backgroundDataForRoh.factions);
+    }
+
+    function removeRohBackgrounds() {
+      for (const option of backgroundSelect.querySelectorAll("[data-roh-background], [data-roh-background-group]")) {
+        option.remove();
+      }
+      for (const name of rohBackgroundNames) delete backgroundData[name];
+      rohBackgroundNames.clear();
+    }
+
+    function installRohSpellIndex() {
+      const rohIndex = Array.isArray(window.__ROH_SPELL_INDEX__) ? window.__ROH_SPELL_INDEX__ : [];
+      if (!rohIndex.length) return;
+      if (!Array.isArray(window.__DND_SPELL_INDEX__)) window.__DND_SPELL_INDEX__ = [];
+      for (const entry of rohIndex) {
+        if (!entry?.n) continue;
+        if (!window.__DND_SPELL_INDEX__.some((item) => item.src === "ROH" && item.u === entry.u && item.n === entry.n)) {
+          window.__DND_SPELL_INDEX__.push({ ...entry, src: "ROH" });
+        }
+      }
+      spellSearchGroupsCache = null;
+    }
+
+    function removeRohSpellIndex() {
+      if (!Array.isArray(window.__DND_SPELL_INDEX__)) return;
+      window.__DND_SPELL_INDEX__ = window.__DND_SPELL_INDEX__.filter((entry) => entry?.src !== "ROH");
+      spellSearchGroupsCache = null;
+    }
+
+    function refreshFeatNameSelects() {
+      for (const select of document.querySelectorAll(".feat-name-select")) {
+        const previous = select.value;
+        select.replaceChildren();
+        populateFeatSelect(select);
+        if ([...select.options].some((option) => option.value === previous)) {
+          select.value = previous;
+        }
+      }
+    }
+
+    function chineseRohFeatName(name) {
+      const chinese = String(name || "").split(/\s+[A-Za-z]/)[0].trim();
+      return chinese || String(name || "").trim();
+    }
+
+    function getRohRaceFeatEntry(race) {
+      if (!rohExtensionData?.raceFeats || !rohRaceValues.has(race)) return null;
+      const base = rohRaceDisplayName(race);
+      const key = Object.keys(rohExtensionData.raceFeats)
+        .find((item) => item.replace(/[（(][^）)]*[）)]/g, "").trim() === base);
+      return key ? rohExtensionData.raceFeats[key] : null;
+    }
+
+    function buildRohFeatDescription(feat, race) {
+      const effect = String(feat.description || "")
+        .replace(/\r\n?/g, "\n")
+        .replace(/\n{2,}/g, "\n")
+        .trim();
+      const meta = String(feat.meta || "")
+        .replace(/\s+/g, " ")
+        .trim() || `种族专长（先决条件：${rohRaceDisplayName(race)}，4级+）`;
+      return `${chineseRohFeatName(feat.name)}\n${meta}\n${effect}`;
+    }
+
+    function updateRohRaceFeatGroup(race) {
+      const index = featCatalog.findIndex((group) => group.label === "—种族专长—");
+      if (index >= 0) featCatalog.splice(index, 1);
+      const feats = getRohRaceFeatEntry(race);
+      if (feats?.length) {
+        const items = [];
+        for (const feat of feats) {
+          const name = chineseRohFeatName(feat.name);
+          if (!name || items.includes(name)) continue;
+          items.push(name);
+          featDescriptionData[name] = buildRohFeatDescription(feat, race);
+        }
+        if (items.length) featCatalog.unshift({ label: "—种族专长—", items });
+      }
+      refreshFeatNameSelects();
+    }
+
+    function removeRohRaceFeats() {
+      updateRohRaceFeatGroup("");
+    }
+
+    function applyRohExtension(data) {
+      if (!data?.classes || !data?.races) throw new Error("ROH 扩展数据格式不完整");
+      deactivateRohExtension();
+      rohExtensionData = data;
+      rohExtensionActive = true;
+      for (const [className, entry] of Object.entries(data.classes)) {
+        if (!rohClassNames.includes(className)) rohClassNames.push(className);
+        if (!classNames.includes(className)) classNames.push(className);
+        classEnglishNames[className] = entry.en || className;
+        subclassCatalog[className] = entry.subclasses.map((item) => [
+          item.name, "", Boolean(item.disabled)
+        ]);
+        subclassMap[className] = entry.subclasses.map((item) => item.name);
+        if (!classCoreTraits[className]) {
+          classCoreTraits[className] = {
+            ability: "—", hitDie: "—", saves: "—", skillsHtml: "—",
+            weapons: "—", tools: "—", armor: "—", equipment: "—"
+          };
+        }
+        if (!hitDieMap[className]) hitDieMap[className] = 8;
+      }
+      refreshRohClassSelects();
+      addRohRaceOptions();
+      addRohBackgrounds(data);
+      installRohSpellIndex();
+      subraceMap["精灵(ROH)"] = ["流水", "气尘", "自然", "光芒"];
+      updateRohRaceFeatGroup(raceSelect.value);
+      refreshLanguageToolSelects();
+      refreshBackpackGearSelects();
+      updateSummary();
+    }
+
+    function setupRohExtension() {
+      const extensionSelect = document.getElementById("builder-extension-select");
+      if (!extensionSelect) return;
+      const storageKey = "dnd5e2024.privateExtension";
+
+      classSelect.addEventListener("change", () => {
+        if (getRohClassEntry(classSelect.value)) loadRohClassTraits(classSelect.value);
+      });
+      raceSelect.addEventListener("change", () => {
+        updateRohRaceFeatGroup(raceSelect.value);
+        if (rohRaceValues.has(raceSelect.value)) loadRohRace(raceSelect.value);
+      });
+
+      extensionSelect.addEventListener("change", async () => {
+        if (extensionSelect.value !== "ROH") {
+          deactivateRohExtension();
+          try {
+            localStorage.removeItem(storageKey);
+          } catch (error) {
+            // 清除失败不影响当前页面。
+          }
+          return;
+        }
+        extensionSelect.disabled = true;
+        try {
+          const data = await loadRohExtensionScript();
+          applyRohExtension(data);
+          try {
+            localStorage.setItem(storageKey, "ROH");
+          } catch (error) {
+            // 持久化失败不影响当前页面。
+          }
+        } catch (error) {
+          extensionSelect.value = "";
+          console.error("ROH 扩展加载失败", error);
+          window.alert("ROH 扩展加载失败，请检查扩展文件是否可用。");
+        } finally {
+          extensionSelect.disabled = false;
+        }
+      });
+
+      try {
+        if (localStorage.getItem(storageKey) === "ROH" && window.ROH_EXTENSION) {
+          extensionSelect.value = "ROH";
+          applyRohExtension(window.ROH_EXTENSION);
+          setTimeout(() => {
+            updateRohRaceFeatGroup(raceSelect.value);
+            if (rohRaceValues.has(raceSelect.value)) loadRohRace(raceSelect.value);
+            if (getRohClassEntry(classSelect.value)) loadRohClassTraits(classSelect.value);
+          }, 0);
+        }
+      } catch (error) {
+        // 私设扩展状态读取失败时保持默认关闭。
+      }
+    }
+
     wrapInlinePlusFields();
+    setupRohExtension();
     setupContentResponsiveLayout();
     populateArmorNames();
     updateArmorDefaults();
@@ -12638,7 +13465,8 @@ ${buildIframeZoomActions()}
       const weight = row.querySelector(".backpack-gear-weight");
       const price = row.querySelector(".backpack-gear-price");
       syncGearCustomUI(row);
-      const data = adventuringGearData[select.value] ||
+      const data = rohAdventuringGearData[select.value] ||
+        adventuringGearData[select.value] ||
         backpackWeaponData[select.value] ||
         backpackArmorData[select.value];
 
@@ -12653,7 +13481,8 @@ ${buildIframeZoomActions()}
         return;
       }
 
-      const descriptionText = adventuringGearDescriptions[select.value] ||
+      const descriptionText = rohAdventuringGearDescriptions[select.value] ||
+        adventuringGearDescriptions[select.value] ||
         backpackWeaponDescriptions[select.value] ||
         backpackArmorDescriptions[select.value] ||
         "";
@@ -12666,12 +13495,8 @@ ${buildIframeZoomActions()}
       updateBackpackGearTotals();
     }
 
-    function createBackpackGearRow() {
-      const row = document.createElement("tr");
-      const select = document.createElement("select");
-      select.className = "backpack-gear-select";
-      select.setAttribute("aria-label", "冒险装备");
-
+    function populateBackpackGearSelect(select) {
+      select.replaceChildren();
       const blank = document.createElement("option");
       blank.value = "";
       blank.textContent = "—";
@@ -12695,9 +13520,29 @@ ${buildIframeZoomActions()}
           select.appendChild(option);
         }
       };
+      if (rohExtensionActive) appendGearGroup("——ROH冒险装备——", rohAdventuringGearData);
       appendGearGroup("——冒险装备——", adventuringGearData);
       appendGearGroup("——武器——", backpackWeaponData);
       appendGearGroup("——护甲——", backpackArmorData);
+    }
+
+    function refreshBackpackGearSelects() {
+      for (const select of document.querySelectorAll(".backpack-gear-select")) {
+        const previous = select.value;
+        populateBackpackGearSelect(select);
+        if ([...select.options].some((option) => option.value === previous)) {
+          select.value = previous;
+        }
+      }
+      updateBackpackGearTotals();
+    }
+
+    function createBackpackGearRow() {
+      const row = document.createElement("tr");
+      const select = document.createElement("select");
+      select.className = "backpack-gear-select";
+      select.setAttribute("aria-label", "冒险装备");
+      populateBackpackGearSelect(select);
 
       const nameControl = document.createElement("div");
       nameControl.className = "backpack-name-control";

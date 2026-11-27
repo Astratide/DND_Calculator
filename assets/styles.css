@@ -7368,3 +7368,137 @@ body.content-compact .magic-equipment-table {
   padding-right: 0 !important;
   text-align: center !important;
 }
+
+/* 角色构筑私设扩展选择 */
+.builder-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+}
+
+.builder-panel-head .panel-title {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.builder-extension-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  color: #333;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.builder-extension-control strong {
+  font-weight: bold;
+}
+
+.builder-extension-control select {
+  width: auto;
+  min-width: 150px;
+  height: 28px;
+  padding: 2px 5px;
+}
+
+html[data-theme="dark"] .panel .builder-extension-control {
+  color: #ddd !important;
+}
+
+@media (max-width: 620px) {
+  .builder-panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .builder-extension-control {
+    align-self: flex-end;
+  }
+}
+
+/* 导航栏更多设置入口 */
+.header-right {
+  align-items: center;
+}
+
+.settings-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+}
+
+/* 私设战技卡片与职业特性标题 */
+.class-feature-paste-table .feature-name-cell {
+  color: #800000;
+  font-weight: bold;
+}
+
+.feature-syntax-card {
+  margin: 8px 0;
+  padding: 7px 9px;
+  background: #f7f7f7;
+  border: 1px solid #9a9a9a;
+  border-radius: 3px;
+  line-height: 1.55;
+}
+
+.feature-syntax-title {
+  color: #111;
+  font-weight: bold;
+}
+
+.feature-syntax-meta {
+  color: #666;
+  font-weight: normal;
+}
+
+html[data-theme="dark"] .feature-syntax-card {
+  background: #222;
+  border-color: #666;
+}
+
+html[data-theme="dark"] .feature-syntax-title {
+  color: #f1f1f1;
+}
+
+html[data-theme="dark"] .feature-syntax-meta {
+  color: #aaa;
+}
+
+/* ROH 阵营身份卡片 */
+.background-identity-card {
+  margin: 9px 0;
+  padding: 8px 10px;
+  background: #f7f7f7;
+  border: 1px solid #9a9a9a;
+  border-radius: 3px;
+}
+
+.background-identity-title {
+  margin-bottom: 5px;
+  color: #800000;
+  font-weight: bold;
+}
+
+.background-identity-body {
+  line-height: 1.55;
+}
+
+html[data-theme="dark"] .background-identity-card {
+  background: #222;
+  border-color: #666;
+}
+
+html[data-theme="dark"] .background-identity-title {
+  color: #e6b3b3;
+}
+
+.builder-identity-field[hidden] {
+  display: none;
+}

@@ -41,14 +41,21 @@
             <button class="tab" id="tab-builder" type="button" role="tab" aria-selected="false" aria-controls="panel-builder" tabindex="-1" data-tab="builder">角色构筑</button>
             <button class="tab" id="tab-monster" type="button" role="tab" aria-selected="false" aria-controls="panel-monster" tabindex="-1" data-tab="monster">怪物设计</button>
           </nav>
-          <button id="settings-button" class="settings-button" type="button" aria-label="显示设置" aria-controls="settings-panel" aria-expanded="false" title="显示设置">...</button>
+          <button id="settings-button" class="settings-button" type="button" aria-label="更多设置" aria-controls="settings-panel" aria-expanded="false" title="更多设置">···</button>
         </div>
       </div>
     </div>
   </header>
 
-  <div id="settings-panel" class="settings-panel" role="dialog" aria-label="显示设置" hidden>
-    <div class="settings-panel-title">显示设置</div>
+  <div id="settings-panel" class="settings-panel" role="dialog" aria-label="更多设置" hidden>
+    <div class="settings-panel-title">更多设置</div>
+    <label class="settings-field">
+      <span>私设扩展</span>
+      <select id="builder-extension-select" aria-label="私设扩展">
+        <option value="">—</option>
+        <option value="ROH">罗德岛外勤指南(ROH)</option>
+      </select>
+    </label>
     <label class="settings-field">
       <span>主题</span>
       <select id="theme-select">
@@ -465,6 +472,12 @@
           <label class="builder-field builder-hometown-field">
             <span class="faith-label">故乡<button class="faith-help reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="hometown" aria-label="查看故乡信息" title="查看故乡信息">?</button></span>
             <input id="builder-hometown" type="text" placeholder="选填" autocomplete="off">
+          </label>
+          <label class="builder-field builder-identity-field" hidden>
+            <span>身份</span>
+            <select id="builder-background-identity" aria-label="背景身份">
+              <option value="">请选择</option>
+            </select>
           </label>
         </div>
         <div id="builder-background-traits" class="race-traits" aria-live="polite" hidden></div>
@@ -1340,6 +1353,7 @@
           <div class="spellbook-toolbar-actions">
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup" aria-label="查看职业法术速查" title="查看职业法术速查">职业法术速查</button>
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-all" aria-label="查看万法大全" title="查看万法大全">万法大全</button>
+            <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh" aria-label="查看ROH万法大全" title="查看ROH万法大全">ROH万法大全</button>
           </div>
         </div>
         <div class="spellbook-search" role="search">
@@ -1550,6 +1564,7 @@
   <script src="assets/js/adventure-traits.js"></script>
   <script src="assets/js/hometown-lore.js"></script>
   <script src="assets/js/spell-index.js"></script>
+  <script src="assets/js/roh-extension.js"></script>
   <script src="assets/js/builder.js"></script>
   <script src="assets/js/attribute-generator.js"></script>
   <script src="assets/js/settings.js"></script>
