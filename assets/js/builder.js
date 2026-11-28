@@ -2129,7 +2129,7 @@
             const nextText = bold.nextSibling?.nodeType === Node.TEXT_NODE
               ? bold.nextSibling.nodeValue.trimStart()
               : "";
-            if (/^[^。；：:\n]{1,12}[。：:]$/.test(heading) ||
+            if (/[。：:]$/.test(heading) ||
                 /^[。：:]/.test(nextText)) {
               return NodeFilter.FILTER_REJECT;
             }
