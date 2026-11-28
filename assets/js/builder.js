@@ -30,6 +30,9 @@
     const customSavePanel = document.getElementById("custom-save-panel");
     const builderPanel = document.getElementById("panel-builder");
     const raceTraitsBox = document.getElementById("builder-race-traits");
+    const optionalRaceTraitsBox = document.getElementById("builder-optional-race-traits");
+    const optionalRaceBody = document.getElementById("builder-optional-race-body");
+    const optionalRaceAdd = document.getElementById("builder-optional-race-add");
     const backgroundSelect = document.getElementById("builder-background");
     const backgroundIdentityField = document.getElementById("builder-background-identity")?.closest(".builder-identity-field") || null;
     const backgroundIdentitySelect = document.getElementById("builder-background-identity");
@@ -48,6 +51,9 @@
     const referenceTooltip = document.getElementById("reference-tooltip");
     if (referenceTooltip?.closest("main")) document.body.append(referenceTooltip);
     const combatHp = document.getElementById("combat-hp");
+    const rohCombatExtraTables = document.getElementById("roh-combat-extra-tables");
+    const rohMasteryDamageBody = document.getElementById("roh-mastery-damage-body");
+    const rohClassSpellListBody = document.getElementById("roh-class-spell-list-body");
     const combatHpGrowth = document.getElementById("combat-hp-growth");
     const combatHpGrowthPlus = document.getElementById("combat-hp-growth-plus");
     let hpGrowthAutoValue = null;
@@ -130,9 +136,14 @@
     const specialAbilityAdd = document.getElementById("special-ability-add");
     const specialAbilityBlock = document.getElementById("special-ability-block");
     const specialAbilityBody = document.getElementById("special-ability-body");
+    const battleskillPanel = document.getElementById("battleskill-panel");
+    const battleskillList = document.getElementById("battleskill-list");
+    const battleskillAdd = document.getElementById("battleskill-add");
+    const battleskillEmpty = document.getElementById("battleskill-empty");
     const spellCasterLabel = document.getElementById("spell-caster-label");
     const spellCasterLevel = document.getElementById("spell-caster-level");
     const spellCantripCount = document.getElementById("spell-cantrip-count");
+    const spellCantripLabel = document.getElementById("spell-cantrip-label");
     const spellPreparedCount = document.getElementById("spell-prepared-count");
     const spellMulticlassNote = document.getElementById("spell-multiclass-note");
     const spellMainClass = document.getElementById("spell-main-class");
@@ -221,6 +232,71 @@
     const classNames = [...coreClassNames, ...thirdPartyClassNames];
     const rohRaceValues = new Set();
     const rohBackgroundNames = new Set();
+    const rohOptionalTraits = new Map();
+    const rohHpGrowthRaces = new Set([
+      "乌萨斯(熊)", "丰蹄(牛)", "瓦伊凡(飞龙)", "温迪戈"
+    ]);
+    const rohDamageOptions = [
+      "—", "挥砍", "钝击", "穿刺", "强酸", "寒冷", "火焰", "闪电",
+      "雷鸣", "毒素", "光耀", "暗蚀", "心灵", "力场"
+    ];
+    const rohBaseSpellTableByClass = {
+      "术师": "术师基础法术表",
+      "医疗": "医疗基础法术表",
+      "辅助": "辅助基础法术表",
+      "特种": "特种基础法术表"
+    };
+    const rohSpellTableOptions = [
+      "—", "术师基础法术表", "医疗基础法术表", "辅助基础法术表", "特种基础法术表",
+      "光芒法术表", "烈火法术表", "寒冰法术表", "流水法术表", "气尘法术表",
+      "岩土法术表", "雷电法术表", "黯蚀法术表", "空间法术表", "心魂法术表",
+      "幻象法术表", "预知法术表", "自然法术表", "酸毒法术表", "深海法术表",
+      "炼金法术表", "辉煌烈焰法术表", "酷寒洪流法术表", "风暴雷鸣法术表",
+      "酸毒侵蚀法术表", "光影心灵法术表", "疗愈重塑法术表", "时空矢量法术表"
+    ];
+    const rohRaceSubraces = {
+      "萨弗拉(蜥)": ["秘匿皮肤", "湿润皮肤"],
+      "阿达克利斯(鳄)": ["粗尾巴", "细尾巴"],
+      "斐迪亚(蛇)": ["游蛇", "蚺蟒"],
+      "萨科塔(天使)": ["铳械天赋", "法术天赋"],
+      "安努拉(蛙)": ["树蛙", "雨蛙"],
+      "卡普里尼(羊)": ["术法天赋", "天生犄角"],
+      "阿戈尔(水生)": ["严谨学者", "法术天赋"],
+      "精灵(ROH)": ["流水", "气尘", "自然", "光芒"]
+    };
+    const rohRaceCombatOverrides = {
+      "梦魇": { resistance: "心灵", immunity: "", advantage: "恐慌" },
+      "天马": { resistance: "光耀", immunity: "", advantage: "恐慌" },
+      "佩洛(犬)": { resistance: "", immunity: "", advantage: "察觉（嗅觉）" },
+      "鲁珀(狼)": { resistance: "", immunity: "", advantage: "察觉（嗅觉）" },
+      "沃尔珀(狐)": { resistance: "", immunity: "", advantage: "察觉（嗅觉）、特技" },
+      "瑞柏巴(鬣)": { resistance: "", immunity: "", advantage: "察觉（嗅觉）" },
+      "黎博利(鸟)": { resistance: "", immunity: "", advantage: "察觉（视觉）" },
+      "骏鹰": { resistance: "", immunity: "", advantage: "察觉（视觉）" },
+      "卡特斯(免)": { resistance: "", immunity: "突袭", advantage: "" },
+      "阿戈尔(水生)": { resistance: "寒冷", immunity: "", advantage: "智力豁免" },
+      "卡普里尼(羊)": { resistance: "", advantage: "魅惑", immunity: "睡眠" },
+      "瓦伊凡(飞龙)": { resistance: "", immunity: "", advantage: "运动" },
+      "曼提柯(狮蝎)": { resistance: "", immunity: "", advantage: "隐匿" },
+      "女妖": { resistance: "", immunity: "睡眠", advantage: "魅惑" },
+      "深海猎人": { resistance: "寒冷", immunity: "", advantage: "震慑、麻痹" },
+      "萨弗拉(蜥)": { resistance: "", immunity: "", advantage: "" },
+      "安努拉(蛙)": { resistance: "", immunity: "", advantage: "" },
+      "斐迪亚(蛇)": { resistance: "毒素", immunity: "", advantage: "中毒" },
+      "羽蛇": { resistance: "", immunity: "", advantage: "魅惑、恐慌" },
+      "龙": { resistance: "心灵", immunity: "", advantage: "智力豁免" },
+      "麒麟": { resistance: "闪电、雷鸣", immunity: "", advantage: "魅惑" }
+    };
+    const rohSubraceCombatOverrides = {
+      "萨弗拉(蜥)": {
+        "秘匿皮肤": { advantage: "察觉、隐匿" },
+        "湿润皮肤": { advantage: "魔法性豁免" }
+      },
+      "安努拉(蛙)": {
+        "树蛙": { resistance: "毒素", immunity: "中毒" },
+        "雨蛙": { advantage: "隐匿" }
+      }
+    };
     const rohRaceCache = new Map();
     const rohClassTraitCache = new Map();
     let rohExtensionActive = false;
@@ -2037,8 +2113,19 @@
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
         acceptNode(node) {
           if (!node.nodeValue || !test.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
-          if (node.parentElement && node.parentElement.closest("b, strong, .term-green")) {
+          if (node.parentElement && node.parentElement.closest(".term-green, .custom-term, .custom-spell")) {
             return NodeFilter.FILTER_REJECT;
+          }
+          const bold = node.parentElement?.closest("b, strong");
+          if (bold) {
+            const heading = bold.textContent.replace(/\s+/g, " ").trim();
+            const nextText = bold.nextSibling?.nodeType === Node.TEXT_NODE
+              ? bold.nextSibling.nodeValue.trimStart()
+              : "";
+            if (/^[^。；：:\n]{1,12}[。：:]$/.test(heading) ||
+                /^[。：:]/.test(nextText)) {
+              return NodeFilter.FILTER_REJECT;
+            }
           }
           return NodeFilter.FILTER_ACCEPT;
         }
@@ -2135,10 +2222,112 @@
       subraceSelect.classList.add("is-empty");
     }
 
+    function createOptionalRaceRow(entry = {}, entries = []) {
+      const row = document.createElement("tr");
+      row.dataset.optionalRaceRow = "1";
+      const nameCell = document.createElement("td");
+      const control = document.createElement("div");
+      control.className = "optional-race-name-control";
+      const select = document.createElement("select");
+      select.setAttribute("aria-label", "可选种族特性");
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "—";
+      select.append(placeholder);
+      for (const item of entries) {
+        const option = document.createElement("option");
+        option.value = item.name;
+        option.textContent = item.name;
+        select.append(option);
+      }
+      const customOption = document.createElement("option");
+      customOption.value = CUSTOM_VALUE;
+      customOption.textContent = "自定义";
+      select.append(customOption);
+
+      const customInput = document.createElement("input");
+      customInput.type = "text";
+      customInput.className = "optional-race-custom-input";
+      customInput.placeholder = "自定义特性";
+      customInput.setAttribute("aria-label", "自定义可选种族特性");
+      customInput.hidden = true;
+
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "custom-reset optional-race-custom-reset";
+      reset.textContent = "×";
+      reset.title = "返回特性选择";
+      reset.setAttribute("aria-label", "返回特性选择");
+      reset.hidden = true;
+
+      const descCell = document.createElement("td");
+      const desc = document.createElement("textarea");
+      desc.value = entry.description || "";
+      desc.placeholder = "选择特性后自动填入详述";
+      desc.setAttribute("aria-label", "可选种族特性详述");
+      desc.title = "双击展开/收起";
+      desc.addEventListener("dblclick", () => {
+        desc.classList.toggle("is-expanded");
+      });
+
+      const syncCustom = () => {
+        const custom = select.value === CUSTOM_VALUE;
+        select.hidden = custom;
+        customInput.hidden = !custom;
+        reset.hidden = !custom;
+        if (custom) {
+          desc.value = "";
+          desc.classList.remove("is-expanded");
+          customInput.focus();
+        }
+      };
+      select.value = entry.name || "";
+      select.addEventListener("change", () => {
+        if (select.value === CUSTOM_VALUE) {
+          syncCustom();
+          return;
+        }
+        const item = entries.find((candidate) => candidate.name === select.value);
+        desc.value = item?.description || "";
+        desc.classList.remove("is-expanded");
+        syncCustom();
+      });
+      reset.addEventListener("click", () => {
+        select.value = "";
+        customInput.value = "";
+        desc.value = "";
+        syncCustom();
+        select.focus();
+      });
+      control.append(select, customInput, reset);
+      nameCell.append(control);
+      descCell.append(desc);
+      row.append(nameCell, descCell);
+      return row;
+    }
+
+    function renderOptionalRaceTraits(race = raceSelect.value) {
+      if (!optionalRaceTraitsBox || !optionalRaceBody) return;
+      if (!rohExtensionActive || isCustomRace() || !rohRaceValues.has(race)) {
+        optionalRaceTraitsBox.hidden = true;
+        optionalRaceBody.replaceChildren();
+        return;
+      }
+      const entries = rohOptionalTraits.get(race) || [];
+      optionalRaceBody.replaceChildren();
+      if (!entries.length) {
+        optionalRaceTraitsBox.hidden = true;
+        return;
+      }
+      optionalRaceTraitsBox.hidden = false;
+      optionalRaceBody.append(createOptionalRaceRow({}, entries));
+    }
+
     function renderRaceTraits() {
       if (isCustomRace()) {
         raceTraitsBox.hidden = true;
         customRaceEditor.hidden = false;
+        renderOptionalRaceTraits();
         return;
       }
 
@@ -2147,6 +2336,7 @@
       const race = raceSelect.value;
       raceTraitsBox.innerHTML = raceTraits[race] || "";
       highlightTerms(raceTraitsBox);
+      renderOptionalRaceTraits(race);
     }
 
     function isValidAppearanceImageSource(src) {
@@ -2470,6 +2660,7 @@
       customBackgroundEditor.hidden = true;
       backgroundTraitsBox.hidden = false;
       const description = String(data.description || "")
+        .trimEnd()
         .replace(/阵营身份\s*[:：]/g, "<b>阵营身份：</b>")
         .replace(/\n/g, "<br>");
       const identityHtml = visibleIdentities.map((identity) => {
@@ -2482,16 +2673,13 @@
 <div class="background-identity-body">${escapePlainText(body).replace(/&lt;br&gt;/g, "<br>")}</div>
 </div>`;
       }).join("");
-      const reference = data.url
-        ? `<br><a href="${data.url}" target="_blank" rel="noopener">ROH背景速查</a>`
-        : "";
       backgroundTraitsBox.innerHTML = `<b class="maroon">${value} ${data.english}</b><br>
 <b>属性值：</b>${abilities}<br>
 <b>起源专长：</b>${data.feat}<br>
 <b>技能熟练：</b>${skills}<br>
 <b>工具熟练：</b>${data.tool}<br>
 <b>装备：</b>${data.equipment}<br><br>
-${description}${identityHtml}${reference}`;
+${description}${identityHtml}`;
       highlightTerms(backgroundTraitsBox);
     }
 
@@ -4516,6 +4704,90 @@ ${description}${identityHtml}${reference}`;
       "手铳": { weight: "3磅", price: "250GP" }
     };
 
+    const rohWeaponBackpackData = {
+      "双刃弯刀": { weight: "6磅", price: "100GP" },
+      "巨镰": { weight: "5磅", price: "50GP" },
+      "锏": { weight: "6磅", price: "10GP" },
+      "鞭刃": { weight: "5磅", price: "20GP" },
+      "长链锤": { weight: "5磅", price: "50GP" },
+      "巨弓": { weight: "4磅", price: "100GP" },
+      "战斗铁锚": { weight: "20磅", price: "200GP" },
+      "复合武器": { weight: "—", price: "100GP+组件价格" },
+      "注射枪": { weight: "1磅", price: "5GP" }
+    };
+
+    const rohWeaponDescriptions = {
+      "双刃弯刀": "军用近战武器。双刃弯刀是维伦那精灵的标志性武器，一根细木棒连接着两端弯曲的长刃。\n属性：双手；伤害：2d4挥砍；精通：侵扰。\n特殊效应：如果你在你的回合的攻击动作中使用了双刃弯刀发动攻击，你可以紧接着使用一个附赠动作来再发动一次近战攻击。此攻击命中时造成1d4挥砍伤害，而非2d4。",
+      "巨镰": "军用近战武器。巨镰是加长柄的重型巨大镰刀，结合了长柄武器的触及范围与镰刀横扫的弧线斩击，需要双手才能持用。\n属性：重型，灵巧，触及，双手；伤害：1d10挥砍；精通：横扫。\n特殊效应：使用巨镰攻击5尺内的生物时，你不能使用其精通词条。当你使用这把武器掷出一次重击时，或当你用其将一个生物的生命值降低至0时，你可以立即使用你的附赠动作用这把武器发动一次攻击。",
+      "锏": "军用近战武器。锏是一种无刃的沉重钢棒，依靠其重型质量猛击敌人。\n属性：重型，多用（1d10）；伤害：1d8钝击；精通：失衡。\n特殊效应：使用锏攻击命中并应用精通词条时，你可以立即采取附赠动作，使得目标若体型不大于中型则强制倒地。",
+      "鞭刃": "军用近战武器。鞭刃由多段锋利的金属刃节串联而成，形似长鞭。\n属性：灵巧，触及，多用（1d8）；伤害：1d6挥砍；精通：侵扰。\n特殊效应：使用鞭刃攻击命中时，并且可以应用精通词条时，你可以立即执行附赠动作，尝试使用此武器擒抱你的攻击目标。该武器在以此擒抱时无法攻击其他目标。",
+      "长链锤": "军用近战武器。长链锤是一根长柄连接着带刺的铁锤头，中间以铁链衔接。\n属性：双手，重型，触及；伤害：1d10钝击；精通：削弱。\n特殊效应：使用长链锤攻击一个持用盾牌的生物时，你可以忽略目标从盾牌中获得的AC加值。",
+      "巨弓": "军用远程武器。巨弓是一张需要非凡力量才能驾驭的巨型长弓。\n属性：弹药（射程 180/600），重型，双手；伤害：2d6穿刺；精通：缓速。\n特殊效应：这把独特的武器只能被力量值18或更高的中型或更大的生物使用。该弓射出的大号箭矢造成2d6+持用者的力量调整值的穿刺伤害。",
+      "战斗铁锚": "军用近战武器。战斗铁锚是一柄为陆战设计的、缩小但仍显沉重的船锚，锚爪被打磨得很锋利。\n属性：重型，双手，投掷（特殊距离）；伤害：2d6挥砍；精通：拉近。\n特殊效应：这把独特的武器只能被力量值18或更高的中型或更大的生物使用。战斗铁锚的投掷属性的最大投掷距离为5×你的力量调整值（至少5尺）。每回合仅一次：作为攻击动作的一部分，以此进行投掷攻击后，你可以牵引绳索将其拉回手中。",
+      "复合武器": "军用近战武器或者军用远程武器，重量等同两把武器之和，价格等同100GP+两把武器价格之和。\n复合武器由一把近战武器和一把远程武器组成。例如，你可以把一把长弓和一把长剑组合起来变成一把弓刃，或者把重弩和巨剑组合起来作为切割弩，又或者把镰刀和狙击铳组合在一起作为机关镰，从而制造一把独属于你的复合武器。\n熟练要求：你必须同时熟练于组成复合武器的两种武器才能正常使用它。\n远近皆可：复合武器既可以作为对应的近战武器，也可以作为对应的远程武器使用，由你在使用复合武器发动攻击时选择。例如，你可以在使用长弓剑发动攻击时，选择要将其作为长弓还是作为长剑其中之一来使用。\n特殊效应：当你执行攻击动作，并使用复合武器攻击命中距离你10尺内的目标时，你可以立即使用附赠动作，将其作为另一种形态使用再发动一次攻击，这次攻击视为攻击动作的一部分。以此进行的攻击不可在伤害中加入属性调整值，并且你依然需要满足使用该形态攻击的任何条件。",
+      "注射枪": "简易远程武器。注射枪是一种用于注射药水或毒药的远程装置。\n属性：装填，弹药（射程 20/60；吹矢）；伤害：1穿刺；精通：削弱。\n特殊效应：你可以用一个动作将一份药水或损伤型毒药装入注射枪的针筒内。当你这么做后，注射枪下次命中时，向目标注射你之前装入的液体。"
+    };
+
+    const rohFirearmBackpackData = {
+      "气动手铳": { weight: "2磅", price: "100GP" },
+      "气动冲锋铳": { weight: "4磅", price: "200GP" },
+      "气动猎铳": { weight: "4磅", price: "150GP" },
+      "气动霰弹铳": { weight: "5磅", price: "150GP" },
+      "手持发射器": { weight: "4磅", price: "150GP" },
+      "自动手铳": { weight: "3磅", price: "200GP" },
+      "左轮手铳": { weight: "4磅", price: "200GP" },
+      "冲锋铳": { weight: "6磅", price: "300GP" },
+      "连射铳": { weight: "8磅", price: "400GP" },
+      "狙击铳": { weight: "8磅", price: "400GP" },
+      "双管霰弹铳": { weight: "8磅", price: "400GP" },
+      "战术霰弹铳": { weight: "10磅", price: "600GP" },
+      "轻型发射器": { weight: "6磅", price: "500GP" },
+      "重型发射器": { weight: "10磅", price: "1000GP" },
+      "单兵突击炮": { weight: "90磅", price: "2000GP" }
+    };
+
+    const rohFirearmDescriptions = {
+      "气动手铳": "铳械（射程 40/80；子弹），轻型，射速（3）。精通：侵扰。",
+      "气动冲锋铳": "铳械（射程 40/80；子弹），射速（5）。精通：自动。",
+      "气动猎铳": "铳械（射程 80/320；子弹），射速（2），双手。精通：瞄准。",
+      "气动霰弹铳": "铳械（射程 20/40；子弹），射速（2）。精通：散射。",
+      "手持发射器": "发射器（射程 40/80；榴弹），轻型，射速（2）。",
+      "自动手铳": "铳械（射程 40/80；子弹），轻型，射速（5）。精通：侵扰。",
+      "左轮手铳": "铳械（射程 40/12；子弹），射速（3）。精通：削弱。",
+      "冲锋铳": "铳械（射程 60/120；子弹），轻型，射速（6）。精通：自动。",
+      "连射铳": "铳械（射程 80/240；子弹），射速（5），双手。精通：自动。",
+      "狙击铳": "铳械（射程 200/1000；子弹），双手，重型，射速（3）。精通：瞄准。",
+      "双管霰弹铳": "铳械（射程 20/40；子弹），双手，射速（2）。精通：散射。",
+      "战术霰弹铳": "铳械（射程 30/60；子弹），重型，双手，射速（3）。精通：散射。",
+      "轻型发射器": "发射器（射程 60/180；榴弹），射速（3）。",
+      "重型发射器": "发射器（射程 120/360；榴弹），重型，双手，射速（4）。",
+      "单兵突击炮": "发射器（射程 180/600；榴弹），超重型，双手，射速（5），抛射。"
+    };
+
+    const rohArmorBackpackData = {
+      "皮夹克": { weight: "3磅", price: "10GP" },
+      "厚重大衣": { weight: "8磅", price: "10GP" },
+      "软质护具": { weight: "3磅", price: "50GP" },
+      "战术背心": { weight: "12磅", price: "50GP" },
+      "复合护具": { weight: "20磅", price: "100GP" },
+      "外骨骼装甲": { weight: "35磅", price: "500GP" },
+      "陆军制式甲": { weight: "45磅", price: "200GP" },
+      "重型护具": { weight: "50磅", price: "800GP" },
+      "动力甲": { weight: "70磅", price: "1500GP" }
+    };
+
+    const rohArmorDescriptions = {
+      "皮夹克": "轻甲：AC 11+敏捷调整值。",
+      "厚重大衣": "轻甲：AC 12+敏捷调整值，隐匿劣势。",
+      "软质护具": "轻甲：AC 12+敏捷调整值。",
+      "战术背心": "中甲：AC 14+敏捷调整值（最多2）。",
+      "复合护具": "中甲：AC 15+敏捷调整值（最多2），隐匿劣势。",
+      "外骨骼装甲": "中甲：AC 15+敏捷调整值（最多3），隐匿劣势。",
+      "陆军制式甲": "重甲：AC 17，需力量13，隐匿劣势。",
+      "重型护具": "重甲：AC 18，需力量15，隐匿劣势。",
+      "动力甲": "重甲：AC 19，隐匿劣势。"
+    };
+
     const backpackArmorData = {
       "布甲": { weight: "8磅", price: "5GP" },
       "皮甲": { weight: "10磅", price: "10GP" },
@@ -4910,8 +5182,11 @@ ${description}${identityHtml}${reference}`;
     };
 
     function getCasterLevel() {
-      const fullCasters = new Set(["吟游诗人", "牧师", "德鲁伊", "术士", "法师"]);
-      const halfCasters = new Set(["圣武士", "游侠", "奇械师"]);
+      const fullCasters = new Set([
+        "吟游诗人", "牧师", "德鲁伊", "术士", "法师",
+        "术师", "辅助", "医疗"
+      ]);
+      const halfCasters = new Set(["圣武士", "游侠", "奇械师", "特种"]);
       const thirdCasterSubclasses = {
         "战士": "奥法骑士",
         "游荡者": "诡术师",
@@ -4945,7 +5220,8 @@ ${description}${identityHtml}${reference}`;
     function extraMulticlassHasSpellcasting() {
       const spellcastingClasses = new Set([
         "吟游诗人", "牧师", "德鲁伊", "术士", "法师",
-        "圣武士", "游侠", "奇械师", "魔契师"
+        "圣武士", "游侠", "奇械师", "魔契师",
+        "术师", "辅助", "医疗", "特种"
       ]);
       const thirdCasterSubclasses = {
         "战士": "奥法骑士",
@@ -4967,6 +5243,8 @@ ${description}${identityHtml}${reference}`;
       if (!className || level === null || level < 1) return null;
 
       const index = Math.min(20, level) - 1;
+      if (["术师", "辅助", "医疗"].includes(className)) return preparedSpellCounts.full[index];
+      if (className === "特种") return preparedSpellCounts.half[index];
       if (className === "法师") return preparedSpellCounts.wizard[index];
       if (className === "牧师") return preparedSpellCounts.cleric[index];
       if (["术士", "德鲁伊", "吟游诗人"].includes(className)) return preparedSpellCounts.full[index];
@@ -4993,6 +5271,8 @@ ${description}${identityHtml}${reference}`;
 
       const index = Math.min(20, level) - 1;
 
+      if (["术师", "辅助", "医疗"].includes(className)) return cantripSpellCounts.sorcerer[index];
+      if (className === "特种") return 0;
       if (className === "法师" || className === "牧师") {
         return cantripSpellCounts.wizardCleric[index];
       }
@@ -5054,11 +5334,13 @@ ${description}${identityHtml}${reference}`;
     };
     const SPELL_LOOKUP_ALL_PAGE = "5E万法大全.html";
     const ROH_SPELL_LOOKUP_URL = "https://astratide.github.io/ROH-online/topics/第五章：施法规则/法术速查.html";
+    const ROH_SPELL_TABLE_LOOKUP_URL = "https://astratide.github.io/ROH-online/topics/第五章：施法规则/法术表构建.html";
 
     function isSpellcastingClassEntry(name, subclass) {
       const spellcastingClasses = new Set([
         "吟游诗人", "牧师", "德鲁伊", "术士", "法师",
-        "圣武士", "游侠", "奇械师", "魔契师"
+        "圣武士", "游侠", "奇械师", "魔契师",
+        "术师", "辅助", "医疗", "特种"
       ]);
       const thirdCasterSubclasses = {
         "战士": "奥法骑士",
@@ -5174,7 +5456,8 @@ ${description}${identityHtml}${reference}`;
           { label: "洛温初光", source: "洛温：初光", url: "https://5echm.kagangtuya.top/topics/被遗忘的国度/洛温初光/专长.htm" },
           { label: "艾伯伦龙纹", source: "艾伯伦：奇械锻炉", url: "https://5echm.kagangtuya.top/topics/艾伯伦：奇械锻炉/第二章/龙纹专长.htm" },
           { label: "反派UA", source: "反派UA", url: "https://5echm.kagangtuya.top/topics/其他/新UA/反派三期/起源专长.htm" },
-          { label: "外域专长(旧)", source: "印记城与外域", url: "https://5echm.kagangtuya.top/topics/印记城与外域/第一章/专长.htm" }
+          { label: "外域专长(旧)", source: "印记城与外域", url: "https://5echm.kagangtuya.top/topics/印记城与外域/第一章/专长.htm" },
+          { label: "斯翠海文学徒(旧)", source: "斯翠海文：混沌研习", url: "https://5echm.kagangtuya.top/topics/斯翠海文：混沌研习/玩家选项/专长.html" }
         ],
         third: [
           { label: "歪曲之月", source: "歪曲之月", url: "https://5echm.kagangtuya.top/topics/第三方/歪曲之月/第五章/起源专长.htm" },
@@ -5237,6 +5520,27 @@ ${description}${identityHtml}${reference}`;
         ]
       }
     };
+
+    const ROH_FEAT_LOOKUP_ENTRIES = [
+      {
+        category: "起源专长",
+        label: "ROH起源",
+        source: "罗德岛外勤指南(ROH)",
+        url: "https://astratide.github.io/ROH-online/topics/第二章：角色资源/专长/起源专长.html"
+      },
+      {
+        category: "通用专长",
+        label: "ROH通用",
+        source: "罗德岛外勤指南(ROH)",
+        url: "https://astratide.github.io/ROH-online/topics/第二章：角色资源/专长/通用专长.html"
+      },
+      {
+        category: "战斗风格专长",
+        label: "ROH战斗风格",
+        source: "罗德岛外勤指南(ROH)",
+        url: "https://astratide.github.io/ROH-online/topics/第二章：角色资源/专长/战斗风格专长.html"
+      }
+    ];
 
     function featLookupPageButtons(category, pages, markFirst = false) {
       return pages.map((page, index) => (
@@ -5353,16 +5657,19 @@ ${noteHtml}
     function buildSpellLookupTooltip(mode) {
       const allSpells = mode === "all";
       const rohSpells = mode === "roh";
+      const rohTable = mode === "rohTable";
       const selection = getSpellLookupSelection();
-      const label = rohSpells ? "ROH 万法大全" : allSpells ? "5E 万法大全" : selection.label;
+      const label = rohTable
+        ? "ROH 法术表速查"
+        : rohSpells ? "ROH 万法大全" : allSpells ? "5E 万法大全" : selection.label;
       const lookupClass = selection.lookupClass;
       const page = allSpells
         ? SPELL_LOOKUP_ALL_PAGE
-        : rohSpells
+        : rohSpells || rohTable
           ? ""
           : SPELL_LOOKUP_PAGES[lookupClass];
 
-      if (!allSpells && !rohSpells && (!selection.className || !page)) {
+      if (!allSpells && !rohSpells && !rohTable && (!selection.className || !page)) {
         return `<div class="spell-lookup-head">
 <span class="reference-title">法术速查 Spell Lookup</span>
 <span class="spell-lookup-actions">
@@ -5374,10 +5681,12 @@ ${noteHtml}
 <span class="spell-lookup-resize" title="调整大小" aria-hidden="true"></span>`;
       }
 
-      const url = rohSpells
-        ? encodeURI(ROH_SPELL_LOOKUP_URL)
-        : encodeURI(`${SPELL_LOOKUP_BASE}${page}`);
-      const sourceNote = rohSpells ? "ROH" : "5e不全书";
+      const url = rohTable
+        ? encodeURI(ROH_SPELL_TABLE_LOOKUP_URL)
+        : rohSpells
+          ? encodeURI(ROH_SPELL_LOOKUP_URL)
+          : encodeURI(`${SPELL_LOOKUP_BASE}${page}`);
+      const sourceNote = rohSpells || rohTable ? "ROH" : "5e不全书";
       return `<div class="spell-lookup-head">
 <span class="reference-title">${escapePlainText(label)} · 法术速查 Spell Lookup</span>
 <span class="spell-lookup-actions">
@@ -5414,6 +5723,12 @@ ${buildIframeZoomActions()}
         : preparedBase + preparedGift;
 
       syncSpellMainClassSelect();
+
+      if (spellCantripLabel) {
+        spellCantripLabel.textContent = ["术师", "辅助", "医疗", "特种"].includes(classSelect.value)
+          ? "可准备戏法数量"
+          : "可习得戏法数量";
+      }
 
       spellCasterLabel.textContent = classSelect.value === "魔契师"
         ? "契约魔法等级"
@@ -6049,8 +6364,26 @@ ${buildIframeZoomActions()}
       "重甲": ["环甲", "链甲", "板条甲", "板甲"]
     };
 
+    const rohArmorNames = ["羽蛇-锋羽防御", "萨弗拉-鳞甲硬化", "支援机械-装甲外壳"];
+    const rohArmorNamesByType = {
+      "轻甲": ["皮夹克", "厚重大衣", "软质护具"],
+      "中甲": ["战术背心", "复合护具", "外骨骼装甲"],
+      "重甲": ["陆军制式甲", "重型护具", "动力甲"]
+    };
     const armorData = {
       "无甲": { ac: "10+敏捷调整值", stealth: "否" },
+      "羽蛇-锋羽防御": { ac: "13+敏捷调整值", stealth: "否" },
+      "萨弗拉-鳞甲硬化": { ac: "13+敏捷调整值", stealth: "否" },
+      "支援机械-装甲外壳": { ac: "17", stealth: "否" },
+      "皮夹克": { ac: "11+敏捷调整值", stealth: "否" },
+      "厚重大衣": { ac: "12+敏捷调整值", stealth: "是" },
+      "软质护具": { ac: "12+敏捷调整值", stealth: "否" },
+      "战术背心": { ac: "14+敏捷调整值（最多2）", stealth: "否" },
+      "复合护具": { ac: "15+敏捷调整值（最多2）", stealth: "是" },
+      "外骨骼装甲": { ac: "15+敏捷调整值（最多3）", stealth: "是" },
+      "陆军制式甲": { ac: "17", stealth: "是" },
+      "重型护具": { ac: "18", stealth: "是" },
+      "动力甲": { ac: "19", stealth: "是" },
       "法师护甲": { ac: "13+敏捷调整值", stealth: "否" },
       "大法师法袍": { ac: "15+敏捷调整值", stealth: "否" },
       "武僧": { ac: "10+敏捷调整值+感知调整值", stealth: "否" },
@@ -6091,10 +6424,41 @@ ${buildIframeZoomActions()}
         equipmentArmorName.append(option);
       }
 
+      if (rohExtensionActive && equipmentArmorType.value === "无甲") {
+        for (const name of rohArmorNames) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          option.dataset.rohArmor = "1";
+          equipmentArmorName.append(option);
+        }
+      }
+      if (rohExtensionActive && rohArmorNamesByType[equipmentArmorType.value]) {
+        for (const name of rohArmorNamesByType[equipmentArmorType.value]) {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          option.dataset.rohArmor = "1";
+          equipmentArmorName.append(option);
+        }
+      }
+
       const customOption = document.createElement("option");
       customOption.value = "自定义";
       customOption.textContent = "自定义";
       equipmentArmorName.append(customOption);
+      syncArmorCustomUI();
+    }
+
+    function refreshArmorNameSelect() {
+      const previous = equipmentArmorName.value;
+      populateArmorNames();
+      if ([...equipmentArmorName.options].some((option) => option.value === previous)) {
+        equipmentArmorName.value = previous;
+      } else {
+        equipmentArmorName.value = "";
+        updateArmorDefaults(true);
+      }
       syncArmorCustomUI();
     }
 
@@ -6107,6 +6471,18 @@ ${buildIframeZoomActions()}
 
     const armorAcConfig = {
       "无甲": { base: 10, dex: true },
+      "羽蛇-锋羽防御": { base: 13, dex: true },
+      "萨弗拉-鳞甲硬化": { base: 13, dex: true },
+      "支援机械-装甲外壳": { base: 17, dex: false },
+      "皮夹克": { base: 11, dex: true },
+      "厚重大衣": { base: 12, dex: true },
+      "软质护具": { base: 12, dex: true },
+      "战术背心": { base: 14, dex: true, maxDex: 2 },
+      "复合护具": { base: 15, dex: true, maxDex: 2 },
+      "外骨骼装甲": { base: 15, dex: true, maxDex: 3 },
+      "陆军制式甲": { base: 17, dex: false },
+      "重型护具": { base: 18, dex: false },
+      "动力甲": { base: 19, dex: false },
       "法师护甲": { base: 13, dex: true },
       "大法师法袍": { base: 15, dex: true },
       "武僧": { base: 10, dex: true, wis: true },
@@ -6161,6 +6537,53 @@ ${buildIframeZoomActions()}
       equipmentArmorAc.value = String(ac);
       equipmentArmorAc.classList.add("is-default");
     }
+
+    const rohWeaponData = {
+      "双刃弯刀": { damage: "2d4", type: "挥砍", properties: "双手" },
+      "巨镰": { damage: "1d10", type: "挥砍", properties: "重型，灵巧，触及，双手" },
+      "锏": { damage: "1d8", type: "钝击", properties: "重型，多用（1d10）" },
+      "鞭刃": { damage: "1d6", type: "挥砍", properties: "灵巧，触及，多用（1d8）" },
+      "长链锤": { damage: "1d10", type: "钝击", properties: "双手，重型，触及" },
+      "巨弓": { damage: "2d6", type: "穿刺", properties: "弹药（射程 180/600），重型，双手" },
+      "战斗铁锚": { damage: "2d6", type: "挥砍", properties: "重型，双手，投掷（特殊距离）" },
+      "复合武器": { damage: "", type: "", properties: "军用近战或军用远程，见描述" },
+      "注射枪": { damage: "1", type: "穿刺", properties: "装填，弹药（射程 20/60；吹矢）" }
+    };
+    const rohWeaponMastery = {
+      "双刃弯刀": "侵扰", "巨镰": "横扫", "锏": "失衡", "鞭刃": "侵扰",
+      "长链锤": "削弱", "巨弓": "缓速", "战斗铁锚": "拉近", "注射枪": "削弱"
+    };
+    const rohWeaponAbility = {
+      "双刃弯刀": "力量", "巨镰": "敏捷", "锏": "力量", "鞭刃": "敏捷",
+      "长链锤": "力量", "巨弓": "敏捷", "战斗铁锚": "力量", "注射枪": "敏捷"
+    };
+    const rohFirearmData = {
+      "气动手铳": { damage: "2d4", type: "穿刺", properties: "铳械（射程 40/80；子弹），轻型，射速（3）" },
+      "气动冲锋铳": { damage: "1d12", type: "穿刺", properties: "铳械（射程 40/80；子弹），射速（5）" },
+      "气动猎铳": { damage: "2d6", type: "穿刺", properties: "铳械（射程 80/320；子弹），射速（2），双手" },
+      "气动霰弹铳": { damage: "3d4", type: "穿刺", properties: "铳械（射程 20/40；子弹），射速（2）" },
+      "手持发射器": { damage: "", type: "", properties: "发射器（射程 40/80；榴弹），轻型，射速（2）" },
+      "自动手铳": { damage: "2d6", type: "穿刺", properties: "铳械（射程 40/80；子弹），轻型，射速（5）" },
+      "左轮手铳": { damage: "2d8", type: "穿刺", properties: "铳械（射程 40/120；子弹），射速（3）" },
+      "冲锋铳": { damage: "2d4", type: "穿刺", properties: "铳械（射程 60/120；子弹），轻型，射速（6）" },
+      "连射铳": { damage: "2d6", type: "穿刺", properties: "铳械（射程 80/240；子弹），射速（5），双手" },
+      "狙击铳": { damage: "2d10", type: "穿刺", properties: "铳械（射程 200/1000；子弹），双手，重型，射速（3）" },
+      "双管霰弹铳": { damage: "2d8", type: "穿刺", properties: "铳械（射程 20/40；子弹），双手，射速（2）" },
+      "战术霰弹铳": { damage: "3d6", type: "穿刺", properties: "铳械（射程 30/60；子弹），重型，双手，射速（3）" },
+      "轻型发射器": { damage: "", type: "", properties: "发射器（射程 60/180；榴弹），射速（3）" },
+      "重型发射器": { damage: "", type: "", properties: "发射器（射程 120/360；榴弹），重型，双手，射速（4）" },
+      "单兵突击炮": { damage: "", type: "", properties: "发射器（射程 180/600；榴弹），超重型，双手，射速（5），抛射" }
+    };
+    const rohFirearmMastery = {
+      "气动手铳": "侵扰", "气动冲锋铳": "自动", "气动猎铳": "瞄准", "气动霰弹铳": "散射",
+      "自动手铳": "侵扰", "左轮手铳": "削弱", "冲锋铳": "自动", "连射铳": "自动",
+      "狙击铳": "瞄准", "双管霰弹铳": "散射", "战术霰弹铳": "散射"
+    };
+    const rohFirearmAbility = Object.fromEntries(
+      Object.keys(rohFirearmData).map((name) => [name, "敏捷"])
+    );
+    const rohWeaponNames = Object.keys(rohWeaponData);
+    const rohFirearmNames = Object.keys(rohFirearmData);
 
     const weaponData = {
       "短棒": { damage: "1d4", type: "钝击", properties: "轻型" },
@@ -6251,6 +6674,13 @@ ${buildIframeZoomActions()}
       "鞭": "敏捷", "吹箭筒": "敏捷", "手弩": "敏捷", "重弩": "敏捷",
       "长弓": "敏捷", "手铳": "敏捷", "鸟铳": "敏捷"
     };
+    const weaponDamageAbility = {
+      "巨弓": "力量"
+    };
+
+    Object.assign(weaponData, rohWeaponData, rohFirearmData);
+    Object.assign(weaponMastery, rohWeaponMastery, rohFirearmMastery);
+    Object.assign(weaponAbility, rohWeaponAbility, rohFirearmAbility);
 
     const abilityKeyMap = {
       "力量": "str", "敏捷": "dex", "体质": "con",
@@ -6294,10 +6724,14 @@ ${buildIframeZoomActions()}
 
       const abilityKey = abilityKeyMap[abilitySelect.value] || "str";
       const abilityModifier = getModifierValue(abilityKey) ?? 0;
+      const damageAbilityKey = abilityKeyMap[weaponDamageAbility[nameSelect.value]] || abilityKey;
+      const damageAbilityModifier = rohFirearmNames.includes(nameSelect.value)
+        ? 0
+        : (getModifierValue(damageAbilityKey) ?? 0);
       const bonusRaw = bonusInput.value.trim();
       const bonus = bonusRaw === "" || !Number.isFinite(Number(bonusRaw)) ? 0 : Math.trunc(Number(bonusRaw));
       const attack = abilityModifier + getCurrentPB() + bonus;
-      const damage = formatDamageExpression(data.damage, abilityModifier, bonus);
+      const damage = formatDamageExpression(data.damage, damageAbilityModifier, bonus);
 
       if (force || attackInput.classList.contains("is-default") || attackInput.value.trim() === "") {
         attackInput.value = String(attack);
@@ -6566,6 +7000,79 @@ ${buildIframeZoomActions()}
       scroll.insertBefore(bar, table);
     }
 
+    function ensureWeaponOtherGroup(select) {
+      if (!select) return null;
+      let group = select.querySelector("[data-other-weapon-group]");
+      const custom = select.querySelector('option[value="自定义"]');
+      if (!group) {
+        group = document.createElement("option");
+        group.value = "";
+        group.disabled = true;
+        group.textContent = "——其他武器——";
+        group.dataset.otherWeaponGroup = "1";
+      }
+      select.insertBefore(group, custom || null);
+      return group;
+    }
+
+    function ensureWeaponMasteryOptions(select) {
+      if (!select) return;
+      const existing = new Set([...select.options].map((option) => option.value));
+      for (const value of ["自动", "瞄准", "散射"]) {
+        if (existing.has(value)) continue;
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.append(option);
+      }
+    }
+
+    function addRohWeaponOptions(select) {
+      if (!select) return;
+      select.querySelectorAll("[data-roh-weapon], [data-roh-weapon-group], [data-roh-firearm], [data-roh-firearm-group]").forEach((option) => option.remove());
+      const otherGroup = ensureWeaponOtherGroup(select);
+      if (!rohExtensionActive) return;
+      const group = document.createElement("option");
+      group.value = "";
+      group.disabled = true;
+      group.textContent = "——新式武器——";
+      group.dataset.rohWeaponGroup = "1";
+      select.insertBefore(group, otherGroup || select.querySelector('option[value="自定义"]') || null);
+      for (const name of rohWeaponNames) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        option.dataset.rohWeapon = "1";
+        select.insertBefore(option, otherGroup || select.querySelector('option[value="自定义"]') || null);
+      }
+
+      const firearmGroup = document.createElement("option");
+      firearmGroup.value = "";
+      firearmGroup.disabled = true;
+      firearmGroup.textContent = "——铳械/发射器——";
+      firearmGroup.dataset.rohFirearmGroup = "1";
+      select.insertBefore(firearmGroup, otherGroup || select.querySelector('option[value="自定义"]') || null);
+      for (const name of rohFirearmNames) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        option.dataset.rohFirearm = "1";
+        select.insertBefore(option, otherGroup || select.querySelector('option[value="自定义"]') || null);
+      }
+    }
+
+    function refreshWeaponNameSelects() {
+      for (const select of document.querySelectorAll(".equipment-weapon-name-select")) {
+        const previous = select.value;
+        addRohWeaponOptions(select);
+        if ([...select.options].some((option) => option.value === previous)) {
+          select.value = previous;
+        } else {
+          select.value = "";
+        }
+      }
+    }
+
     function createAddedWeaponRow() {
       const template = equipmentWeaponBody.querySelector("tr");
       const row = template.cloneNode(true);
@@ -6583,6 +7090,8 @@ ${buildIframeZoomActions()}
 
       const customName = row.querySelector(".weapon-custom-name");
       if (customName) customName.value = "";
+      addRohWeaponOptions(row.querySelector(".equipment-weapon-name-select"));
+      ensureWeaponMasteryOptions(row.querySelector(".equipment-mastery-select"));
       ensureEquipmentActionCell(row, true);
       bindWeaponRow(row);
       applyWeaponDefaults(row.querySelector(".equipment-weapon-name-select"));
@@ -9445,6 +9954,7 @@ ${buildIframeZoomActions()}
         specialAbilityRows: captureDynamicBuilderRows(specialAbilityBody),
         skillStates: captureSkillStates(),
         spellbookRows: captureSpellbookRows(),
+        battleskillCards: captureBattleskillCards(),
         backpack: {
           gear: captureDynamicBuilderRows(backpackGearBody),
           tool: captureDynamicBuilderRows(backpackToolBody),
@@ -9910,6 +10420,11 @@ ${buildIframeZoomActions()}
         restoreSpellbookRows(data.spellbookRows || []);
       } catch (error) {
         console.error("恢复法术书表格失败", error);
+      }
+      try {
+        restoreBattleskillCards(data.battleskillCards || []);
+      } catch (error) {
+        console.error("恢复战技表失败", error);
       }
 
       const syncIds = [
@@ -10897,7 +11412,8 @@ ${buildIframeZoomActions()}
 
     function getHpGrowthDefault() {
       const isDwarf = raceSelect.value === "矮人" || currentRaceName() === "矮人";
-      return (isDwarf ? 1 : 0) + (hasToughFeat() ? 2 : 0);
+      const isRohGrowthRace = rohHpGrowthRaces.has(raceSelect.value);
+      return (isDwarf ? 1 : 0) + (isRohGrowthRace ? 1 : 0) + (hasToughFeat() ? 2 : 0);
     }
 
     function updateHpGrowthPlus() {
@@ -11012,6 +11528,7 @@ ${buildIframeZoomActions()}
       const abilityOutput = document.getElementById("spellcasting-summary-ability");
       const dcOutput = document.getElementById("spellcasting-summary-dc");
       const attackOutput = document.getElementById("spellcasting-summary-attack");
+      const masteryOutput = document.getElementById("spellcasting-summary-mastery");
       if (!abilityOutput || !dcOutput || !attackOutput) return;
 
       const selected = combatSpellAbility.options[combatSpellAbility.selectedIndex];
@@ -11020,9 +11537,14 @@ ${buildIframeZoomActions()}
         : "—";
       const dcText = combatSpellDc.value.trim() || "—";
       const attackText = combatSpellAttack.value.trim() || "—";
+      const masteryText = rohMasteryDamageBody?.querySelector("select")?.value || "—";
       abilityOutput.textContent = abilityText;
       dcOutput.textContent = dcText === "—" ? "—" : `DC ${dcText}`;
       attackOutput.textContent = attackText === "—" ? "—" : `D20 + ${attackText}`;
+      if (masteryOutput) {
+        masteryOutput.textContent = masteryText;
+        masteryOutput.classList.toggle("is-empty", masteryText === "—");
+      }
       abilityOutput.classList.toggle("is-empty", abilityText === "—");
       dcOutput.classList.toggle("is-empty", dcText === "—");
       attackOutput.classList.toggle("is-empty", attackText === "—");
@@ -11272,6 +11794,9 @@ ${buildIframeZoomActions()}
       updateDerivedStats();
       updateDstCommand();
       syncClassFeatureEditors();
+      updateBattleskillVisibility();
+      syncRohDefaultSpellTable();
+      updateRohSpellTableSummary();
     }
 
     function dstText(value, fallback = "0") {
@@ -11995,7 +12520,9 @@ ${buildIframeZoomActions()}
           ? buildSpellLookupTooltip("all")
           : key === "spell-lookup-roh"
             ? buildSpellLookupTooltip("roh")
-            : key === "class-lookup"
+            : key === "spell-lookup-roh-table"
+              ? buildSpellLookupTooltip("rohTable")
+              : key === "class-lookup"
             ? buildClassFeatureLookupTooltip(target)
             : key === "feat-lookup"
               ? buildFeatLookupTooltip()
@@ -12104,6 +12631,8 @@ ${buildIframeZoomActions()}
     renderRaceTraits();
     renderBackgroundTraits();
     updateRaceCombatDefaults();
+    applyHpGrowthDefault();
+    updateCombatStats();
     renderSkillTables();
     updateSummary();
 
@@ -12319,6 +12848,8 @@ ${buildIframeZoomActions()}
       updateSubrace();
       renderRaceTraits();
       updateRaceCombatDefaults();
+      applyHpGrowthDefault();
+      updateCombatStats();
       updateSummary();
       if (isCustomRace()) customRaceInput.focus();
     });
@@ -12327,6 +12858,23 @@ ${buildIframeZoomActions()}
       updateRaceCombatDefaults();
       updateSummary();
     });
+    optionalRaceAdd?.addEventListener("click", () => {
+      if (!optionalRaceTraitsBox || !optionalRaceBody) return;
+      optionalRaceTraitsBox.hidden = false;
+      optionalRaceBody.append(createOptionalRaceRow({}, rohOptionalTraits.get(raceSelect.value) || []));
+    });
+
+    rohCombatExtraTables?.addEventListener("change", updateRohSpellTableSummary);
+
+    battleskillAdd?.addEventListener("click", () => {
+      if (!battleskillList) return;
+      const card = createBattleskillCard();
+      battleskillList.append(card);
+      updateBattleskillVisibility();
+      scheduleBuilderSave();
+      card.querySelector(".battleskill-name")?.focus();
+    });
+
     backgroundSelect.addEventListener("change", () => {
       if (backgroundIdentitySelect) backgroundIdentitySelect.value = "";
       renderBackgroundTraits();
@@ -12348,6 +12896,8 @@ ${buildIframeZoomActions()}
       updateSubrace();
       renderRaceTraits();
       updateRaceCombatDefaults();
+      applyHpGrowthDefault();
+      updateCombatStats();
       updateSummary();
       raceSelect.focus();
     });
@@ -12711,6 +13261,18 @@ ${buildIframeZoomActions()}
       return "";
     }
 
+    function parseRohDarkvision(text) {
+      const clauses = String(text || "").split(/[。；\n]/).filter((clause) => clause.includes("黑暗视觉"));
+      const candidates = [];
+      for (const clause of clauses) {
+        for (const match of clause.matchAll(/(\d+)\s*尺/g)) {
+          const value = Number(match[1]);
+          if (value >= 10 && value <= 300) candidates.push(value);
+        }
+      }
+      return candidates.length ? `${candidates[candidates.length - 1]}尺` : "—";
+    }
+
     function parseRohRaceCombat(text, baseText = text) {
       const cleanBase = String(baseText || "").replace(/\s+/g, " ");
       const cleanFull = String(text || "").replace(/\s+/g, " ");
@@ -12722,9 +13284,7 @@ ${buildIframeZoomActions()}
       if (speedNumber && /飞行/.test(cleanBase)) speed += `，飞行${speedNumber}尺`;
       if (speedNumber && /游泳/.test(cleanBase)) speed += `，游泳${speedNumber}尺`;
       if (speedNumber && /攀爬/.test(cleanBase)) speed += `，攀爬${speedNumber}尺`;
-      const darkMatch = cleanBase.match(/(\d+)\s*尺[^。]*?黑暗视觉/) ||
-        cleanBase.match(/黑暗视觉[^。]*?(\d+)\s*尺/);
-      const darkvision = darkMatch ? `${darkMatch[1]}尺` : "—";
+      const darkvision = parseRohDarkvision(cleanBase);
       const resistances = new Set();
       for (const match of cleanBase.matchAll(/(?:具有|拥有|获得|对)([^。；\n]{1,30}?)伤害(?:的)?抗性/g)) {
         const value = match[1].replace(/^对/, "").trim();
@@ -12766,6 +13326,28 @@ ${buildIframeZoomActions()}
       root.querySelectorAll(".navy").forEach((node) => node.classList.add("custom-title"));
     }
 
+    function extractRohOptionalTraits(doc) {
+      const result = [];
+      for (const block of doc.querySelectorAll(".syntax")) {
+        if (!/可选-/.test(block.textContent || "")) continue;
+        for (const bold of block.querySelectorAll("b")) {
+          const nameText = (bold.textContent || "").replace(/\s+/g, " ").trim();
+          if (!nameText.startsWith("可选-")) continue;
+          const name = nameText.replace(/^可选-/, "").replace(/[:：].*$/, "").trim();
+          const parts = [];
+          for (let node = bold.nextSibling; node; node = node.nextSibling) {
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "B" &&
+                /^可选-/.test((node.textContent || "").trim())) break;
+            const text = node.textContent || "";
+            if (text.trim()) parts.push(text);
+          }
+          const description = parts.join(" ").replace(/\s+/g, " ").trim();
+          if (name) result.push({ name, description });
+        }
+      }
+      return result;
+    }
+
     function extractRohRaceTraits(html, raceName) {
       const doc = new DOMParser().parseFromString(html, "text/html");
       const traitContainer = doc.createElement("div");
@@ -12777,6 +13359,12 @@ ${buildIframeZoomActions()}
         for (let node = heading.nextSibling; node; node = node.nextSibling) {
           if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "H2") break;
           if (node.nodeType === Node.COMMENT_NODE) continue;
+          const nodeText = (node.textContent || "").replace(/\s+/g, " ").trim();
+          if (node.nodeType === Node.ELEMENT_NODE &&
+              /以下可选规则|可选-/.test(nodeText) &&
+              (node.classList.contains("syntax") || nodeText.startsWith("以下可选规则"))) {
+            break;
+          }
           const clone = node.cloneNode(true);
           fullContainer.append(clone.cloneNode(true));
           if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "H3" &&
@@ -12797,13 +13385,18 @@ ${buildIframeZoomActions()}
       return {
         html: `<b class="maroon">${escapePlainText(raceName)}特质</b><br>${content}`,
         text: fullContainer.textContent,
-        baseText: traitContainer.textContent
+        baseText: traitContainer.textContent,
+        optional: extractRohOptionalTraits(doc)
       };
     }
 
     function applyRohRaceData(race, data) {
       raceTraits[race] = data.html;
-      raceCombatDefaults[race] = data.combat;
+      rohOptionalTraits.set(race, data.optional || []);
+      raceCombatDefaults[race] = {
+        ...data.combat,
+        ...(rohRaceCombatOverrides[race] || {})
+      };
       if (raceSelect.value === race) {
         renderRaceTraits();
         updateRaceCombatDefaults();
@@ -12832,18 +13425,22 @@ ${buildIframeZoomActions()}
           if (!extracted.html || extracted.html.length < 30) {
             throw new Error("ROH 种族页面没有找到特质段");
           }
+          rohOptionalTraits.set(race, extracted.optional || []);
           const data = {
             html: extracted.html,
-            combat: parseRohRaceCombat(extracted.text, extracted.baseText)
+            combat: parseRohRaceCombat(extracted.text, extracted.baseText),
+            optional: extracted.optional || []
           };
           rohRaceCache.set(race, data);
           applyRohRaceData(race, data);
           return data;
         })
         .catch(() => {
+          rohOptionalTraits.set(race, []);
           const data = {
             html: `<b class="maroon">${escapePlainText(rohRaceDisplayName(race))}特质</b><br><span class="grey">无法加载 ROH 外部页面中的种族特质。</span>`,
-            combat: { darkvision: "—", size: "", speed: "", resistance: "", immunity: "", advantage: "" }
+            combat: { darkvision: "—", size: "", speed: "", resistance: "", immunity: "", advantage: "" },
+            optional: []
           };
           rohRaceCache.set(race, data);
           applyRohRaceData(race, data);
@@ -12904,14 +13501,25 @@ ${buildIframeZoomActions()}
       }
       rohExtensionActive = false;
       rohClassNames.length = 0;
-      delete subraceMap["精灵(ROH)"];
+      for (const race of Object.keys(rohRaceSubraces)) {
+        delete subraceMap[race];
+        delete raceCombatSubraceDefaults[race];
+      }
       removeRohRaceOptions();
       removeRohRaceFeats();
       removeRohBackgrounds();
       removeRohSpellIndex();
+      removeRohFeatLookupEntries();
+      updateRohCombatExtraTables();
+      rohOptionalTraits.clear();
+      if (optionalRaceTraitsBox) optionalRaceTraitsBox.hidden = true;
+      if (optionalRaceBody) optionalRaceBody.replaceChildren();
+      if (rohRaceValues.has(raceSelect.value)) updateSubrace();
       refreshRohClassSelects();
       refreshLanguageToolSelects();
       refreshBackpackGearSelects();
+      refreshWeaponNameSelects();
+      refreshArmorNameSelect();
       updateSummary();
     }
 
@@ -12961,6 +13569,24 @@ ${buildIframeZoomActions()}
       }
       for (const name of rohBackgroundNames) delete backgroundData[name];
       rohBackgroundNames.clear();
+    }
+
+    function installRohFeatLookupEntries() {
+      for (const entry of ROH_FEAT_LOOKUP_ENTRIES) {
+        const data = FEAT_LOOKUP_DATA[entry.category];
+        if (!data) continue;
+        if (!data.third.some((page) => page.label === entry.label)) {
+          data.third.push({ label: entry.label, source: entry.source, url: entry.url });
+        }
+      }
+    }
+
+    function removeRohFeatLookupEntries() {
+      for (const entry of ROH_FEAT_LOOKUP_ENTRIES) {
+        const data = FEAT_LOOKUP_DATA[entry.category];
+        if (!data) continue;
+        data.third = data.third.filter((page) => page.label !== entry.label);
+      }
     }
 
     function installRohSpellIndex() {
@@ -13063,11 +13689,427 @@ ${buildIframeZoomActions()}
       addRohRaceOptions();
       addRohBackgrounds(data);
       installRohSpellIndex();
-      subraceMap["精灵(ROH)"] = ["流水", "气尘", "自然", "光芒"];
+      installRohFeatLookupEntries();
+      updateRohCombatExtraTables();
+      for (const [race, subraces] of Object.entries(rohRaceSubraces)) {
+        subraceMap[race] = [...subraces];
+      }
+      for (const [race, defaults] of Object.entries(rohSubraceCombatOverrides)) {
+        raceCombatSubraceDefaults[race] = { ...defaults };
+      }
+      if (rohRaceValues.has(raceSelect.value)) updateSubrace();
       updateRohRaceFeatGroup(raceSelect.value);
       refreshLanguageToolSelects();
       refreshBackpackGearSelects();
+      refreshWeaponNameSelects();
+      refreshArmorNameSelect();
       updateSummary();
+    }
+
+    function getRohClassLevelTotal() {
+      let total = 0;
+      if (rohClassNames.includes(classSelect.value)) total += getLevel(levelInput) ?? 0;
+      if (rohClassNames.includes(multiClassSelect.value)) total += getLevel(multiLevelInput) ?? 0;
+      for (const row of getExtraMultiRows()) {
+        if (rohClassNames.includes(row.querySelector(".profession-row-class")?.value)) {
+          total += getLevel(row.querySelector(".profession-row-level")) ?? 0;
+        }
+      }
+      return total;
+    }
+
+    function updateBattleskillVisibility() {
+      if (!battleskillPanel) return;
+      const visible = rohExtensionActive && getRohClassLevelTotal() >= 2;
+      battleskillPanel.hidden = !visible;
+      if (battleskillEmpty && battleskillList) {
+        battleskillEmpty.hidden = battleskillList.children.length > 0;
+      }
+    }
+
+    function formatBattleskillEffect(effect) {
+      const text = effect.textContent || "";
+      const match = text.match(/^([\u4e00-\u9fa5]{2,6})[：:]/);
+      if (!match) return;
+      const prefix = `${match[1]}：`;
+      const first = effect.firstElementChild;
+      if (first?.tagName === "B" && first.textContent === prefix) return;
+      const rest = text.slice(match[0].length).replace(/\r/g, "");
+      effect.innerHTML = `<b>${escapePlainText(prefix)}</b>${escapePlainText(rest).replace(/\n/g, "<br>")}`;
+    }
+
+    function populateRohCombatExtraBody(body, options) {
+      if (!body) return;
+      const previous = [...body.querySelectorAll("select")].map((select) => select.value);
+      body.replaceChildren();
+      for (let rowIndex = 0; rowIndex < 2; rowIndex += 1) {
+        const row = document.createElement("tr");
+        for (let column = 0; column < 2; column += 1) {
+          const cell = document.createElement("td");
+          const select = document.createElement("select");
+          select.setAttribute("aria-label", rowIndex === 0 && column === 0 ? options === rohDamageOptions ? "精通伤害" : "职业法术表" : "额外选项");
+          options.forEach((value, index) => {
+            const option = document.createElement("option");
+            option.value = value === "—" ? "" : value;
+            option.textContent = value;
+            select.append(option);
+          });
+          const previousValue = previous[rowIndex * 2 + column] || "";
+          if ([...select.options].some((option) => option.value === previousValue)) {
+            select.value = previousValue;
+          }
+          const syncEmpty = () => select.classList.toggle("is-empty", !select.value);
+          select.addEventListener("change", syncEmpty);
+          syncEmpty();
+          cell.append(select);
+          row.append(cell);
+        }
+        body.append(row);
+      }
+    }
+
+    function getRohCasterBaseSpellTable() {
+      const candidates = [
+        [classSelect.value, getLevel(levelInput) ?? 0],
+        [multiClassSelect.value, getLevel(multiLevelInput) ?? 0]
+      ];
+      for (const row of getExtraMultiRows()) {
+        candidates.push([
+          row.querySelector(".profession-row-class")?.value || "",
+          getLevel(row.querySelector(".profession-row-level")) ?? 0
+        ]);
+      }
+      for (const [name, level] of candidates) {
+        if (level >= 1 && rohBaseSpellTableByClass[name]) return rohBaseSpellTableByClass[name];
+      }
+      return "";
+    }
+
+    function syncRohDefaultSpellTable() {
+      if (!rohExtensionActive || !rohClassSpellListBody) return;
+      const first = rohClassSpellListBody.querySelector("select");
+      if (!first || first.value) return;
+      const table = getRohCasterBaseSpellTable();
+      if (table && [...first.options].some((option) => option.value === table)) {
+        first.value = table;
+        first.classList.remove("is-empty");
+      }
+    }
+
+    function shortSpellTableName(value) {
+      return String(value || "")
+        .replace(/基础法术表$/, "")
+        .replace(/法术表$/, "")
+        .trim() || "—";
+    }
+
+    function updateRohSpellTableSummary() {
+      const selects = [...(rohClassSpellListBody?.querySelectorAll("select") || [])];
+      const base = selects[0]?.value || "";
+      const domains = [selects[1]?.value, selects[2]?.value]
+        .filter(Boolean)
+        .map(shortSpellTableName);
+      const advanced = selects[3]?.value || "";
+      const baseOutput = document.getElementById("spell-base-table");
+      const domainOutput = document.getElementById("spell-domain-table");
+      const advancedOutput = document.getElementById("spell-advanced-table");
+      if (baseOutput) baseOutput.textContent = base ? shortSpellTableName(base) : "—";
+      if (domainOutput) domainOutput.textContent = domains.length ? domains.join("、") : "—";
+      if (advancedOutput) advancedOutput.textContent = advanced ? shortSpellTableName(advanced) : "—";
+      updateSpellcastingSummary();
+    }
+
+    function updateRohCombatExtraTables() {
+      if (!rohCombatExtraTables) return;
+      rohCombatExtraTables.hidden = !rohExtensionActive;
+      if (!rohExtensionActive) {
+        updateRohSpellTableSummary();
+        return;
+      }
+      populateRohCombatExtraBody(rohMasteryDamageBody, rohDamageOptions);
+      populateRohCombatExtraBody(rohClassSpellListBody, rohSpellTableOptions);
+      syncRohDefaultSpellTable();
+      updateRohSpellTableSummary();
+    }
+
+    function createBattleskillEffectRow(html = "", deletable = false) {
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 3;
+      cell.className = "battleskill-effect-cell";
+      const effect = document.createElement("div");
+      effect.className = "battleskill-effect";
+      effect.contentEditable = "true";
+      effect.setAttribute("role", "textbox");
+      effect.setAttribute("aria-label", "战技效果");
+      effect.innerHTML = html;
+      effect.addEventListener("input", scheduleBuilderSave);
+      effect.addEventListener("paste", (event) => {
+        event.preventDefault();
+        const text = event.clipboardData?.getData("text/plain") || "";
+        document.execCommand("insertText", false, text);
+        window.setTimeout(() => {
+          formatBattleskillEffect(effect);
+          scheduleBuilderSave();
+        }, 0);
+      });
+      effect.addEventListener("blur", () => {
+        formatBattleskillEffect(effect);
+        scheduleBuilderSave();
+      });
+      formatBattleskillEffect(effect);
+      cell.append(effect);
+      if (deletable) {
+        effect.classList.add("has-remove");
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "battleskill-effect-remove";
+        remove.textContent = "×";
+        remove.title = "删除效果行";
+        remove.setAttribute("aria-label", "删除效果行");
+        remove.addEventListener("click", () => {
+          row.remove();
+          scheduleBuilderSave();
+        });
+        cell.append(remove);
+      }
+      row.append(cell);
+      return row;
+    }
+
+    function createBattleskillCard(data = {}) {
+      const card = document.createElement("div");
+      card.className = "battleskill-card";
+      card.style.setProperty("background", "var(--battleskill-card-bg)", "important");
+      card.style.setProperty("border", "1px solid #666", "important");
+      const table = document.createElement("table");
+      const body = document.createElement("tbody");
+
+      const nameRow = document.createElement("tr");
+      const nameCell = document.createElement("td");
+      nameCell.colSpan = 3;
+      const name = document.createElement("input");
+      name.type = "text";
+      name.className = "battleskill-name";
+      name.placeholder = "战技名称";
+      name.value = data.name || "";
+      name.setAttribute("aria-label", "战技名称");
+      name.addEventListener("input", scheduleBuilderSave);
+      nameCell.append(name);
+      nameRow.append(nameCell);
+
+      const metaRow = document.createElement("tr");
+      const metaCell = document.createElement("td");
+      metaCell.colSpan = 3;
+      metaCell.className = "battleskill-meta-cell";
+      const meta = document.createElement("div");
+      meta.className = "battleskill-meta";
+
+      const activationBlock = document.createElement("div");
+      activationBlock.className = "battleskill-meta-block battleskill-activation-block";
+      const activationText = document.createElement("span");
+      activationText.className = "battleskill-activation-text";
+      const activation = document.createElement("select");
+      activation.className = "battleskill-activation";
+      activation.setAttribute("aria-label", "战技动作类型");
+      for (const value of ["—", "攻击动作", "附赠动作", "攻击命中", "动作", "反应", "施展法术"]) {
+        const option = document.createElement("option");
+        option.value = value === "—" ? "" : value;
+        option.textContent = value;
+        activation.append(option);
+      }
+      activation.value = data.activation || "";
+      const updateActivationColor = () => {
+        const colors = {
+          "动作": "var(--battleskill-action-green)",
+          "附赠动作": "var(--battleskill-action-green)",
+          "攻击命中": "var(--battleskill-action-red)",
+          "攻击动作": "var(--battleskill-action-red)",
+          "施展法术": "var(--battleskill-action-red)",
+          "反应": "var(--battleskill-action-yellow)"
+        };
+        activationText.textContent = activation.options[activation.selectedIndex]?.textContent || "—";
+        activationBlock.style.setProperty(
+          "--battleskill-action-color",
+          colors[activation.value] || "var(--battleskill-action-gray)"
+        );
+        activationBlock.style.setProperty(
+          "background-color",
+          "var(--battleskill-action-color)",
+          "important"
+        );
+      };
+      activation.addEventListener("change", () => {
+        updateActivationColor();
+        scheduleBuilderSave();
+      });
+      updateActivationColor();
+      activationBlock.append(activationText, activation);
+
+      const costBlock = document.createElement("div");
+      costBlock.className = "battleskill-meta-block battleskill-cost-block";
+      costBlock.style.setProperty("background", "var(--battleskill-cost-bg)", "important");
+      const costPrefix = document.createElement("span");
+      costPrefix.textContent = "消耗";
+      const cost = document.createElement("input");
+      cost.type = "text";
+      cost.inputMode = "numeric";
+      cost.className = "battleskill-cost";
+      cost.value = data.cost ?? "1";
+      cost.style.setProperty("background-color", "var(--battleskill-cost-bg)", "important");
+      cost.setAttribute("aria-label", "技力消耗");
+      const unit = document.createElement("input");
+      unit.type = "text";
+      unit.className = "battleskill-cost-unit";
+      unit.value = data.unit || "技力";
+      unit.style.setProperty("background-color", "var(--battleskill-cost-bg)", "important");
+      unit.setAttribute("aria-label", "技力单位");
+      const syncCostWidth = () => {
+        cost.style.width = `${Math.max(1, cost.value.length + 0.3)}em`;
+        unit.style.width = `${Math.max(1, unit.value.length + 0.3)}em`;
+      };
+      cost.addEventListener("input", () => {
+        syncCostWidth();
+        scheduleBuilderSave();
+      });
+      unit.addEventListener("input", () => {
+        syncCostWidth();
+        scheduleBuilderSave();
+      });
+      syncCostWidth();
+      costBlock.append(costPrefix, cost, unit);
+
+      const timingBlock = document.createElement("div");
+      timingBlock.className = "battleskill-meta-block battleskill-time-block";
+      timingBlock.style.setProperty("background", "var(--battleskill-time-bg)", "important");
+      const timingText = document.createElement("span");
+      timingText.className = "battleskill-timing-text";
+      const timingSelect = document.createElement("select");
+      timingSelect.className = "battleskill-timing-select";
+      timingSelect.setAttribute("aria-label", "战技时机或持续时间");
+      for (const value of ["—", "立即", "本回合结束", "下回合开始", "下回合结束", "战斗结束", "法术持续期间", "自定义"]) {
+        const option = document.createElement("option");
+        option.value = value === "—" ? "" : value === "自定义" ? CUSTOM_VALUE : value;
+        option.textContent = value;
+        timingSelect.append(option);
+      }
+      const timing = document.createElement("input");
+      timing.type = "text";
+      timing.className = "battleskill-timing";
+      timing.style.setProperty("background-color", "var(--battleskill-time-bg)", "important");
+      timing.placeholder = "自定义时机";
+      timing.setAttribute("aria-label", "自定义战技时机");
+      timing.hidden = true;
+      const timingReset = document.createElement("button");
+      timingReset.type = "button";
+      timingReset.className = "custom-reset battleskill-timing-reset";
+      timingReset.textContent = "×";
+      timingReset.title = "返回时机选择";
+      timingReset.setAttribute("aria-label", "返回时机选择");
+      timingReset.hidden = true;
+
+      const customTiming = String(data.timing || "");
+      if (customTiming && [...timingSelect.options].some((option) => option.value === customTiming)) {
+        timingSelect.value = customTiming;
+      } else if (customTiming) {
+        timingSelect.value = CUSTOM_VALUE;
+        timing.value = customTiming;
+      }
+
+      const syncTiming = () => {
+        const custom = timingSelect.value === CUSTOM_VALUE;
+        timingText.hidden = custom;
+        timingSelect.classList.toggle("is-custom", custom);
+        timing.hidden = !custom;
+        timingReset.hidden = !custom;
+        if (custom) {
+          timing.style.width = `${Math.max(2, timing.value.length + 0.5)}em`;
+          timing.focus();
+        } else {
+          timingText.textContent = timingSelect.options[timingSelect.selectedIndex]?.textContent || "—";
+        }
+      };
+      timingSelect.addEventListener("change", () => {
+        syncTiming();
+        scheduleBuilderSave();
+      });
+      timing.addEventListener("input", () => {
+        timing.style.width = `${Math.max(2, timing.value.length + 0.5)}em`;
+        scheduleBuilderSave();
+      });
+      timingReset.addEventListener("click", () => {
+        timingSelect.value = "";
+        timing.value = "";
+        syncTiming();
+        timingSelect.focus();
+        scheduleBuilderSave();
+      });
+      syncTiming();
+      timingBlock.append(timingText, timingSelect, timing, timingReset);
+
+      meta.append(activationBlock, costBlock, timingBlock);
+      metaCell.append(meta);
+      metaRow.append(metaCell);
+
+      body.append(nameRow, metaRow);
+      const effects = data.effects?.length ? data.effects : [""];
+      effects.forEach((effectHtml, index) => {
+        body.append(createBattleskillEffectRow(effectHtml, index > 0));
+      });
+      table.append(body);
+      card.append(table);
+
+      const addEffect = document.createElement("button");
+      addEffect.type = "button";
+      addEffect.className = "battleskill-effect-add";
+      addEffect.textContent = "+";
+      addEffect.title = "添加效果行";
+      addEffect.setAttribute("aria-label", "添加效果行");
+      addEffect.addEventListener("click", () => {
+        const row = createBattleskillEffectRow("", true);
+        body.append(row);
+        updateBattleskillVisibility();
+        scheduleBuilderSave();
+        row.querySelector(".battleskill-effect")?.focus();
+      });
+      const removeCard = document.createElement("button");
+      removeCard.type = "button";
+      removeCard.className = "battleskill-card-remove";
+      removeCard.textContent = "×";
+      removeCard.title = "删除战技";
+      removeCard.setAttribute("aria-label", "删除战技");
+      removeCard.addEventListener("click", () => {
+        card.remove();
+        updateBattleskillVisibility();
+        scheduleBuilderSave();
+      });
+      card.append(addEffect, removeCard);
+      return card;
+    }
+
+    function captureBattleskillCards() {
+      if (!battleskillList) return [];
+      return [...battleskillList.querySelectorAll(".battleskill-card")].map((card) => ({
+        name: card.querySelector(".battleskill-name")?.value || "",
+        activation: card.querySelector(".battleskill-activation")?.value || "",
+        cost: card.querySelector(".battleskill-cost")?.value || "",
+        unit: card.querySelector(".battleskill-cost-unit")?.value || "",
+        timing: (() => {
+          const select = card.querySelector(".battleskill-timing-select");
+          const custom = card.querySelector(".battleskill-timing");
+          return select?.value === CUSTOM_VALUE ? custom?.value || "" : select?.value || "";
+        })(),
+        effects: [...card.querySelectorAll(".battleskill-effect")].map((effect) => effect.innerHTML)
+      }));
+    }
+
+    function restoreBattleskillCards(cards = []) {
+      if (!battleskillList) return;
+      battleskillList.replaceChildren();
+      for (const card of cards || []) {
+        battleskillList.append(createBattleskillCard(card));
+      }
+      updateBattleskillVisibility();
     }
 
     function setupRohExtension() {
@@ -13126,6 +14168,12 @@ ${buildIframeZoomActions()}
       }
     }
 
+    for (const select of document.querySelectorAll(".equipment-weapon-name-select")) {
+      ensureWeaponOtherGroup(select);
+    }
+    for (const select of document.querySelectorAll(".equipment-mastery-select")) {
+      ensureWeaponMasteryOptions(select);
+    }
     wrapInlinePlusFields();
     setupRohExtension();
     setupContentResponsiveLayout();
@@ -13468,7 +14516,10 @@ ${buildIframeZoomActions()}
       const data = rohAdventuringGearData[select.value] ||
         adventuringGearData[select.value] ||
         backpackWeaponData[select.value] ||
-        backpackArmorData[select.value];
+        rohWeaponBackpackData[select.value] ||
+        rohFirearmBackpackData[select.value] ||
+        backpackArmorData[select.value] ||
+        rohArmorBackpackData[select.value];
 
       if (!data) {
         description.value = "";
@@ -13482,9 +14533,12 @@ ${buildIframeZoomActions()}
       }
 
       const descriptionText = rohAdventuringGearDescriptions[select.value] ||
+        rohWeaponDescriptions[select.value] ||
+        rohFirearmDescriptions[select.value] ||
         adventuringGearDescriptions[select.value] ||
         backpackWeaponDescriptions[select.value] ||
         backpackArmorDescriptions[select.value] ||
+        rohArmorDescriptions[select.value] ||
         "";
       description.value = descriptionText;
       weight.value = data.weight;
@@ -13523,7 +14577,12 @@ ${buildIframeZoomActions()}
       if (rohExtensionActive) appendGearGroup("——ROH冒险装备——", rohAdventuringGearData);
       appendGearGroup("——冒险装备——", adventuringGearData);
       appendGearGroup("——武器——", backpackWeaponData);
-      appendGearGroup("——护甲——", backpackArmorData);
+      appendGearGroup(
+        "——护甲——",
+        rohExtensionActive ? { ...backpackArmorData, ...rohArmorBackpackData } : backpackArmorData
+      );
+      if (rohExtensionActive) appendGearGroup("——新式武器——", rohWeaponBackpackData);
+      if (rohExtensionActive) appendGearGroup("——铳械/发射器——", rohFirearmBackpackData);
     }
 
     function refreshBackpackGearSelects() {

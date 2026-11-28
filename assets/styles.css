@@ -7502,3 +7502,839 @@ html[data-theme="dark"] .background-identity-title {
 .builder-identity-field[hidden] {
   display: none;
 }
+
+/* ROH 可选种族特性 */
+.optional-race-traits {
+  max-width: 900px;
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: #f7f7f7;
+  border: 1px solid #aaa;
+}
+
+.optional-race-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  color: #800000;
+}
+
+.optional-race-add {
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.optional-race-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.optional-race-table th,
+.optional-race-table td {
+  padding: 3px 5px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+
+.optional-race-enabled-col { width: 42px; }
+.optional-race-name-col { width: 180px; }
+.optional-race-delete-col { width: 34px; }
+
+.optional-race-table input[type="text"],
+.optional-race-table textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.optional-race-table textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+
+html[data-theme="dark"] .optional-race-traits {
+  background: #222;
+  border-color: #666;
+}
+
+/* 可选种族特性：两列表格 */
+.optional-race-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.optional-race-table th,
+.optional-race-table td {
+  padding: 0;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+.optional-race-table th {
+  padding: 4px 6px;
+  color: #777;
+  background: #f0f0f0;
+  font-size: 0.76rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.optional-race-table .optional-race-name-col {
+  width: 34%;
+}
+
+.optional-race-table select,
+.optional-race-table textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px 6px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  font: inherit;
+}
+
+.optional-race-table select:focus,
+.optional-race-table textarea:focus {
+  box-shadow: inset 0 0 0 1px #800000;
+}
+
+.optional-race-table textarea {
+  height: 1.85em;
+  min-height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  resize: none;
+}
+
+.optional-race-table textarea.is-expanded {
+  height: 8em;
+  overflow: auto;
+  white-space: pre-wrap;
+  resize: vertical;
+}
+
+html[data-theme="dark"] .optional-race-table th {
+  background: #333;
+  color: #bbb;
+  border-color: #555;
+}
+
+html[data-theme="dark"] .optional-race-table th,
+html[data-theme="dark"] .optional-race-table td {
+  border-color: #555;
+}
+
+/* 可选种族特性：最终表格样式 */
+.optional-race-table th {
+  padding: 3px 6px;
+  color: #777;
+  background: transparent;
+  border: 0;
+  font-size: 0.76rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.optional-race-table td {
+  border: 1px solid #ccc;
+  padding: 0;
+  text-align: center;
+}
+
+.optional-race-table td:last-child {
+  text-align: left;
+}
+
+.optional-race-name-control {
+  display: flex;
+  align-items: center;
+  min-height: 1.95em;
+}
+
+.optional-race-table select,
+.optional-race-table input.optional-race-custom-input,
+.optional-race-table textarea {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px 6px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  font: inherit;
+}
+
+.optional-race-table select {
+  text-align: center;
+}
+
+.optional-race-table select:focus,
+.optional-race-table input.optional-race-custom-input:focus,
+.optional-race-table textarea:focus {
+  box-shadow: inset 0 0 0 1px #800000;
+}
+
+.optional-race-table .optional-race-custom-reset {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-right: 3px;
+  padding: 0;
+  color: #777;
+  background: transparent;
+  border: 0;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.optional-race-table .optional-race-custom-reset:hover {
+  color: #800000;
+}
+
+.optional-race-table input.optional-race-custom-input {
+  text-align: center;
+}
+
+/* ROH 战技表 */
+.battleskill-panel { margin-bottom: 16px; }
+
+.battleskill-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.battleskill-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.battleskill-card {
+  position: relative;
+  padding: 6px 28px 6px 6px;
+  background: #f7f7f7;
+  border: 1px solid #aaa;
+}
+
+.battleskill-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.battleskill-card td {
+  padding: 3px 5px;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+}
+
+.battleskill-card input,
+.battleskill-card select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 3px 5px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font: inherit;
+}
+
+.battleskill-name {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.battleskill-cost-cell {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.battleskill-cost-cell input.battleskill-cost {
+  width: 2.8em;
+  text-align: center;
+}
+
+.battleskill-cost-cell input.battleskill-cost-unit {
+  width: 3.6em;
+}
+
+.battleskill-effect-cell {
+  padding: 0 !important;
+}
+
+.battleskill-effect {
+  min-height: 1.7em;
+  padding: 4px 6px;
+  outline: none;
+  line-height: 1.55;
+}
+
+.battleskill-effect:focus {
+  box-shadow: inset 0 0 0 1px #800000;
+}
+
+.battleskill-effect-add {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: #111;
+  background: #fff;
+  border: 1px solid #aaa;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.battleskill-empty {
+  margin: 8px 0 0;
+  color: #888;
+  font-size: 0.82rem;
+}
+
+html[data-theme="dark"] .battleskill-card {
+  background: #222;
+  border-color: #666;
+}
+
+html[data-theme="dark"] .battleskill-card td {
+  border-color: #555;
+}
+
+/* 战技卡片最终样式 */
+.battleskill-panel-head {
+  align-items: center;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #800000;
+}
+
+.battleskill-panel .panel-title {
+  flex: 1 1 auto;
+  width: 100%;
+  margin: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.battleskill-card {
+  padding: 6px 28px 6px 6px;
+  background: #d8d8d8;
+  border: 0;
+}
+
+.battleskill-card table,
+.battleskill-card tr,
+.battleskill-card td {
+  border: 0 !important;
+}
+
+.battleskill-card td {
+  padding: 2px 4px;
+  background: transparent;
+}
+
+.battleskill-meta-cell {
+  padding: 3px 4px 5px !important;
+}
+
+.battleskill-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.battleskill-meta-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.8em;
+  padding: 2px 9px;
+  color: #fff;
+  background: #808080;
+  border: 0;
+  border-radius: 7px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.battleskill-activation-block {
+  min-width: 7em;
+}
+
+.battleskill-meta-block select,
+.battleskill-meta-block input {
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  text-align: center;
+  font: inherit;
+  font-weight: bold;
+}
+
+.battleskill-activation-block select {
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+.battleskill-activation-block select option {
+  color: #111;
+  background: #fff;
+  font-weight: normal;
+}
+
+.battleskill-cost-block {
+  background: #808080;
+}
+
+.battleskill-cost-block .battleskill-cost {
+  width: 2.5em;
+}
+
+.battleskill-cost-block .battleskill-cost-unit {
+  width: 3.5em;
+}
+
+.battleskill-time-block {
+  flex: 0 1 auto;
+  min-width: 8em;
+  background: #545454;
+}
+
+.battleskill-time-block .battleskill-timing {
+  width: 100%;
+}
+
+.battleskill-meta-block input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.battleskill-name {
+  padding-left: 2px !important;
+  font-weight: bold;
+}
+
+.battleskill-effect-cell {
+  padding: 0 4px !important;
+}
+
+.battleskill-effect {
+  min-height: 1.8em;
+  padding: 2px 2px 4px;
+  background: transparent;
+}
+
+.battleskill-effect:focus {
+  box-shadow: inset 0 0 0 1px #800000;
+}
+
+/* 战技卡片最终细节 */
+.battleskill-name {
+  color: #111 !important;
+  font-size: 1.08rem !important;
+  font-weight: bold !important;
+}
+
+.battleskill-meta-block {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  font-weight: normal !important;
+  line-height: 1.45;
+}
+
+.battleskill-meta-block select,
+.battleskill-meta-block input {
+  width: auto;
+  font-weight: normal !important;
+}
+
+.battleskill-activation-block,
+.battleskill-time-block {
+  position: relative;
+  min-width: 0;
+  width: auto;
+}
+
+.battleskill-activation-text,
+.battleskill-timing-text {
+  display: inline-block;
+  color: #fff;
+  font-weight: normal;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.battleskill-activation-block select,
+.battleskill-time-block select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.battleskill-time-block .battleskill-timing-select.is-custom {
+  display: none;
+}
+
+.battleskill-cost-block {
+  flex: 0 0 auto;
+  gap: 3px;
+}
+
+.battleskill-cost-block .battleskill-cost {
+  width: 1.5ch;
+  min-width: 1.5ch;
+  text-align: center;
+}
+
+.battleskill-cost-block .battleskill-cost-unit {
+  width: 2.2ch;
+  min-width: 2.2ch;
+  text-align: center;
+}
+
+.battleskill-time-block {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.battleskill-time-block .battleskill-timing {
+  width: 2ch;
+  min-width: 2ch;
+  text-align: center;
+}
+
+.battleskill-time-block .battleskill-timing-reset {
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  padding: 0;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.battleskill-effect-cell {
+  position: relative;
+}
+
+.battleskill-effect.has-remove {
+  padding-right: 24px;
+}
+
+.battleskill-effect-remove {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  color: #777;
+  background: transparent;
+  border: 0;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.battleskill-effect-remove:hover {
+  color: #800000;
+}
+
+
+
+/* 战技卡片右上角按钮 */
+.battleskill-card {
+  padding-right: 52px;
+}
+
+.battleskill-card-remove {
+  position: absolute;
+  top: 4px;
+  right: 28px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: #111;
+  background: #fff;
+  border: 1px solid #aaa;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.battleskill-card-remove:hover {
+  border-color: #800000;
+  color: #800000;
+}
+
+/* 战技色块自适应内容宽度 */
+.battleskill-meta-block {
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: none;
+  overflow: visible;
+}
+
+.battleskill-meta-block input {
+  width: auto;
+  min-width: 1ch;
+  max-width: none;
+  overflow: visible;
+  field-sizing: content;
+}
+
+.battleskill-cost-block,
+.battleskill-time-block {
+  width: max-content;
+  max-width: none;
+}
+
+.battleskill-cost-block .battleskill-cost,
+.battleskill-cost-block .battleskill-cost-unit {
+  width: auto;
+  min-width: 1ch;
+  max-width: none;
+}
+
+.battleskill-time-block .battleskill-timing {
+  width: auto;
+  min-width: 1ch;
+  max-width: none;
+}
+
+/* 战技卡片主题变量与深色模式 */
+:root {
+  --battleskill-card-bg: #d8d8d8;
+  --battleskill-cost-bg: #808080;
+  --battleskill-time-bg: #545454;
+}
+
+html[data-theme="dark"] {
+  --battleskill-card-bg: #2b2b2b;
+  --battleskill-cost-bg: #4a4a4a;
+  --battleskill-time-bg: #3d3d3d;
+}
+
+.battleskill-meta-block input {
+  color: #fff !important;
+  caret-color: #fff;
+  -webkit-text-fill-color: #fff;
+  background: transparent !important;
+  appearance: none;
+}
+
+.battleskill-meta-block select option,
+.battleskill-time-block select option {
+  color: #111 !important;
+  background: #fff !important;
+}
+
+html[data-theme="dark"] .battleskill-name {
+  color: #f1f1f1 !important;
+}
+
+html[data-theme="dark"] .battleskill-card {
+  color: #f0f0f0;
+}
+
+html[data-theme="dark"] .battleskill-effect {
+  color: #f0f0f0;
+}
+
+/* 黑夜模式施法属性框 */
+html[data-theme="dark"] .panel table.spellcasting-quickstats tbody td.spellcasting-stat-value.is-ability {
+  color: #e6edf2 !important;
+  background: #1B2933 !important;
+  border-color: #3b4a55 !important;
+}
+
+html[data-theme="dark"] .panel table.spellcasting-quickstats tbody td.spellcasting-stat-value.is-ability output {
+  color: #e6edf2 !important;
+}
+
+/* ROH 战斗附加表 */
+.roh-combat-extra {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 780px;
+  margin: 10px 0 14px;
+}
+
+.roh-combat-extra-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.roh-combat-extra-table th {
+  padding: 5px 8px;
+  color: #fff;
+  background: #808080;
+  border: 1px solid #777;
+  font-weight: bold;
+  text-align: center;
+}
+
+.roh-combat-extra-table td {
+  padding: 0;
+  background: #fff;
+  border: 1px solid #bbb;
+  text-align: center;
+}
+
+.roh-combat-extra-table select {
+  display: block;
+  width: 100%;
+  padding: 5px 6px;
+  color: #111;
+  background: #fff;
+  border: 0;
+  outline: none;
+  text-align: center;
+  font: inherit;
+}
+
+.roh-combat-extra-table select:focus {
+  box-shadow: inset 0 0 0 1px #800000;
+}
+
+html[data-theme="dark"] .roh-combat-extra-table td,
+html[data-theme="dark"] .roh-combat-extra-table select {
+  color: #eee;
+  background: #2a2a2a;
+}
+
+html[data-theme="dark"] .roh-combat-extra-table td {
+  border-color: #555;
+}
+
+@media (max-width: 700px) {
+  .roh-combat-extra { grid-template-columns: 1fr; }
+}
+
+:root {
+  --battleskill-action-green: #8EC31F;
+  --battleskill-action-red: #FC793E;
+  --battleskill-action-yellow: #FFB400;
+  --battleskill-action-gray: #808080;
+}
+
+html[data-theme="dark"] {
+  --battleskill-action-green: #5d7d18;
+  --battleskill-action-red: #a64b25;
+  --battleskill-action-yellow: #9a6e00;
+  --battleskill-action-gray: #454545;
+}
+
+/* 战技卡片按钮位置交换 */
+.battleskill-card .battleskill-effect-add {
+  right: 28px;
+}
+
+.battleskill-card .battleskill-card-remove {
+  right: 4px;
+}
+
+/* 战技输入在深色模式下与色块融合 */
+.battleskill-meta-block input {
+  background-color: inherit !important;
+}
+
+.battleskill-activation-block select,
+.battleskill-time-block select {
+  color-scheme: light;
+}
+
+.battleskill-activation-block select option,
+.battleskill-time-block select option {
+  color-scheme: light;
+}
+
+/* ROH 战斗附加表：紧凑表头与无箭头下拉 */
+.roh-combat-extra-table th {
+  padding: 3px 6px;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.roh-combat-extra-table select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none;
+}
+
+.roh-combat-extra-table select.is-empty {
+  color: #888 !important;
+}
+
+html[data-theme="dark"] .roh-combat-extra-table select.is-empty {
+  color: #aaa !important;
+}
+
+/* 战技技力输入与色块同色 */
+.battleskill-cost-block .battleskill-cost,
+.battleskill-cost-block .battleskill-cost-unit {
+  background-color: var(--battleskill-cost-bg) !important;
+}
+
+.battleskill-time-block .battleskill-timing {
+  background-color: var(--battleskill-time-bg) !important;
+}
+
+/* ROH 战斗附加表内容与表头一致 */
+.roh-combat-extra-table select {
+  padding: 3px 6px;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+/* ROH 法术表摘要 */
+.spell-table-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: -4px 0 12px;
+}
+
+.spell-table-summary .spell-summary-item {
+  min-width: 0;
+}
+
+.spell-table-summary output {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .spell-table-summary { grid-template-columns: 1fr; }
+}

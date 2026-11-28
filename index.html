@@ -624,6 +624,22 @@
           </label>
         </div>
         <div id="builder-race-traits" class="race-traits" aria-live="polite"></div>
+        <div id="builder-optional-race-traits" class="optional-race-traits" hidden>
+          <div class="optional-race-head">
+            <strong>可选种族特性</strong>
+            <button id="builder-optional-race-add" type="button" class="profession-add optional-race-add" title="添加可选特性" aria-label="添加可选特性">+</button>
+          </div>
+          <div class="optional-race-table-wrap">
+            <table class="optional-race-table" aria-label="可选种族特性">
+              <colgroup>
+                <col class="optional-race-name-col">
+                <col>
+              </colgroup>
+              <thead><tr><th>特性</th><th>详述</th></tr></thead>
+              <tbody id="builder-optional-race-body"></tbody>
+            </table>
+          </div>
+        </div>
         <div id="builder-custom-race-editor" class="custom-race-editor" hidden>
           <div class="custom-editor-toolbar" role="toolbar" aria-label="自定义种族特质格式">
             <button type="button" class="custom-format" data-format="plain">正文</button>
@@ -923,6 +939,17 @@
                 <td class="combat-correction-cell"><span class="correction-plus" aria-hidden="true">+</span><input id="combat-spell-attack-correction" type="text" inputmode="numeric" autocomplete="off" aria-label="法术攻击加值修正"></td>
               </tr>
             </tbody>
+          </table>
+        </div>
+
+        <div id="roh-combat-extra-tables" class="roh-combat-extra" hidden>
+          <table class="roh-combat-extra-table" aria-label="精通伤害">
+            <thead><tr><th colspan="2">精通伤害</th></tr></thead>
+            <tbody id="roh-mastery-damage-body"></tbody>
+          </table>
+          <table class="roh-combat-extra-table" aria-label="职业法术表">
+            <thead><tr><th colspan="2">职业法术表</th></tr></thead>
+            <tbody id="roh-class-spell-list-body"></tbody>
           </table>
         </div>
 
@@ -1265,11 +1292,21 @@
         </div>
       </div>
 
+      <div id="battleskill-panel" class="panel battleskill-panel" hidden>
+        <div class="battleskill-panel-head">
+          <h2 class="panel-title">战技表 Battleskill List</h2>
+          <button id="battleskill-add" class="profession-add" type="button" title="添加战技" aria-label="添加战技">+</button>
+        </div>
+        <div id="battleskill-list" class="battleskill-list"></div>
+        <p id="battleskill-empty" class="battleskill-empty">尚未收录战技。点击右上角 + 添加。</p>
+      </div>
+
       <div class="panel spell-panel">
         <h2 class="panel-title">法术 Spellcasting</h2>
         <table class="spellcasting-quickstats" aria-label="施法属性摘要">
           <thead>
             <tr>
+              <th scope="col">精通伤害</th>
               <th scope="col">施法属性</th>
               <th scope="col">法术豁免DC</th>
               <th scope="col">法术攻击加值</th>
@@ -1277,6 +1314,7 @@
           </thead>
           <tbody>
             <tr>
+              <td class="spellcasting-stat-value is-ability"><output id="spellcasting-summary-mastery" class="is-empty">—</output></td>
               <td class="spellcasting-stat-value is-ability"><output id="spellcasting-summary-ability" class="is-empty">—</output></td>
               <td class="spellcasting-stat-value"><output id="spellcasting-summary-dc" class="is-empty">—</output></td>
               <td class="spellcasting-stat-value"><output id="spellcasting-summary-attack" class="is-empty">—</output></td>
@@ -1291,7 +1329,7 @@
 
           <div class="spell-count-group spell-cantrip-group">
             <div class="spell-summary-item spell-count-item">
-              <span>可习得戏法数量</span>
+              <span id="spell-cantrip-label">可习得戏法数量</span>
               <output id="spell-cantrip-count">—</output>
             </div>
             <label class="spell-modifier">
@@ -1318,6 +1356,21 @@
               <span class="spell-modifier-label" data-tooltip="某些扩表特性或专长，例如牧师子职的领域法术，或者游侠、圣武士的子职扩表，又或者是奥术书的法术学派专长，会允许你扩展一些法术加入你的准备中，在此作为可准备法术数量加值来添加。" tabindex="0">时刻准备</span>
               <input id="spell-always-prepared" class="spell-modifier-input" type="text" inputmode="numeric" autocomplete="off" aria-label="时刻准备加值">
             </label>
+          </div>
+        </div>
+
+        <div class="spell-table-summary">
+          <div class="spell-summary-item">
+            <span>基础法术表</span>
+            <output id="spell-base-table">—</output>
+          </div>
+          <div class="spell-summary-item">
+            <span>领域法术表</span>
+            <output id="spell-domain-table">—</output>
+          </div>
+          <div class="spell-summary-item">
+            <span>进阶法术表</span>
+            <output id="spell-advanced-table">—</output>
           </div>
         </div>
 
@@ -1354,6 +1407,7 @@
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup" aria-label="查看职业法术速查" title="查看职业法术速查">职业法术速查</button>
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-all" aria-label="查看万法大全" title="查看万法大全">万法大全</button>
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh" aria-label="查看ROH万法大全" title="查看ROH万法大全">ROH万法大全</button>
+            <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh-table" aria-label="查看ROH法术表速查" title="查看ROH法术表速查">ROH法术表速查</button>
           </div>
         </div>
         <div class="spellbook-search" role="search">
