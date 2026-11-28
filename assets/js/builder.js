@@ -4492,6 +4492,7 @@ ${description}${identityHtml}`;
           const applySkillProficiency = () => {
             updateSkillNameColor(nameCell, Number(proficiencySelect.value));
             updateSkillTotals();
+            updateCombatStats();
           };
           proficiencySelect.addEventListener("change", applySkillProficiency);
           proficiencySelect.addEventListener("input", applySkillProficiency);
@@ -4508,7 +4509,10 @@ ${description}${identityHtml}`;
           correctionInput.className = "skill-correction-input";
           correctionInput.autocomplete = "off";
           correctionInput.setAttribute("aria-label", `${skill}修正`);
-          correctionInput.addEventListener("input", updateSkillTotals);
+          correctionInput.addEventListener("input", () => {
+            updateSkillTotals();
+            updateCombatStats();
+          });
           correctionCell.append(correctionPlus, correctionInput);
 
           const gapCell = document.createElement("td");
@@ -5755,6 +5759,25 @@ ${buildIframeZoomActions()}
         output.textContent = count > 0 ? String(count) : "—";
         output.classList.toggle("is-empty", count === 0);
       }
+    }
+
+    function getPerceptionSkillModifier() {
+      const nameCell = document.querySelector('.skill-name-cell[data-skill="察觉"]');
+      const row = nameCell?.closest("tr");
+      if (!row) return getModifierValue("wis") ?? 0;
+      const table = row.closest(".skill-table");
+      const abilityModifier = getModifierValue(table?.dataset.ability) ?? 0;
+      const state = Number(row.querySelector(".skill-prof-select")?.value) || 0;
+      const { total } = getCombatTotalLevel();
+      const pb = Math.max(2, Math.floor((total - 1) / 4) + 2);
+      const bardLevel = getBardLevel();
+      let proficiency = 0;
+      if (state === 1) proficiency = pb;
+      else if (state === 2) proficiency = pb * 2;
+      else if (bardLevel >= 2) proficiency = Math.floor(pb / 2);
+      const raw = row.querySelector(".skill-correction-input")?.value.trim() || "";
+      const correction = raw !== "" && Number.isFinite(Number(raw)) ? Math.trunc(Number(raw)) : 0;
+      return abilityModifier + proficiency + correction;
     }
 
     function updateSkillTotals() {
@@ -11517,7 +11540,7 @@ ${buildIframeZoomActions()}
         "ac",
         Number.isFinite(armorAc) ? armorAc + (hasShieldAc ? shieldAc : 0) : null
       );
-      setCombatTotal(combatPassive, "passive", 10 + wisMod);
+      setCombatTotal(combatPassive, "passive", 10 + getPerceptionSkillModifier());
 
       const spellKey = combatSpellAbility.value;
       const spellMod = spellKey ? getModifierValue(spellKey) : null;
