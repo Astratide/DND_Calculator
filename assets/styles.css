@@ -8338,3 +8338,14 @@ html[data-theme="dark"] .roh-combat-extra-table select.is-empty {
 @media (max-width: 700px) {
   .spell-table-summary { grid-template-columns: 1fr; }
 }
+
+/* ROH 施法块按扩展显示 */
+#spell-mastery-head[hidden],
+#spell-mastery-cell[hidden],
+#spell-table-summary[hidden] {
+  display: none !important;
+}
+
+.spellbook-lookup-button[hidden] {
+  display: none !important;
+}

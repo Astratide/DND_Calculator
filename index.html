@@ -1306,7 +1306,7 @@
         <table class="spellcasting-quickstats" aria-label="施法属性摘要">
           <thead>
             <tr>
-              <th scope="col">精通伤害</th>
+              <th id="spell-mastery-head" scope="col" hidden>精通伤害</th>
               <th scope="col">施法属性</th>
               <th scope="col">法术豁免DC</th>
               <th scope="col">法术攻击加值</th>
@@ -1314,7 +1314,7 @@
           </thead>
           <tbody>
             <tr>
-              <td class="spellcasting-stat-value is-ability"><output id="spellcasting-summary-mastery" class="is-empty">—</output></td>
+              <td id="spell-mastery-cell" class="spellcasting-stat-value is-ability" hidden><output id="spellcasting-summary-mastery" class="is-empty">—</output></td>
               <td class="spellcasting-stat-value is-ability"><output id="spellcasting-summary-ability" class="is-empty">—</output></td>
               <td class="spellcasting-stat-value"><output id="spellcasting-summary-dc" class="is-empty">—</output></td>
               <td class="spellcasting-stat-value"><output id="spellcasting-summary-attack" class="is-empty">—</output></td>
@@ -1359,7 +1359,7 @@
           </div>
         </div>
 
-        <div class="spell-table-summary">
+        <div id="spell-table-summary" class="spell-table-summary" hidden>
           <div class="spell-summary-item">
             <span>基础法术表</span>
             <output id="spell-base-table">—</output>
@@ -1406,8 +1406,8 @@
           <div class="spellbook-toolbar-actions">
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup" aria-label="查看职业法术速查" title="查看职业法术速查">职业法术速查</button>
             <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-all" aria-label="查看万法大全" title="查看万法大全">万法大全</button>
-            <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh" aria-label="查看ROH万法大全" title="查看ROH万法大全">ROH万法大全</button>
-            <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh-table" aria-label="查看ROH法术表速查" title="查看ROH法术表速查">ROH法术表速查</button>
+            <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh-table" aria-label="查看ROH法术表速查" title="查看ROH法术表速查" hidden>ROH法术表速查</button>
+            <button class="spellbook-lookup-button reference-tooltip-trigger reference-click-help" type="button" data-reference-tooltip="spell-lookup-roh" aria-label="查看ROH万法大全" title="查看ROH万法大全" hidden>ROH万法大全</button>
           </div>
         </div>
         <div class="spellbook-search" role="search">

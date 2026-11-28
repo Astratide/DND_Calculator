@@ -144,6 +144,9 @@
     const spellCasterLevel = document.getElementById("spell-caster-level");
     const spellCantripCount = document.getElementById("spell-cantrip-count");
     const spellCantripLabel = document.getElementById("spell-cantrip-label");
+    const spellMasteryHead = document.getElementById("spell-mastery-head");
+    const spellMasteryCell = document.getElementById("spell-mastery-cell");
+    const spellTableSummary = document.getElementById("spell-table-summary");
     const spellPreparedCount = document.getElementById("spell-prepared-count");
     const spellMulticlassNote = document.getElementById("spell-multiclass-note");
     const spellMainClass = document.getElementById("spell-main-class");
@@ -240,6 +243,10 @@
       "—", "挥砍", "钝击", "穿刺", "强酸", "寒冷", "火焰", "闪电",
       "雷鸣", "毒素", "光耀", "暗蚀", "心灵", "力场"
     ];
+    const rohAdvancedSpellTables = new Set([
+      "辉煌烈焰法术表", "酷寒洪流法术表", "风暴雷鸣法术表", "酸毒侵蚀法术表",
+      "光影心灵法术表", "疗愈重塑法术表", "时空矢量法术表"
+    ]);
     const rohBaseSpellTableByClass = {
       "术师": "术师基础法术表",
       "医疗": "医疗基础法术表",
@@ -13500,6 +13507,8 @@ ${buildIframeZoomActions()}
         }
       }
       rohExtensionActive = false;
+      updateRohSpellcastingVisibility();
+      updateRohSpellbookButtons();
       rohClassNames.length = 0;
       for (const race of Object.keys(rohRaceSubraces)) {
         delete subraceMap[race];
@@ -13669,6 +13678,8 @@ ${buildIframeZoomActions()}
       deactivateRohExtension();
       rohExtensionData = data;
       rohExtensionActive = true;
+      updateRohSpellcastingVisibility();
+      updateRohSpellbookButtons();
       for (const [className, entry] of Object.entries(data.classes)) {
         if (!rohClassNames.includes(className)) rohClassNames.push(className);
         if (!classNames.includes(className)) classNames.push(className);
@@ -13803,19 +13814,54 @@ ${buildIframeZoomActions()}
         .trim() || "—";
     }
 
+    function updateRohSpellbookButtons() {
+      for (const button of document.querySelectorAll(
+        '[data-reference-tooltip="spell-lookup-roh"], [data-reference-tooltip="spell-lookup-roh-table"]'
+      )) {
+        button.hidden = !rohExtensionActive;
+      }
+    }
+
+    function updateRohSpellcastingVisibility() {
+      const visible = rohExtensionActive;
+      if (spellMasteryHead) spellMasteryHead.hidden = !visible;
+      if (spellMasteryCell) spellMasteryCell.hidden = !visible;
+      if (spellTableSummary) spellTableSummary.hidden = !visible;
+      if (!visible) {
+        for (const id of ["spell-base-table", "spell-domain-table", "spell-advanced-table"]) {
+          const output = document.getElementById(id);
+          if (output) output.textContent = "—";
+        }
+        const masteryOutput = document.getElementById("spellcasting-summary-mastery");
+        if (masteryOutput) {
+          masteryOutput.textContent = "—";
+          masteryOutput.classList.add("is-empty");
+        }
+      }
+    }
+
     function updateRohSpellTableSummary() {
       const selects = [...(rohClassSpellListBody?.querySelectorAll("select") || [])];
-      const base = selects[0]?.value || "";
-      const domains = [selects[1]?.value, selects[2]?.value]
-        .filter(Boolean)
-        .map(shortSpellTableName);
-      const advanced = selects[3]?.value || "";
+      const base = [];
+      const domains = [];
+      const advanced = [];
+      for (const select of selects) {
+        const value = select.value || "";
+        if (!value) continue;
+        if (/基础法术表$/.test(value)) {
+          base.push(shortSpellTableName(value));
+        } else if (rohAdvancedSpellTables.has(value)) {
+          advanced.push(shortSpellTableName(value));
+        } else if (/法术表$/.test(value)) {
+          domains.push(shortSpellTableName(value));
+        }
+      }
       const baseOutput = document.getElementById("spell-base-table");
       const domainOutput = document.getElementById("spell-domain-table");
       const advancedOutput = document.getElementById("spell-advanced-table");
-      if (baseOutput) baseOutput.textContent = base ? shortSpellTableName(base) : "—";
-      if (domainOutput) domainOutput.textContent = domains.length ? domains.join("、") : "—";
-      if (advancedOutput) advancedOutput.textContent = advanced ? shortSpellTableName(advanced) : "—";
+      if (baseOutput) baseOutput.textContent = base.length ? [...new Set(base)].join("、") : "—";
+      if (domainOutput) domainOutput.textContent = domains.length ? [...new Set(domains)].join("、") : "—";
+      if (advancedOutput) advancedOutput.textContent = advanced.length ? [...new Set(advanced)].join("、") : "—";
       updateSpellcastingSummary();
     }
 
